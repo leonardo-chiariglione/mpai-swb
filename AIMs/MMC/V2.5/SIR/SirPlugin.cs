@@ -18,7 +18,7 @@ public sealed class SirPlugin : IAimPlugin
     public IAimProcessor Create(AimPortReader ports, IReadOnlyDictionary<string, string> settings)
         => new SirAimProcessor(
             AimName,
-            _ecapa   ??= new SpeakerEmbedder(Get(settings, "EcapaModel", @"D:\AI\Models\ecapa-tdnn.onnx")),
+            _ecapa   ??= new SpeakerEmbedder(Get(settings, "EcapaModel", Mpai.Core.MpaiPaths.Model("ecapa-tdnn.onnx"))),
             _gallery ??= SubjectGallery.Load(new AIF.SharedStorage.FileSharedStorage(Mpai.Core.MpaiPaths.SharedStorage, AimName, "local")),
             ports);
     private static string Get(IReadOnlyDictionary<string,string> s, string k, string d) => s.TryGetValue(k, out var v) && !string.IsNullOrWhiteSpace(v) ? v : d;

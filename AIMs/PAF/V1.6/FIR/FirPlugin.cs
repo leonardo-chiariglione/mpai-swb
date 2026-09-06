@@ -20,8 +20,8 @@ public sealed class FirPlugin : IAimPlugin
     public IAimProcessor Create(AimPortReader ports, IReadOnlyDictionary<string, string> settings)
         => new FirAimProcessor(
             AimName,
-            _scrfd   ??= new ScrfdFaceDetector(Get(settings, "ScrfdModel",  @"D:\AI\Models\scrfd_10g_bnkps.onnx")),
-            _arcFace ??= new ArcFaceRecogniser(Get(settings, "ArcFaceModel", @"D:\AI\Models\glintr100.onnx")),
+            _scrfd   ??= new ScrfdFaceDetector(Get(settings, "ScrfdModel",  Mpai.Core.MpaiPaths.Model("scrfd_10g_bnkps.onnx"))),
+            _arcFace ??= new ArcFaceRecogniser(Get(settings, "ArcFaceModel", Mpai.Core.MpaiPaths.Model("glintr100.onnx"))),
             _gallery ??= SubjectGallery.Load(new AIF.SharedStorage.FileSharedStorage(Mpai.Core.MpaiPaths.SharedStorage, AimName, "local")),
             ports);
     private static string Get(IReadOnlyDictionary<string,string> s, string k, string d) => s.TryGetValue(k, out var v) && !string.IsNullOrWhiteSpace(v) ? v : d;

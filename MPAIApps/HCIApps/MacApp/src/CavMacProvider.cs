@@ -78,13 +78,13 @@ internal sealed class CavMacProvider : IAimProvider, IDisposable
         };
 
     private ArcFaceRecogniser ArcFace(IReadOnlyDictionary<string, string> s) =>
-        _arcFace ??= new ArcFaceRecogniser(Setting(s, "ArcFaceModel", @"D:\AI\Models\glintr100.onnx"));
+        _arcFace ??= new ArcFaceRecogniser(Setting(s, "ArcFaceModel", Mpai.Core.MpaiPaths.Model("glintr100.onnx")));
 
     private SpeakerEmbedder Ecapa(IReadOnlyDictionary<string, string> s) =>
-        _ecapa ??= new SpeakerEmbedder(Setting(s, "EcapaModel", @"D:\AI\Models\ecapa-tdnn.onnx"));
+        _ecapa ??= new SpeakerEmbedder(Setting(s, "EcapaModel", Mpai.Core.MpaiPaths.Model("ecapa-tdnn.onnx")));
 
     private ScrfdFaceDetector Scrfd(IReadOnlyDictionary<string, string> s) =>
-        _scrfd ??= new ScrfdFaceDetector(Setting(s, "ScrfdModel", @"D:\AI\Models\scrfd_10g_bnkps.onnx"));
+        _scrfd ??= new ScrfdFaceDetector(Setting(s, "ScrfdModel", Mpai.Core.MpaiPaths.Model("scrfd_10g_bnkps.onnx")));
 
     private static string Setting(IReadOnlyDictionary<string, string> s, string key, string fallback) =>
         s.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v : fallback;

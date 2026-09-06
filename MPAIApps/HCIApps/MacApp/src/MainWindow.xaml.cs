@@ -34,10 +34,10 @@ public partial class MainWindow : Window
     private const string MacModule = "CAV-MAC-V2.0";
     private const string RsrModule = "PAF-RSR-V1.6";   // used to render the fixed guidance prompts
 
-    private const string AmdDir       = @"D:\AI\AIMs\AMDs";
-    private const string SettingsPath = @"D:\AI\AIMs\aim-settings.json";
-    private static readonly string AssetsDir   = @"D:\AI\Lib\Assets";
-    private static readonly string GalleryJson = @"D:\AI\TestData\gallery.json";
+    private static readonly string AmdDir = Mpai.Core.MpaiPaths.Amds;
+    private static readonly string SettingsPath = Mpai.Core.MpaiPaths.Settings;
+    private static readonly string AssetsDir = Mpai.Core.MpaiPaths.Assets;
+    private static readonly string GalleryJson = Mpai.Core.MpaiPaths.Gallery;
 
     private UserAgent?      _ua;
     private CavMacProvider? _provider;
