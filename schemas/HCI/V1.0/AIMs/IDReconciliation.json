@@ -1,0 +1,36 @@
+{ "$schema":              "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/HCI/V1.0/AIMs/IDReconciliation.json",
+  "title":                "ID Reconciliation V1.0",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "HCI-IDR-V1.0"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM reconciles the Identifiers of an Entity produced by two recognition modalities. It receives a face Instance Identifier and a speaker Instance Identifier, fuses their ranked candidates by score-level fusion, and produces one reconciled Instance Identifier. Either input may be absent, in which case the reconciliation degrades to the modality present.",
+
+  "ExternalPorts":        [{"Name": "FaceID",       "Direction": "Input",  "DataType": "OSD-IID-V1.5", "PortNumber": 1, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpeakerID",    "Direction": "Input",  "DataType": "OSD-IID-V1.5", "PortNumber": 2, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ReconciledID", "Direction": "Output", "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [{"ImplementationURI": "/* URI storing Implementation */",
+                            "BinaryName":       "/* BinaryName */",
+                            "Architecture":     "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+                            "OperatingSystem":  "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | RTOS | Oniro | iOS */",
+                            "Version":          "/* Version */",
+                            "Source":           "/* AIMStorage | MPAIStore | AIMURL */",
+                            "Destination":      "/* Destination URI */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",               "Minimum": "/* number GB, e.g. 8 GB */",              "Maximum": "/* number GB, e.g. 8 GB */",              "Request": "/* number GB, e.g. 8 GB */"             },
+                           {"Name": "CPU:Number",           "Minimum": "/* integer, 0=all */",                    "Maximum": "/* integer, 0=all */",                    "Request": "/* integer, 0=all */"                   },
+                           {"Name": "CPU:Class",            "Minimum": "/* Low | Medium | High */",               "Maximum": "/* Low | Medium | High */",               "Request": "/* Low | Medium | High */"              },
+                           {"Name": "GPU:Number",           "Minimum": "/* integer, 0=all */",                    "Maximum": "/* integer, 0=all */",                    "Request": "/* integer, 0=all */"                   },
+                           {"Name": "GPU:CUDA:Class",       "Minimum": "/* SM10 .. SM90 */",                      "Maximum": "/* SM10 .. SM90 */",                      "Request": "/* SM10 .. SM90 */"                     },
+                           {"Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* e.g. 24.0 GB GDDR6X */",               "Maximum": "/* e.g. 24.0 GB GDDR6X */",               "Request": "/* e.g. 24.0 GB GDDR6X */"              },
+                           {"Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* e.g. 1.75 GHz */",                     "Maximum": "/* e.g. 1.75 GHz */",                     "Request": "/* e.g. 1.75 GHz */"                    }],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-hci/"}]}

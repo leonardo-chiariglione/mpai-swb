@@ -1,0 +1,56 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                  "https://schemas.mpai.community/MMC/V2.5/data/PredicateRoleMapping.json",
+  "title":                "Predicate Role Mapping V2.5",
+  "type":                 "object",
+  "additionalProperties": false,
+  "required":             [ "Predicate", "Arguments" ],
+  "properties":           {
+
+    "Header":             { "type": "string", "const": "MMC-PRM-V2.5" },
+    "MInstanceID":        { "type": "string" },
+    "UEnvironmentID":     { "type": "string" },
+    "PreRolMapID":        { "type": "string" },
+    "PreRolMapTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json" },
+
+    "LocalTrace":         { "type": "object", "required": [ "origin", "timestamp" ], "properties": {
+      "origin":           { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/ProcessInstance.json" },
+      "timestamp":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" } } },
+
+    "Predicate":          { "$ref": "#/$defs/PredicateOccurrence" },
+
+    "Arguments":          { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/RoleArgument" } },
+
+    "Metadata":           { "type": "object", "additionalProperties": true, "properties": {
+      "language":         { "type": "string" },
+      "schemaVersion":    { "type": "string" } } },
+
+    "DataXMData":         { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":      { "type": "string", "maxLength": 2048 } },
+
+  "$defs": {
+
+    "RoleVocabulary":     { "title": "SemAF-SR Role Vocabulary (Starter)", "type": "string",
+                            "description": "Enumerated semantic roles for predicate-argument annotation (starter set aligned with ISO 24617-4).",
+                            "enum": [ "Agent","Patient","Theme","Experiencer","Stimulus","Instrument", "Beneficiary","Recipient","Source","Goal","Location","Path", "Manner","Cause","Purpose","Comitative","Temporal","Duration" ] },
+
+    "PredicateOccurrence":{ "title": "Predicate Occurrence", "type": "object", "additionalProperties": false, "required": [ "predicateId", "lemma", "pos" ], "properties": {
+      "predicateId":      { "type": "string", "description": "Stable identifier of the predicate occurrence in the annotation layer." },
+      "lemma":            { "type": "string", "description": "Canonical form (lemma) of the predicate." },
+      "pos":              { "type": "string", "description": "Part-of-speech of the predicate (e.g., verb, noun, adjective)." },
+      "sense":            { "type": [ "string", "null" ], "description": "Lexical sense or frame identifier, if available." },
+      "provenance":       { "type": "object", "additionalProperties": false, "description": "Optional link to source spans (text/audio/video).", "properties": {
+        "textSpan":       { "type": "array", "items": { "type": "integer" }, "description": "[start, end) character offsets." },
+        "timeSpan":       { "type": "array", "items": { "type": "number" }, "description": "[start, end) seconds in media." } } } } },
+
+    "RoleArgument":       { "title": "Role Argument", "type": "object", "additionalProperties": false, "required": [ "role", "filler" ], "properties": {
+      "role":             { "$ref": "#/$defs/RoleVocabulary" },
+      "filler":           { "description": "The argument value: entity id, string, or structured object", "oneOf": [ 
+                          { "type": "string" }, 
+                          { "type": "number" }, 
+                          { "type": "object", "additionalProperties": false, "properties": {
+        "ref":            { "type": "string", "description": "ID reference to an entity/object in the world model" },
+        "text":           { "type": "string", "description": "Surface form if no ID available" } } } ] },
+      "confidence":       { "type": "number", "minimum": 0, "maximum": 1 },
+      "provenance":       { "type": "object", "additionalProperties": false, "properties": {
+        "textSpan":       { "type": "array", "items": { "type": "integer" } },
+        "timeSpan":       { "type": "array", "items": { "type": "number" } } } } } } } }

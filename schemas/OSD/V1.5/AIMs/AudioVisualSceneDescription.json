@@ -1,0 +1,57 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/AudioVisualSceneDescription.json",
+  "title":                "Audio-Visual Scene Description V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-MSD-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This Composite AIM receives Audio-Visual Objects, the Descriptors of the Scene the Objects belong to, and their Space-Time information, and produces the Descriptors of a Scene composed of Audio-Visual Objects and Scenes.",
+
+  "ExternalPorts":        [{"Name": "SpaceTime",                      "Direction": "Input",  "DataType": "OSD-SPT-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpeechObject",                   "Direction": "Input",  "DataType": "OSD-SPO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioObject",                    "Direction": "Input",  "DataType": "OSD-AUO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "LiDARObject",                    "Direction": "Input",  "DataType": "OSD-LIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualObject",                   "Direction": "Input",  "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioVisualSceneDescriptors",    "Direction": "Input",  "DataType": "OSD-MSD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioVisualSceneDescriptorsOut", "Direction": "Output", "DataType": "OSD-MSD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [{ "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-SSD-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-ASD-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-LSD-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VSD-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-SMX-V1.5" } }],
+
+  "Topology":             [{ "Output": { "AIMName": "",             "PortName": "SpaceTime"                   }, "Input": { "AIMName": "OSD-SSD-V1.5", "PortName": "SpaceTime"                      } },
+                           { "Output": { "AIMName": "",             "PortName": "SpaceTime"                   }, "Input": { "AIMName": "OSD-ASD-V1.5", "PortName": "SpaceTime"                      } },
+                           { "Output": { "AIMName": "",             "PortName": "SpaceTime"                   }, "Input": { "AIMName": "OSD-LSD-V1.5", "PortName": "SpaceTime"                      } },
+                           { "Output": { "AIMName": "",             "PortName": "SpaceTime"                   }, "Input": { "AIMName": "OSD-VSD-V1.5", "PortName": "SpaceTime"                      } },
+                           { "Output": { "AIMName": "",             "PortName": "SpeechObject"                }, "Input": { "AIMName": "OSD-SSD-V1.5", "PortName": "SpeechObject"                   } },
+                           { "Output": { "AIMName": "",             "PortName": "AudioObject"                 }, "Input": { "AIMName": "OSD-ASD-V1.5", "PortName": "AudioObject"                    } },
+                           { "Output": { "AIMName": "",             "PortName": "LiDARObject"                 }, "Input": { "AIMName": "OSD-LSD-V1.5", "PortName": "LiDARObject"                    } },
+                           { "Output": { "AIMName": "",             "PortName": "VisualObject"                }, "Input": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualObject"                   } },
+                           { "Output": { "AIMName": "OSD-SSD-V1.5", "PortName": "SpeechSceneDescriptors"      }, "Input": { "AIMName": "OSD-SMX-V1.5", "PortName": "SpeechSceneDescriptors"         } },
+                           { "Output": { "AIMName": "OSD-ASD-V1.5", "PortName": "AudioSceneDescriptors"       }, "Input": { "AIMName": "OSD-SMX-V1.5", "PortName": "AudioSceneDescriptors"          } },
+                           { "Output": { "AIMName": "OSD-LSD-V1.5", "PortName": "LiDARSceneDescriptors"       }, "Input": { "AIMName": "OSD-SMX-V1.5", "PortName": "LiDARSceneDescriptors"          } },
+                           { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualSceneDescriptors"      }, "Input": { "AIMName": "OSD-SMX-V1.5", "PortName": "VisualSceneDescriptors"         } },
+                           { "Output": { "AIMName": "",             "PortName": "AudioVisualSceneDescriptors" }, "Input": { "AIMName": "OSD-SMX-V1.5", "PortName": "AudioVisualSceneDescriptors"    } },
+                           { "Output": { "AIMName": "OSD-SMX-V1.5", "PortName": "AudioVisualSceneDescriptors" }, "Input": { "AIMName": "",             "PortName": "AudioVisualSceneDescriptorsOut" } }],
+
+  "Implementations":      [{"BinaryName":      "/* provided by implementer */",
+                            "Architecture":    "/* x86-64 | ARM64 */",
+                            "OperatingSystem": "/* Windows | Linux | MacOS */",
+                            "Version":         "/* implementer version */",
+                            "Source":          "/* AIMStorage | MPAIStore */",
+                            "Destination":     "/* provided by implementer */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",               "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */"},
+                           {"Name": "CPU:Number",           "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */"},
+                           {"Name": "CPU:Class",            "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */"},
+                           {"Name": "GPU:Number",           "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */"},
+                           {"Name": "GPU:CUDA:Class",       "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */"},
+                           {"Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */"},
+                           {"Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* GB/s */",           "Maximum": "/* GB/s */",           "Request": "/* GB/s */"}],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

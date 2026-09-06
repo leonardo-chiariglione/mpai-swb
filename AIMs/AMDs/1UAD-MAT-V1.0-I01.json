@@ -1,0 +1,31 @@
+{ "Identifier":       { "ImplementerID": "1", "ImplementationID": "UAD-MAT-V1.0-I01", "AIMName": "UAD-MAT-V1.0" },
+
+  "APIProfile":       "Basic",
+  "Description":      "User Agent for Multimodal Anonymous Translation: the application that interacts with the real world and with the MMC-MAT middleware via the north HCI API. It owns the real-world edge Modules - Speech Object Acquisition (mic - the human's spoken turn, tagged with the input language), Speech Object Delivery (the translated Machine Speech to the loudspeaker) and 3D Model Object Delivery (the avatar to the screen). It supplies the human's spoken turn and the Language Selector (input and output languages, remembered across turns) to MMC-MAT, and presents the Speaking Avatar it receives - the avatar speaking the translation in the target language, lip-synced. It is trusted in its interaction with the middleware (across the HCI API) and untrusted in its interaction with the real world, which is why the acquisition and delivery edges are the User Agent's, not the middleware's.",
+
+  "ExternalPorts":    [{"Name": "Microphone",   "Direction": "Input",  "DataType": "OSD-SPO-V1.5", "Technology": "Hardware", "Protocol": "", "IsRemote": false},
+                       {"Name": "LanguageChoice","Direction": "Input",  "DataType": "OSD-SEL-V1.5", "Technology": "Hardware", "Protocol": "", "IsRemote": false},
+                       {"Name": "Loudspeaker",   "Direction": "Output", "DataType": ["OSD-BSO-V1.5", "OSD-SPO-V1.5"], "Technology": "Hardware", "Protocol": "", "IsRemote": false},
+                       {"Name": "Screen",        "Direction": "Output", "DataType": ["OSD-B3O-V1.5", "OSD-3DO-V1.5"], "Technology": "Hardware", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":          [{ "Identifier": { "ImplementerID": "1", "ImplementationID": "MMC-SOA-V2.5-I01", "AIMName": "MMC-SOA-V2.5" } },
+                       { "Identifier": { "ImplementerID": "1", "ImplementationID": "MMC-SOD-V2.5-I01", "AIMName": "MMC-SOD-V2.5" } },
+                       { "Identifier": { "ImplementerID": "1", "ImplementationID": "OSD-3OD-V1.5-I01", "AIMName": "OSD-3OD-V1.5" } }],
+
+  "Topology":         [{ "Output": { "AIMName": "",             "PortName": "Microphone"  }, "Input": { "AIMName": "MMC-SOA-V2.5", "PortName": "InputSpeech"  } },
+                       { "Output": { "AIMName": "MMC-SOD-V2.5", "PortName": "OutputSpeech" }, "Input": { "AIMName": "",            "PortName": "Loudspeaker"  } },
+                       { "Output": { "AIMName": "OSD-3OD-V1.5", "PortName": "OutputVisual" }, "Input": { "AIMName": "",            "PortName": "Screen"       } }],
+
+  "Implementations":  [{"ImplementationURI": "file:///D:/AI/AIMs/UAD-MAT-V1.0-I01",
+                        "MASPort":           443,
+                        "BinaryName":        "MatApp",
+                        "Architecture":      "x86-64",
+                        "OperatingSystem":   "Windows",
+                        "Version":           "1.0",
+                        "Source":            "AIMStorage"}],
+
+  "ResourcePolicies": [{"Name": "Memory",    "Minimum": "0.5 GB", "Request": "1 GB",   "Maximum": "2 GB"},
+                       {"Name": "CPU:Class", "Minimum": "Low",    "Request": "Medium", "Maximum": "High"}],
+
+  "DataXMData":       {},
+  "Documentation":    [{"Type": "Specification", "URI": "https://mpai.community/standards/mpai-hci/"}]}

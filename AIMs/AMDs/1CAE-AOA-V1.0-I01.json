@@ -1,0 +1,25 @@
+{ "Identifier":       { "ImplementerID": "1", "ImplementationID": "CAE-AOA-V1.0-I01", "AIMName": "CAE-AOA-V1.0" },
+
+  "APIProfile":       "Basic",
+  "Description":      "Audio Object Acquisition: acquires an Audio Object from a device, a network or a disk. A device yields a Basic Audio Object; a stored source may yield either kind, so the output Port accepts both and the Header says which was acquired.",
+
+  "ExternalPorts":    [{"Name": "UserCommand", "Direction": "Input",  "DataType": "CAE-UCM-V1.0",                    "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                       {"Name": "InputAudio",  "Direction": "Input",  "DataType": "OSD-AUO-V1.5",                    "IsOptional": true, "Technology": "Hardware", "Protocol": "", "IsRemote": false},
+                       {"Name": "OutputAudio", "Direction": "Output", "DataType": ["OSD-BAO-V1.5", "OSD-AUO-V1.5"],                     "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":          [],
+  "Topology":         [],
+
+"Implementations":  [{"ImplementationURI": "file:///D:/AI/AIMs/CAE-AOA-V1.0-I01",
+                       "MASPort":           443,
+                       "BinaryName":        "Mpai.Cae.Aoa",
+                       "Architecture":      "x86-64",
+                       "OperatingSystem":   "Windows",
+                       "Version":           "1.0",
+                       "Source":            "AIMStorage"}],
+
+  "ResourcePolicies": [{"Name": "Memory", "Minimum": "0.25 GB", "Request": "0.5 GB", "Maximum": "1 GB"}],
+
+  "DataXMData":       { },
+
+  "Documentation":    [{"Type": "Specification", "URI": "https://mpai.community/standards/mpai-cae/"}]}

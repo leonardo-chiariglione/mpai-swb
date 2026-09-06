@@ -1,0 +1,50 @@
+{ "$schema":                              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                  "https://schemas.mpai.community/OSD/V1.5/data/RADARSceneGeometry.json",
+  "title":                                "RADARScene Geometry V1.5",
+  "description":                          "Includes Objects, Basic Scene geom. & Scene geom.",
+  "type":                                 "object",
+  "required":                             [ "Header", "RADARSceneGeometryID", "RADARSceneGeometrySpaceTime" ],
+  "additionalProperties":                 false,
+  "properties":                           {
+
+    "Header":                             { "type": "string", "const": "OSD-RSG-V1.5" },
+    "MInstanceID":                        { "type": "string" },
+    "UEnvironmentID":                     { "type": "string" },
+    "RADARSceneGeometryID":               { "type": "string" },
+    "RADARSceneGeometrySpaceTime":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "ObjectCount":                        { "type": "integer", "minimum": 0 },
+    "Objects":                            { "type": "array", "items": { "type": "object", "additionalProperties": false,
+                                            "properties": {
+        "ObjectSpaceTime":                { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "ObjectIDOrGeometry":             { "$ref": "#/$defs/ObjectIDOrGeometry" } } } },
+
+    "SubRADARSceneCount":                 { "type": "integer", "minimum": 0 },
+    "SubRADARScenes":                     { "type": "array", "items": { "type": "object", "additionalProperties": false,
+                                            "properties": {
+        "SubRADARSceneSpaceTime":         { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "SubRSceneIDOrSubRScene":         { "$ref": "#/$defs/SubRSceneIDOrSubRScene" } } } },
+
+    "BasicRADARSceneOrRADARScene":        { "$ref": "#/$defs/BasicRADARSceneOrRADARScene" },
+
+    "DataXMData":                         { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                      { "type": "string", "maxLength": 2048 } },
+
+  "$defs":                                {
+
+    "GeometryObject":                     { "type": "object", "required": [ "ObjectSpaceTime", "ObjectQualifier" ],
+                                            "additionalProperties": false, "properties": {
+      "ObjectSpaceTime":                  { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "ObjectQualifier":                  { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/RADARQualifier.json" } } },
+
+    "ObjectIDOrGeometry":                 { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                          { "$ref": "#/$defs/GeometryObject" },
+                                          { "type": "string" } ] } },
+
+    "SubRSceneIDOrSubRScene":             { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/RADARSceneGeometry.json" },
+                                          { "type": "string" } ] } },
+
+    "BasicRADARSceneOrRADARScene":        { "type": "array", "items": { "oneOf": [
+                                          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/BasicRADARSceneGeometry.json" },
+                                          { "$ref": "#/$defs/BasicRADARSceneOrRADARScene" } ] } } } }

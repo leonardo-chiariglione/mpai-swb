@@ -1,0 +1,24 @@
+AJV Validation Report
+Family (targets): PAF\V1.6\data
+Preloaded families: AIF\V3.0\data, MMC\V2.5\data, MMM4\V2.2\data, OSD\V1.5\data, TFA\V1.5\data
+Command: npx ajv-cli@latest compile --spec=draft2020 -c ajv-formats -s .\PAF\V1.6\data\*.json -r .\AIF\V3.0\data\*.json -r .\MMC\V2.5\data\*.json -r .\MMM4\V2.2\data\*.json -r .\OSD\V1.5\data\*.json -r .\TFA\V1.5\data\*.json
+Timestamp: 2026-03-22 11:54:50
+Exit code: 1
+
+RESULTS - total: 6, valid: 0, invalid: 6
+
+INVALID SCHEMAS:
+ - ./PAF/V1.6/data/Avatar.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./PAF/V1.6/data/BodyDescriptorsObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/BodyDescriptorsContentFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/BodyDescriptorsQualifier.json
+ - ./PAF/V1.6/data/FaceDescriptorsObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/FaceDescriptorsContentFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/FaceDescriptorsQualifier.json
+ - ./PAF/V1.6/data/GestureDescriptorsObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/BodyDescriptorsContentFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/GestureDescriptorsQualifier.json
+ - ./PAF/V1.6/data/MoCapObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/MoCapContentFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/MoCapQualifier.json
+ - ./PAF/V1.6/data/PortableAvatar.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+
+

@@ -1,0 +1,38 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/3DModelSceneDescription.json",
+  "title":                "3D Model Scene Description V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-3SD-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM implements the 3D Model Scene Description function.",
+
+  "ExternalPorts":        [{"Name": "SpaceTime",               "Direction": "Input",  "DataType": "OSD-SPT-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "3DModelObject",           "Direction": "Input",  "DataType": "OSD-3DO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SceneDescriptors",        "Direction": "Input",  "DataType": "OSD-SCD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "3DModelSceneDescriptors", "Direction": "Output", "DataType": "OSD-3SD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Alert",                   "Direction": "Output", "DataType": "CAV-ALT-V1.1", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [{"BinaryName":      "/* provided by implementer */",
+                            "Architecture":    "/* x86-64 | ARM64 */",
+                            "OperatingSystem": "/* Windows | Linux | MacOS */",
+                            "Version":         "/* implementer version */",
+                            "Source":          "/* AIMStorage | MPAIStore */",
+                            "Destination":     "/* provided by implementer */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",               "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */"},
+                           {"Name": "CPU:Number",           "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */"},
+                           {"Name": "CPU:Class",            "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */"},
+                           {"Name": "GPU:Number",           "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */"},
+                           {"Name": "GPU:CUDA:Class",       "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */"},
+                           {"Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */"},
+                           {"Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* GB/s */",           "Maximum": "/* GB/s */",           "Request": "/* GB/s */"}],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

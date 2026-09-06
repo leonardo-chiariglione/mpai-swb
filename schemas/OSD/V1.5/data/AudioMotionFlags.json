@@ -1,0 +1,33 @@
+{ "$schema":                "https://json-schema.org/draft/2020-12/schema",
+  "$id":                    "https://schemas.mpai.community/OSD/V1.5/data/AudioMotionFlags.json",
+  "title":                  "Audio Motion Flags V1.5", "type": "object", "required": ["Header", "MInstanceID", "AudioMotionFlags"],
+                            "description":    "Structured classification of motion patterns for each audio object", "properties": {
+
+    "Header":               { "type": "string", "const": "OSD-AMF-V1.5" },
+
+    "MInstanceID":          { "type": "string", "description": "Identifier of the Metaverse (virtual) instance." },
+
+    "AudioMotionFlags":     { "type": "array", "description": "List of motion flags for each audio object", "items": {
+                              "type": "object", "additionalProperties": false,
+                              "required": ["AudioObjectID", "MotionType", "MotionConfidence"], "properties": {
+
+        "AudioObjectID":    { "type": "string", "description": "Unique identifier of the audio object." },
+
+        "MotionType":       { "type": "string",
+                              "enum": ["Stationary", "Approaching", "Receding", "Orbiting", "Intermittent", "Erratic"],
+                              "description": "Primary motion classification." },
+
+        "MotionConfidence": { "type": "number", "minimum": 0, "maximum": 1,
+                              "description": "Confidence score for the motion classification (0..1)." },
+
+        "MotionVector":     { "type": "object", "description": "Optional 3D motion vector in user-relative coordinates.",
+                              "additionalProperties": false, "required": ["dx","dy","dz"], "properties": {
+                                "dx": { "type": "number" },
+                                "dy": { "type": "number" },
+                                "dz": { "type": "number" } } },
+
+        "TemporalWindow":   { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json",
+                              "description": "Evaluation time window for the motion estimate." } } } },
+
+    "DataExchangeMetadata": { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":        { "type": "string", "maxLength": 2048 } } }

@@ -1,0 +1,24 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/PAF/V1.6/AIMs/PSGestureInterpretation.json",
+  "title":                "PS-Gesture Interpretation V1.6",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-PGI-V1.6"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM extracts the Gesture Personal Status from the Gesture Descriptors.",
+
+  "ExternalPorts":        [{"Name": "GestureDescriptors",    "Direction": "Input",  "DataType": "PAF-GDO-V1.6", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "GesturePersonalStatus", "Direction": "Output", "DataType": "MMC-GPS-V2.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-paf/v1-6/"}]}

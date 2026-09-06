@@ -1,0 +1,45 @@
+{ "$schema":                                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                      "https://schemas.mpai.community/OSD/V1.5/data/3DModelSceneGeometry.json",
+  "title":                                    "3DModelScene Geometry V1.5", "description": "Includes Objects, Basic Scene geom. & Scene geom.",
+                                              "type": "object", "required": [ "Header", "3DModelSceneGeometryID", "3DModelSceneGeometrySpaceTime" ], "additionalProperties": false, "properties":                   {
+
+    "Header":                                 { "type": "string", "const": "OSD-3SG-V1.5" },
+    "MInstanceID":                            { "type": "string" },
+    "3DModelSceneGeometryID":                 { "type": "string" },
+    "3DModelSceneGeometrySpaceTime":          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "ObjectCount":                            { "type": "integer", "minimum": 0 },
+    "Objects":                                { "type": "array", "items": { "type": "object", "additionalProperties": false,
+      "properties":                           {
+        "ObjectSpaceTime":                    { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "ObjectIDOrGeometry":                 { "$ref": "#/$defs/ObjectIDOrGeometry" } } } },
+
+    "Sub3DModelSceneCount":                   { "type": "integer", "minimum": 0 },
+    "Sub3DModelScenes":                       { "type": "array", "items": { "type": "object", "additionalProperties": false,
+                                                "properties": {
+        "Sub3DModelSceneSpaceTime":           { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "Sub3SceneIDOrSub3Scene":             { "$ref": "#/$defs/Sub3SceneIDOrSub3Scene" } } } },
+
+    "Basic3DModelSceneOr3DModelScene":        { "$ref": "#/$defs/Basic3DModelSceneOr3DModelScene" },
+
+    "DataXMData":                             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                          { "type": "string", "maxLength": 2048 } },
+
+  "$defs":                                    {
+
+    "GeometryObject":                         { "type": "object", "required": [ "ObjectSpaceTime", "ObjectQualifier" ],
+                                                "additionalProperties": false, "properties": {
+      "ObjectSpaceTime":                      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "ObjectQualifier":                      { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/3DModelQualifier.json" } } },
+
+    "ObjectIDOrGeometry":                     { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                                { "$ref": "#/$defs/GeometryObject" },
+                                                { "type": "string" } ] } },
+
+    "Sub3SceneIDOrSub3Scene":                 { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                                { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/3DModelSceneGeometry.json" },
+                                                { "type": "string" } ] } },
+
+    "Basic3DModelSceneOr3DModelScene":        { "type": "array", "items": { "oneOf": [
+                                                { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Basic3DModelSceneGeometry.json" },
+                                                { "$ref": "#/$defs/Basic3DModelSceneOr3DModelScene" } ] } } } }

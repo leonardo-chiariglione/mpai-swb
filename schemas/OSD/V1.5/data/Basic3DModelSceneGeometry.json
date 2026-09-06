@@ -1,0 +1,24 @@
+{ "$schema":                              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                  "https://schemas.mpai.community/OSD/V1.5/data/Basic3DModelSceneGeometry.json",
+  "title":                                "Basic 3D Model Scene Geometry V1.5",
+  "type":                                 "object",
+  "additionalProperties":                 false,
+  "required":                             [ "Header", "Basic3DModelSceneGeometryID", "Basic3DModelSceneGeometrySpaceTime", "3DModelObjectCount", "3DModelObjects" ],
+  "properties":                           {
+
+    "Header":                             { "type": "string", "const": "OSD-B3G-V1.5" },
+    "MInstanceID":                        { "type": "string" },
+    "UEnvironmentID":                     { "type": "string" },
+    "Basic3DModelSceneGeometryID":        { "type": "string" },
+    "Basic3DModelSceneGeometryTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json" },
+
+    "Basic3DModelSceneGeometrySpaceTime": { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "3DModelObjectCount":                 { "type": "integer", "minimum": 0 },
+    "3DModelObjects":                     { "type": "array", "minItems": 0, "items": { "type": "object", "additionalProperties": false,
+                                            "required": [ "3DModelObjectSpaceTime", "3DModelObjectQualifier" ], "properties": {
+      "3DModelObjectSpaceTime":           { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "3DModelObjectQualifier":           { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/3DModelQualifier.json" } } } },
+
+    "DataXMData":                         { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                      { "type": "string", "maxLength": 2048 } } }

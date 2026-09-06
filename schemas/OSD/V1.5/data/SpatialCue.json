@@ -1,0 +1,60 @@
+{ "$schema":                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                      "https://schemas.mpai.community/OSD/V1.5/data/SpatialCue.json",
+  "title":                    "Spatial Cue V1.5",
+  "type":                     "object",
+  "properties":               {
+
+    "Header":                 { "type": "string", "const": "OSD-OSC-V1.5" },
+    "MInstanceID":            { "type": "string" },
+    "UEnvironmentID":         { "type": "string" },
+    "SpatialCueID":           { "type": "string" },
+    "SpatialCueTime":         { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+    "SpatialCueData":         { "type": "object", "properties": {
+
+      "CoordinateType":       { "$ref": "https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json" },
+      "ReferenceFrame":       { "type": "string", "enum": [ "World", "Entity", "Device", "Object" ] },
+      "CueType":              { "type": "string", "enum": [ "absolute", "relative", "keyword", "region", "range" ] },
+      "MediaType":            { "$ref": "https://schemas.mpai.community/TFA/V1.5/types/MediaTypes.json" },
+
+      "Time":                 { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+      "Trigger":              { "type": "object", "description": "Event or spatial predicate that activates the cue.",
+                                "additionalProperties": false, "required": ["Type"], "properties": {
+        "Type":               { "type": "string", "enum": [ "TimeEvent", "SpatialEvent", "StateEvent" ] },
+
+      "TimeEvent":            { "type": "object", "additionalProperties": false, "properties": {
+        "At":                 { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+        "After":              { "type": "number", "minimum": 0 } } },
+
+      "SpatialEvent":         { "type": "object", "additionalProperties": false, "properties": {
+        "Predicate":          { "type": "string", "enum": [ "enters", "exits", "inside", "outside", "closerThan", "fartherThan" ] },
+
+      "Region":               { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/GeometricSolid.json" },
+
+      "Distance":             { "type": "number", "minimum": 0 } } },
+
+      "StateEvent":           { "type": "object", "additionalProperties": false, "properties": {
+        "Source":             { "type": "string" },
+        "Condition":          { "type": "string" } } } } },
+
+      "Position":             { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Position.json" },
+      "Orientation":          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Orientation.json" },
+
+      "LocationRef":          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/LocationObject.json" },
+
+      "RelativeExpression":   { "oneOf": [
+                              { "type": "string", "enum": [ "right", "left", "front", "back", "up", "down" ] },
+                              { "type": "string" } ] },
+      "Keyword":              { "oneOf": [
+                              { "type": "string", "enum": [ "near", "far", "left", "right", "front", "back", "up", "down", "inside", "outside" ] },
+                              { "type": "string" } ] },
+
+      "Region":               { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/GeometricSolid.json" },
+
+      "RangeConstraint":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/RangeConstraint.json" },
+
+      "Confidence":           { "type": "number" } } },
+
+    "DataXMData":             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":          { "type": "string", "maxLength": 2048 } } }

@@ -1,0 +1,39 @@
+{ "$schema":                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                      "https://schemas.mpai.community/OSD/V1.5/data/SpatialAnchor.json",
+  "title":                    "Spatial Anchor V1.5",
+  "description":              "Represents a physical reference for spatial positioning",
+  "type":                     "object",
+  "additionalProperties":     false,
+  "required":                 ["AnchorType"],
+  "properties":               {
+
+    "Header":                 { "type": "string", "const": "OSD-SPA-V1.5" },
+    "MInstanceID":            { "type": "string" },
+    "UEnvironmentID":         { "type": "string" },
+    "SpatialAnchorID":        { "type": "string" },
+    "SpatialAnchorTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+    "AnchorType":             { "description": "Nature of the spatial anchor", "type": "string",
+                                "enum": ["absolute", "relative", "semantic", "volume"] },
+
+    "LocationRef":            { "description": "Reference to 3D volume Location schema",
+                                "$ref": "https://schemas.mpai.community/OSD/V1.5/data/LocationObject.json" },
+
+    "ReferenceObject":        { "description": "Object or entity used as a reference for relative positioning", "type": "string" },
+
+    "SemanticZone":           { "description": "Named area or zone (e.g., 'kitchen', 'meeting room')", "type": "string" },
+
+    "Confidence":             { "description": "Confidence level in interpreting the spatial anchor",
+                                "type": "number", "minimum": 0, "maximum": 1 },
+
+    "DataXMData":             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":          { "type": "string", "maxLength": 2048 } },
+
+  "oneOf": [                  { "required": ["LocationRef"],     "properties": { "AnchorType": { "const": "volume" } } },
+                              { "required": ["ReferenceObject"], "properties": { "AnchorType": { "const": "relative" } } },
+                              { "required": ["SemanticZone"],    "properties": { "AnchorType": { "const": "semantic" } } } ],
+
+  "$defs": {
+    "3DModelEventIDOr3DModelEvent": { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                    { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/3DModelEventDescriptors.json" },
+                                    { "type": "string" } ] } } } }

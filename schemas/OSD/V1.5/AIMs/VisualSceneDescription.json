@@ -1,0 +1,27 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/VisualSceneDescription.json",
+  "title":                "Visual Scene Description V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VSD-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM implements the Visual Scene Description function.",
+
+  "ExternalPorts":        [{"Name": "SpaceTime",              "Direction": "Input",  "DataType": "OSD-SPT-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualObject",           "Direction": "Input",  "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SceneDescriptors",       "Direction": "Input",  "DataType": "OSD-SCD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualSceneDescriptors", "Direction": "Output", "DataType": "OSD-VSD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Alert",                  "Direction": "Output", "DataType": "CAV-ALT-V1.1", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

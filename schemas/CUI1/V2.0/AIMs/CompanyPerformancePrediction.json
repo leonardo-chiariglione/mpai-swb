@@ -1,0 +1,69 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id": "https://schemas.mpai.community/CUI1/V2.0/AIMs/CompanyPerformancePrediction.json",
+  "title": "Company Performance Prediction V2.0",
+
+  "Identifier":   { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "CUI-CPP-V2.0" },
+
+  "APIProfile":   "Secure",
+  "Description":  "This composite AIM implements the MPAI-CUI Company Performance Prediction (CPP) Use Case.",
+
+  "ExternalPorts":  [
+    { "Name": "PredictionHorizon"                , "Direction": "Input",   "DataType": "number",        "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "ClimateRiskDescriptors"           , "Direction": "Input",   "DataType": "CUI-LRD-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "CyberRiskDescriptors"             , "Direction": "Input",   "DataType": "CUI-CRD-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "FinancialDescriptors"             , "Direction": "Input",   "DataType": "CUI-FND-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "GovernanceDescriptors"            , "Direction": "Input",   "DataType": "CUI-GVS-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "SecondaryRiskStatements"          , "Direction": "Input",   "DataType": "CUI-SRS-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "OrganisationDescriptors"          , "Direction": "Output",  "DataType": "CUI-ORD-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "PrimaryDefaultDescriptors"        , "Direction": "Output",  "DataType": "CUI-PDD-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "PrimaryDiscontinuityDescriptors"  , "Direction": "Output",  "DataType": "CUI-PSD-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "SecondaryDiscontinuityProbability", "Direction": "Output",  "DataType": "number",        "Technology": "Software", "Protocol": "", "IsRemote": false }
+  ],
+
+  "SubAIMs":  [
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "CUI-CAP-V2.0" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "CUI-RMG-V2.0" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "CUI-PRP-V2.0" } }
+  ],
+
+  "Topology":  [
+    { "Output": { "AIMName": ""            , "PortName": "PredictionHorizon"                 }, "Input": { "AIMName": "CUI-CAP-V2.0", "PortName": "PredictionHorizon" } },
+    { "Output": { "AIMName": ""            , "PortName": "ClimateRiskDescriptors"            }, "Input": { "AIMName": "CUI-CAP-V2.0", "PortName": "ClimateRiskDescriptors" } },
+    { "Output": { "AIMName": ""            , "PortName": "CyberRiskDescriptors"              }, "Input": { "AIMName": "CUI-CAP-V2.0", "PortName": "CyberRiskDescriptors" } },
+    { "Output": { "AIMName": ""            , "PortName": "FinancialDescriptors"              }, "Input": { "AIMName": "CUI-CAP-V2.0", "PortName": "FinancialDescriptors" } },
+    { "Output": { "AIMName": ""            , "PortName": "GovernanceDescriptors"             }, "Input": { "AIMName": "CUI-CAP-V2.0", "PortName": "GovernanceDescriptors" } },
+    { "Output": { "AIMName": ""            , "PortName": "SecondaryRiskStatements"           }, "Input": { "AIMName": "CUI-RMG-V2.0", "PortName": "SecondaryRiskStatements" } },
+    { "Output": { "AIMName": ""            , "PortName": "PredictionHorizon"                 }, "Input": { "AIMName": "CUI-PRP-V2.0", "PortName": "PredictionHorizon" } },
+    { "Output": { "AIMName": "CUI-CAP-V2.0", "PortName": "PrimaryDefaultDescriptors"         }, "Input": { "AIMName": "CUI-PRP-V2.0", "PortName": "PrimaryDefaultDescriptors" } },
+    { "Output": { "AIMName": "CUI-RMG-V2.0", "PortName": "SecondaryRiskMatrix"               }, "Input": { "AIMName": "CUI-PRP-V2.0", "PortName": "SecondaryRiskMatrix" } },
+    { "Output": { "AIMName": "CUI-CAP-V2.0", "PortName": "OrganisationDescriptors"           }, "Input": { "AIMName": ""            , "PortName": "OrganisationDescriptors" } },
+    { "Output": { "AIMName": "CUI-CAP-V2.0", "PortName": "PrimaryDefaultDescriptors"         }, "Input": { "AIMName": ""            , "PortName": "PrimaryDefaultDescriptors" } },
+    { "Output": { "AIMName": "CUI-CAP-V2.0", "PortName": "PrimaryDiscontinuityDescriptors"   }, "Input": { "AIMName": ""            , "PortName": "PrimaryDiscontinuityDescriptors" } },
+    { "Output": { "AIMName": "CUI-PRP-V2.0", "PortName": "SecondaryDiscontinuityProbability" }, "Input": { "AIMName": ""            , "PortName": "SecondaryDiscontinuityProbability" } }
+  ],
+
+  "Implementations":  [
+   {
+    "BinaryName": "/* provided by implementer */",
+    "Architecture": "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+    "OperatingSystem": "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | Custom */",
+    "Version": "/* implementer version */",
+    "Source": "/* AIMStorage | MPAIStore | AIMURL */",
+    "Destination": "/* provided by implementer */"
+   }
+  ],
+
+  "ResourcePolicies":  [
+    { "Name": "Memory"              , "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */" },
+    { "Name": "CPU:Number"          , "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */" },
+    { "Name": "CPU:Class"           , "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */" },
+    { "Name": "GPU:Number"          , "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */" },
+    { "Name": "GPU:CUDA:Class"      , "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */" },
+    { "Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */" },
+    { "Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* GB/s */",           "Maximum": "/* GB/s */",           "Request": "/* GB/s */" }
+  ],
+
+  "DataXMData":  { },
+
+  "Documentation":  [{ "Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-cui/cpp/v2-0/" }] }

@@ -1,0 +1,14 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id":     "https://schemas.mpai.community/TFA/V1.5/formats/SpeechSensorCharacteristics.json",
+  "title":   "SpeechSensorCharacteristics",
+  "type":    "string", "oneOf": [
+    { "const": "Omnidirectional",
+      "description": "A microphone pattern that captures sound equally from all directions around the capsule." },
+    { "const": "FigureOfEight",
+      "description": "A bidirectional microphone pattern that captures sound from the front and rear while strongly rejecting sound from the sides." },
+    { "const": "Cardioid",
+      "description": "A heart-shaped directional pattern most sensitive to sound from the front, with partial rejection at the sides and strong rejection at the rear." },
+    { "const": "Supercardioid",
+      "description": "A more directional variant of the cardioid pattern, offering narrower front pickup and stronger side rejection but with a small rear lobe." },
+    { "const": "Hypercardioid",
+      "description": "A highly directional pattern with an even narrower front pickup and higher side rejection, featuring a larger rear lobe than the supercardioid pattern." } ] } 

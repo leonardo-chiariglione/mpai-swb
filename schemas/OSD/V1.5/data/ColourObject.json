@@ -1,0 +1,24 @@
+{ "$schema":                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                      "https://schemas.mpai.community/OSD/V1.5/data/ColourObject.json",
+  "title":                    "Colour Object V1.5",
+  "type":                     "object",
+  "additionalProperties":     false,
+  "properties":               {
+
+    "Header":                 { "type": "string", "const": "OSD-CLO-V1.5" },
+    "MInstanceID":            { "type": "string" },
+    "UEnvironmentID":         { "type": "string" },
+
+    "ColourData":             { "type": "array", "items": { "oneOf": [
+                              { "type": "object", "required": ["Length", "URI"], "additionalProperties": false, "properties": {
+        "Length":             { "type": "integer" },
+        "URI":                { "type": "string", "format": "uri" } } },
+                              { "type": "object", "required": ["ID"], "additionalProperties": false, "properties": {
+        "ID":                 { "type": "string" } } },
+                              { "type": "object", "required": ["Data"], "additionalProperties": false, "properties": {
+        "Data":               { "type": "string" } } } ] } },
+
+    "ColourQualifier":        { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/ColourQualifier.json" },
+
+    "DataXMData":             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":         { "type": "string", "maxLength": 2048 } } }

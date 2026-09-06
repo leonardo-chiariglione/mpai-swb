@@ -1,0 +1,4 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id":     "https://schemas.mpai.community/AIH1/V1.0/nrdata/ServiceTypes.json",
+  "title":   "Service Types V1.5",
+  "type":    "string", "enum": [ "Store", "De-ID and Anonym", "Audit", "AIH Data Process" ] }

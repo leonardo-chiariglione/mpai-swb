@@ -1,0 +1,10 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/data/ProximityClass.json",
+  "title":                "Proximity Class V1.5",
+  "description":          "Proximity classification of an audio Entity relative to the observer.",
+  "type":                 "object",
+  "additionalProperties": false,
+  "properties":           {
+    "EntityID":           { "type": "string" },
+    "ProximityClass":     { "type": "string", "enum": [ "VeryClose", "Close", "Medium", "Far", "VeryFar" ] },
+    "ProximityDistance":  { "type": "number", "minimum": 0 } } }

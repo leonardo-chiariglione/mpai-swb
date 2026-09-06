@@ -1,0 +1,72 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "ModuleTrainer",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Name":  "MPAI-NNW",
+                                             "AIW":  "NNW-WTI",
+                                             "AIM":  "NNW-MTR",
+                                             "Version":  "1"
+                                         },
+                       "Description":  "This AIM trains an AIM.",
+                       "Types":  [
+                                     {
+                                         "Name":  "UntrainedParameters_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "TrainingDataset_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "UnwatermarkedParameters_t",
+                                         "Type":  "uint8[]"
+                                     }
+                                 ],
+                       "Ports":  [
+                                     {
+                                         "Name":  "UntrainedParameters",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "UntrainedParameters_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "TrainingDataset",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "TrainingDataset_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "UnwatermarkedParameters",
+                                         "Direction":  "OutputInput",
+                                         "RecordType":  "UnwatermarkedParameters_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     }
+                                 ],
+                       "SubAIMs":  [
+
+                                   ],
+                       "Topology":  [
+
+                                    ],
+                       "Implementations":  [
+
+                                           ],
+                       "Documentation":  [
+                                             {
+                                                 "Type":  "Tutorial",
+                                                 "URI":  "https://mpai.community/standards/MPAI-NNW/"
+                                             }
+                                         ]
+                   },
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIMs/ModuleTrainer.json"
+}
+

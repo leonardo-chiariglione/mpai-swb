@@ -1,0 +1,36 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/XRV1/V1.0/AIMs/ActionGeneration.json",
+  "title":                "Action Generation V1.0",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "XRV-ADG-V1.0"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM receives the Performance, Participant, and Operator Status of the Real and Virtual Environments and provides the Action Generation of both Environments, the Cue Point Identifier, and the Participant Data.",
+
+  "ExternalPorts":        [{"Name": "REPerformanceStatus",     "Direction": "Input",  "DataType": "XRV-RFS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEPerformanceStatus",     "Direction": "Input",  "DataType": "XRV-VFS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REParticipantStatus",     "Direction": "Input",  "DataType": "XRV-RTS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEParticipantStatus",     "Direction": "Input",  "DataType": "XRV-BTS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REOperatorStatus",        "Direction": "Input",  "DataType": "XRV-ROS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEOperatorStatus",        "Direction": "Input",  "DataType": "XRV-VOS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Script",                  "Direction": "Input",  "DataType": "XRV-SPT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ActionTable",             "Direction": "Input",  "DataType": "XRV-ACT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ScriptVenueAssociations", "Direction": "Input",  "DataType": "XRV-SVA-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ParticipantData",         "Direction": "Input",  "DataType": "XRV-PTD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REActionID",              "Direction": "Output", "DataType": "XRV-ACT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false, "PortNumber": 1},
+                           {"Name": "VEActionID",              "Direction": "Output", "DataType": "XRV-ACT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false, "PortNumber": 2},
+                           {"Name": "CuePointID",              "Direction": "Output", "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ParticipantData",         "Direction": "Output", "DataType": "XRV-PTD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-xrv/ltp/v1-0/"}]}

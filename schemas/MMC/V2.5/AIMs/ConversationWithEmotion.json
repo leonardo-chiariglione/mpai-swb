@@ -1,0 +1,84 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id": "https://schemas.mpai.community/MMC/V2.5/AIMs/ConversationWithEmotion.json",
+  "title": "Conversation with Emotion Composite V2.5",
+
+  "Identifier":   { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-CWE-V2.5" },
+
+  "APIProfile":   "Basic",
+  "Description":  "This composite AIM implements a conversation between a human and a machine conveying Emotion.",
+
+  "ExternalPorts":  [
+    { "Name": "InputSelector", "Direction": "Input",   "DataType": "OSD-SEL-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "InputText1"   , "Direction": "Input",   "DataType": "OSD-TXO-V1.5",  "Technology": "Software", "Protocol": "", "PortNumber": 1, "IsRemote": false },
+    { "Name": "InputText2"   , "Direction": "Input",   "DataType": "OSD-TXO-V1.5",  "Technology": "Software", "Protocol": "", "PortNumber": 2, "IsRemote": false },
+    { "Name": "InputSpeech"  , "Direction": "Input",   "DataType": "OSD-SPO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "FaceObject"   , "Direction": "Input",   "DataType": "OSD-VIO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "OutputText"   , "Direction": "Output",  "DataType": "OSD-TXO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "SpeechObject" , "Direction": "Output",  "DataType": "OSD-SPO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "FaceObjectOut", "Direction": "Output",  "DataType": "OSD-VIO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false }
+  ],
+
+  "SubAIMs":  [
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-ASR-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-ESD-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-EFD-V1.6" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-NLU-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-PTI-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-PSI-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-PFI-V1.6" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-MEF-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-EDP-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-TTS-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-VLA-V2.5" } }
+  ],
+
+  "Topology":  [
+    { "Output": { "AIMName": ""            , "PortName": "InputSpeech"           }, "Input": { "AIMName": "MMC-ASR-V2.5", "PortName": "SpeechObject" } },
+    { "Output": { "AIMName": "MMC-ASR-V2.5", "PortName": "RecognisedText"        }, "Input": { "AIMName": "MMC-NLU-V2.5", "PortName": "TextObject", "PortNumber": 1 } },
+    { "Output": { "AIMName": ""            , "PortName": "InputSelector"         }, "Input": { "AIMName": "MMC-NLU-V2.5", "PortName": "Selector" } },
+    { "Output": { "AIMName": ""            , "PortName": "InputText1"            }, "Input": { "AIMName": "MMC-NLU-V2.5", "PortName": "TextObject", "PortNumber": 2 } },
+    { "Output": { "AIMName": "MMC-NLU-V2.5", "PortName": "Meaning"               }, "Input": { "AIMName": "MMC-PTI-V2.5", "PortName": "Meaning" } },
+    { "Output": { "AIMName": "MMC-NLU-V2.5", "PortName": "Meaning"               }, "Input": { "AIMName": "MMC-EDP-V2.5", "PortName": "Meaning" } },
+    { "Output": { "AIMName": "MMC-NLU-V2.5", "PortName": "RefinedText"           }, "Input": { "AIMName": "MMC-EDP-V2.5", "PortName": "TextObject", "PortNumber": 1 } },
+    { "Output": { "AIMName": ""            , "PortName": "InputSpeech"           }, "Input": { "AIMName": "MMC-ESD-V2.5", "PortName": "SpeechObject" } },
+    { "Output": { "AIMName": "MMC-ESD-V2.5", "PortName": "SpeechDescriptors"     }, "Input": { "AIMName": "MMC-PSI-V2.5", "PortName": "SpeechDescriptors" } },
+    { "Output": { "AIMName": ""            , "PortName": "FaceObject"            }, "Input": { "AIMName": "PAF-EFD-V1.6", "PortName": "FaceObject" } },
+    { "Output": { "AIMName": "PAF-EFD-V1.6", "PortName": "FaceDescriptors"       }, "Input": { "AIMName": "PAF-PFI-V1.6", "PortName": "FaceDescriptors" } },
+    { "Output": { "AIMName": "MMC-PTI-V2.5", "PortName": "PersonalStatusText"    }, "Input": { "AIMName": "MMC-MEF-V2.5", "PortName": "TextEmotion" } },
+    { "Output": { "AIMName": "MMC-PSI-V2.5", "PortName": "PersonalStatusSpeech"  }, "Input": { "AIMName": "MMC-MEF-V2.5", "PortName": "SpeechEmotion" } },
+    { "Output": { "AIMName": "PAF-PFI-V1.6", "PortName": "PersonalStatusFace"    }, "Input": { "AIMName": "MMC-MEF-V2.5", "PortName": "FaceEmotion" } },
+    { "Output": { "AIMName": "MMC-MEF-V2.5", "PortName": "FusedEmotion"          }, "Input": { "AIMName": "MMC-EDP-V2.5", "PortName": "PersonalStatus" } },
+    { "Output": { "AIMName": "MMC-EDP-V2.5", "PortName": "MachineTextObject"     }, "Input": { "AIMName": "MMC-TTS-V2.5", "PortName": "TextObject" } },
+    { "Output": { "AIMName": "MMC-EDP-V2.5", "PortName": "MachineTextObject"     }, "Input": { "AIMName": ""            , "PortName": "OutputText" } },
+    { "Output": { "AIMName": "MMC-EDP-V2.5", "PortName": "MachinePersonalStatus" }, "Input": { "AIMName": "MMC-TTS-V2.5", "PortName": "Emotion" } },
+    { "Output": { "AIMName": "MMC-EDP-V2.5", "PortName": "MachinePersonalStatus" }, "Input": { "AIMName": "MMC-VLA-V2.5", "PortName": "EmotionIn" } },
+    { "Output": { "AIMName": "MMC-TTS-V2.5", "PortName": "Speech"                }, "Input": { "AIMName": ""            , "PortName": "SpeechObject" } },
+    { "Output": { "AIMName": "MMC-TTS-V2.5", "PortName": "Speech"                }, "Input": { "AIMName": "MMC-VLA-V2.5", "PortName": "SpeechObject" } },
+    { "Output": { "AIMName": "MMC-VLA-V2.5", "PortName": "FaceObject"            }, "Input": { "AIMName": ""            , "PortName": "FaceObjectOut" } }
+  ],
+
+  "Implementations":  [
+   {
+    "BinaryName": "/* provided by implementer */",
+    "Architecture": "/* x86-64 | ARM64 */",
+    "OperatingSystem": "/* Windows | Linux | MacOS */",
+    "Version": "/* implementer version */",
+    "Source": "/* AIMStorage | MPAIStore */",
+    "Destination": "/* provided by implementer */"
+   }
+  ],
+
+  "ResourcePolicies":  [
+    { "Name": "Memory"              , "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */" },
+    { "Name": "CPU:Number"          , "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */" },
+    { "Name": "CPU:Class"           , "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */" },
+    { "Name": "GPU:Number"          , "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */" },
+    { "Name": "GPU:CUDA:Class"      , "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */" },
+    { "Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */" },
+    { "Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* GB/s */",           "Maximum": "/* GB/s */",           "Request": "/* GB/s */" }
+  ],
+
+  "DataXMData":  { },
+
+  "Documentation":  [{ "Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-mmc/v2-5/" }] }

@@ -1,0 +1,25 @@
+{ "$schema":                            "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                "https://schemas.mpai.community/OSD/V1.5/data/BasicLiDARSceneGeometry.json",
+  "title":                              "Basic 3D Model Scene Geometry V1.5",
+  "type":                               "object",
+  "additionalProperties":               false,
+  "required":                           [ "Header", "BasicLiDARSceneGeometryID", "BasicLiDARSceneGeometrySpaceTime", "LiDARObjectCount", "LiDARObjects" ],
+  "properties": {
+
+    "Header":                           { "type": "string", "const": "OSD-BLG-V1.5" },
+    "MInstanceID":                      { "type": "string" },
+    "UEnvironmentID":                   { "type": "string" },
+    "BasicLiDARSceneGeometryID":        { "type": "string" },
+    "BasicLiDARSceneGeometryTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json" },
+
+    "BasicLiDARSceneGeometrySpaceTime": { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "LiDARObjectCount":                 { "type": "integer", "minimum": 0 },
+
+    "LiDARObjects":                     { "type": "array", "minItems": 0, "items": { "type": "object", "additionalProperties": false,
+                                          "required": [ "LiDARObjectSpaceTime", "LiDARObjectQualifier" ], "properties": {
+      "LiDARObjectSpaceTime":           { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "LiDARObjectQualifier":           { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/LiDARQualifier.json" } } } },
+
+    "DataXMData":                       { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                    { "type": "string", "maxLength": 2048 } } }

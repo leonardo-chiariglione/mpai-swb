@@ -1,0 +1,46 @@
+{ "$schema":                                        "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                            "https://schemas.mpai.community/OSD/V1.5/data/UltrasoundSceneGeometry.json",
+  "title":                                          "UltrasoundScene Geometry V1.5", "description": "Includes Objs, BScene geom.-Scene geom.",
+                                                    "type": "object", "required": [ "Header", "UltrasoundSceneGeometryID", "UltrasoundSceneGeometrySpaceTime" ], "additionalProperties": false, "properties": {
+
+    "Header":                                       { "type": "string", "const": "OSD-USG-V1.5" },
+    "MInstanceID":                                  { "type": "string" },
+    "UEnvironmentID":                               { "type": "string" },
+    "UltrasoundSceneGeometryID":                    { "type": "string" },
+    "UltrasoundSceneGeometrySpaceTime":             { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "ObjectCount":                                  { "type": "integer", "minimum": 0 },
+    "Objects":                                      { "type": "array", "items": { "type": "object", "additionalProperties": false,
+      "properties":                                 {
+        "ObjectSpaceTime":                          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "ObjectIDOrGeometry":                       { "$ref": "#/$defs/ObjectIDOrGeometry" } } } },
+
+    "SubUltrasoundSceneCount":                      { "type": "integer", "minimum": 0 },
+    "SubUltrasoundScenes":                          { "type": "array", "items": { "type": "object", "additionalProperties": false,
+                                                      "properties": {
+        "SubUltrasoundSceneSpaceTime":              { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "SubUSceneIDOrSubUScene":                   { "$ref": "#/$defs/SubUSceneIDOrSubUScene" } } } },
+
+    "BasicUltrasoundSceneOrUltrasoundScene":        { "$ref": "#/$defs/BasicUltrasoundSceneOrUltrasoundScene" },
+
+    "DataXMData":                                   { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                                { "type": "string", "maxLength": 2048 } },
+
+  "$defs":                                          {
+
+    "GeometryObject":                               { "type": "object", "required": [ "ObjectSpaceTime", "ObjectQualifier" ],
+                                                      "additionalProperties": false, "properties": {
+      "ObjectSpaceTime":                            { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "ObjectQualifier":                            { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/UltrasoundQualifier.json" } } },
+
+    "ObjectIDOrGeometry":                           { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                                      { "$ref": "#/$defs/GeometryObject" },
+                                                      { "type": "string" } ] } },
+
+    "SubUSceneIDOrSubUScene":                       { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                                      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/UltrasoundSceneGeometry.json" },
+                                                      { "type": "string" } ] } },
+
+    "BasicUltrasoundSceneOrUltrasoundScene":        { "type": "array", "items": { "oneOf": [
+                                                      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/BasicUltrasoundSceneGeometry.json" },
+                                                      { "$ref": "#/$defs/BasicUltrasoundSceneOrUltrasoundScene" } ] } } } }

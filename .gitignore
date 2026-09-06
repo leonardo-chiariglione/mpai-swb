@@ -1,0 +1,27 @@
+# build output
+bin/
+obj/
+.vs/
+_build/
+_macpublish/
+*.user
+*.pdb
+*.lib
+*.exe
+
+# diagnostics / scratch
+*.log
+*.bak
+.backups/
+
+# governed storage: biometrics / runtime data - NEVER commit
+SharedStorage/
+TestData/
+
+# large model binaries - not source (kept locally; use Git LFS in the
+# distribution repo if they must ship)
+Models/
+
+# OS
+Thumbs.db
+.DS_Store

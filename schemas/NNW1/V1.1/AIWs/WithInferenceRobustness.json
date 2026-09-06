@@ -1,0 +1,234 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "WithInferenceRobustness",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Standard":  "MPAI-NNW",
+                                             "AIW":  "NNW-WIR",
+                                             "AIM":  "NNW-WIR",
+                                             "Version":  "1"
+                                         }
+                   },
+    "APIProfile":  "Basic",
+    "Description":  "This AIF is used to call the AIW of NNW robustness evaluation when the payload is retrieved in the inference",
+    "Types":  [
+                  {
+                      "Name":  "OriginalPayload_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "TestingDataset_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "WatermarkedParameters_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "ModifiedParameters_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "ModifiedInference_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "RetrievedPayload_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "CountError_t",
+                      "Type":  "uint8"
+                  }
+              ],
+    "Ports":  [
+                  {
+                      "Name":  "OriginalPayload",
+                      "Direction":  " InputOutput ",
+                      "RecordType":  "OriginalPayload_t"
+                  },
+                  {
+                      "Name":  "TestingDataset",
+                      "Direction":  " InputOutput ",
+                      "RecordType":  "TestingDataset_t"
+                  },
+                  {
+                      "Name":  "WatermarkedParameters",
+                      "Direction":  " InputOutput ",
+                      "RecordType":  "WatermarkedParameters_t"
+                  },
+                  {
+                      "Name":  "ModifiedParameters",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "ModifiedParameters_t"
+                  },
+                  {
+                      "Name":  "ModifiedInference",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "ModifiedInference_t"
+                  },
+                  {
+                      "Name":  "RetrievedPayload_1",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "RetrievedPayload_t"
+                  },
+                  {
+                      "Name":  "RetrievedPayload_2",
+                      "Direction":  "OutputInput",
+                      "RecordType":  "RetrievedPayload_t"
+                  },
+                  {
+                      "Name":  "CountError",
+                      "Direction":  "OutputInput",
+                      "RecordType":  "CountError_t"
+                  }
+              ],
+    "SubAIMs":  [
+                    {
+                        "Name":  "ModificationModule",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-WIR",
+                                                                 "AIM":  "ModificationModule",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "ModifiedAIM",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-WIR",
+                                                                 "AIM":  "ModifiedAIM",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "WIRWatermarkDecoder",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-WIR",
+                                                                 "AIM":  "WIRWatermarkDecoder",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "Comparator",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-WIR",
+                                                                 "AIM":  "Comparator",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    }
+                ],
+    "Topology":  [
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "OriginalPayload"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "Comparator",
+                                       "PortName":  "OriginalPayload"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "TestingDataset"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "ModifiedAIM",
+                                       "PortName":  "TestingDataset"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "WatermarkedParameters"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "ModificationModule",
+                                       "PortName":  "WatermarkedParameters"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "ModificationModule",
+                                        "PortName":  "ModifiedParameters"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "ModifiedAIM",
+                                       "PortName":  "ModifiedParameters"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "ModifiedAIM",
+                                        "PortName":  "ModifiedInference"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "WIRWatermarkDecoder",
+                                       "PortName":  "ModifiedInference"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "WIRWatermarkDecoder",
+                                        "PortName":  "RetrievedPayload_1"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "Comparator",
+                                       "PortName":  "RetrievedPayload_1"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "WIRWatermarkDecoder",
+                                        "PortName":  "RetrievedPayload_2"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "",
+                                       "PortName":  "RetrievedPayload_2"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "Comparator",
+                                        "PortName":  "CountError"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "",
+                                       "PortName":  "CountError"
+                                   }
+                     }
+                 ],
+    "Implementations":  [
+
+                        ],
+    "ResourcePolicies":  [
+
+                         ],
+    "Documentation":  [
+                          {
+                              "Type":  "tutorial",
+                              "URI":  "https://mpai.community/standards/mpai-nnw/"
+                          }
+                      ],
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIWs/WithInferenceRobustness.json"
+}
+

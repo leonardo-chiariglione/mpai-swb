@@ -1,0 +1,60 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "NIRWatermarkDecoder",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Name":  "MPAI-NNW",
+                                             "AIW":  "NNW-NIR",
+                                             "AIM":  "NNW-NWD",
+                                             "Version":  "1"
+                                         },
+                       "Description":  "This AIM implements the watermark decoder which retrieves the payload inserted in an AIM and returns the retrieved payload.",
+                       "Types":  [
+                                     {
+                                         "Name":  "ModifiedParameters_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "RetrievedPayload_t",
+                                         "Type":  "uint8[]"
+                                     }
+                                 ],
+                       "Ports":  [
+                                     {
+                                         "Name":  "ModifiedParameters",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "ModifiedParameters_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "RetrievedPayload",
+                                         "Direction":  "OutputInput",
+                                         "RecordType":  "bitstring",
+                                         "Technology":  "RetrievedPayload_t",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     }
+                                 ],
+                       "SubAIMs":  [
+
+                                   ],
+                       "Topology":  [
+
+                                    ],
+                       "Implementations":  [
+
+                                           ],
+                       "Documentation":  [
+                                             {
+                                                 "Type":  "Tutorial",
+                                                 "URI":  "https://mpai.community/standards/MPAI-NNW/"
+                                             }
+                                         ]
+                   },
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIMs/NIRWatermarkDecoder.json"
+}
+

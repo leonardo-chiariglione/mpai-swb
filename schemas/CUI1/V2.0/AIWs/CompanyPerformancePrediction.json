@@ -1,0 +1,86 @@
+
+{
+  "$schemas": "http://schemas.mpai.community/AIF/V2.0/AIW-AIM-metadata.schema.json",
+  "$id": "https://schemas.mpai.community/CUI1/V2.0/AIWs/CompanyPerformancePrediction.json",
+  "title": "Company Performance Prediction V2.0",
+  "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "Standard": {
+    "Name": "MPAI-CUI", "AIW": "CUI-CPP", "AIM": "", "Version": "2.0" },
+
+    "APIProfile": "Secure",
+    "Description": "This AIW implements the MPAI-CUI AI-based Company Performance Prediction (CPP) Use Case",
+
+    "Types": [
+      { "Name": "PredictionHorizon_t",                 "Type": "int8"   },
+      { "Name": "ClimateRiskDescriptors_t",            "Type": "uint8"  },
+      { "Name": "CyberRiskDescriptors_t",              "Type": "uint8"  },
+      { "Name": "GovernanceDescriptors_t",             "Type": "uint8"  },
+      { "Name": "FinancialDescriptors_t",              "Type": "uint8"  },
+      { "Name": "SecondaryRiskStatements_t",           "Type": "uint8"  },
+      { "Name": "OrganisationDescriptors",             "Type": "uint8"  },
+      { "Name": "PrimaryDefaultDescriptors",           "Type": "uint8"  },
+      { "Name": "PrimaryDiscontinuityDescriptors",     "Type": "uint8"  },
+      { "Name": "SecondaryDiscontinuityProbability",   "Type": "number" } ],
+
+    "Ports": [
+      { "Name": "PredictionHorizon",                "Direction": "InputOutput", "Record_Type": "PredictionHorizon_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "ClimateRiskDescriptors",           "Direction": "InputOutput", "Record_Type": "PrimaryRiskDescriptors_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "CyberRiskDescriptors",             "Direction": "InputOutput", "Record_Type": "PrimaryRiskDescriptors_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "GovernanceDescriptors",            "Direction": "InputOutput", "Record_Type": "GovernanceDescriptors_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "FinancialDescriptors",             "Direction": "InputOutput", "Record_Type": "FinancialDescriptors_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "SecondaryRiskStatements",          "Direction": "InputOutput", "Record_Type": "SecondaryRiskDescriptors_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "OrganisationDescriptors",          "Direction": "OutputInput", "Record_Type": "OrganisationDescriptors_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "PrimaryDefaultDescriptors",        "Direction": "OutputInput", "Record_Type": "PrimaryDefaultDescriptors_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "PrimaryDiscontinuityDescriptors",  "Direction": "OutputInput", "Record_Type": "PrimaryDiscontinuityDescriptors_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false },
+      { "Name": "SecondaryDiscontinuityProbability","Direction": "OutputInput", "Record_Type": "SecondaryDiscontinuityProbability_t",
+        "Type": "Software",                         "Protocol": "",             "IsRemote": false } ],
+
+    "SubAIMs": [
+      { "Name": "RiskMatrixGeneration",
+        "Identifier": { "ImplementerID": "/* String assigned by IIDRA */",
+                        "Specification": { "Standard": "MPAI-CUI", "AIW": "CUI-CPP", "AIM": "RiskMatrixGeneration", "Version": "2.0" } } },
+      { "Name": "CompanyAssessmentAndPrediction",
+        "Identifier": { "ImplementerID": "/* String assigned by IIDRA */",
+                        "Specification": { "Standard": "MPAI-CUI", "AIW": "CUI-CPP", "AIM": "CompanyAssessmentAndPrediction", "Version": "2.0" } } },
+      { "Name": "PredictionResultPerturbation",
+        "Identifier": { "ImplementerID": "/* String assigned by IIDRA */",
+                        "Specification": { "Standard": "MPAI-CUI", "AIW": "CUI-CPP", "AIM": "PredictionResultPerturbation", "Version": "2.0" } } } ],
+
+    "Topology": [
+      { "Output": { "Module": "",                               "Port": "PredictionHorizon"          },
+        "Input":  { "Module": "CompanyAssessmentAndPrediction", "Port": "PredictionHorizon"     } },
+      { "Output": { "Module": "",                               "Port": "ClimateRiskDescriptors"     },
+        "Input":  { "Module": "CompanyAssessmentAndPrediction", "Port": "ClimateRiskDescriptors"} },
+      { "Output": { "Module": "",                               "Port": "CyberRiskDescriptors"       },
+        "Input":  { "Module": "CompanyAssessmentAndPrediction", "Port": "CyberRiskDescriptors"  } },
+      { "Output": { "Module": "",                               "Port": "FinancialDescriptors"       },
+        "Input":  { "Module": "CompanyAssessmentAndPrediction", "Port": "FinancialDescriptors"  } },
+      { "Output": { "Module": "",                               "Port": "GovernanceDescriptors"      },
+        "Input":  { "Module": "CompanyAssessmentAndPrediction", "Port": "GovernanceDescriptors" } },
+      { "Output": { "Module": "",                               "Port": "SecondaryRiskStatements"    },
+        "Input":  { "Module": "RiskMatrixGeneration",           "Port": "SecondaryRiskStatements"} },
+      { "Output": { "Module": "RiskMatrixGeneration",           "Port": "SecondaryRiskMatrix"        },
+        "Input":  { "Module": "PredictionResultPerturbation",   "Port": "SecondaryRiskMatrix"    } },
+      { "Output": { "Module": "",                               "Port": "PredictionHorizon"          },
+        "Input":  { "Module": "PredictionResultPerturbationn",  "Port": "PredictionHorizon"      } },
+      { "Output": { "Module": "CompanyAssessmentAndPrediction", "Port": "OrganisationDescriptors"    },
+        "Input":  { "Module": "",                               "Port": "OrganisationDescriptors" } },
+      { "Output": { "Module": "CompanyAssessmentAndPrediction", "Port": "PrimaryDiscontinuityDescriptors" },
+        "Input":  { "Module": "",                               "Port": "PrimaryDiscontinuityDescriptors" } },
+      { "Output": { "Module": "PredictionResultPerturbation",   "Port": "SecondaryDiscontinuityProbability" },
+        "Input":  { "Module": "",                               "Port": "SecondaryDiscontinuityProbability" } } ],
+
+    "Implementations": [],
+    "ResourcePolicies": [],
+    "Documentation": [ { "Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-cui/cpp/v2-0" } ] }
+
+}
+

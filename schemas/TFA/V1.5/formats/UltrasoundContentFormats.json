@@ -1,0 +1,8 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id":     "https://schemas.mpai.community/TFA/V1.5/formats/UltrasoundContentFormats.json",
+  "title":   "UltrasoundContentFormats",
+  "type":    "string", "oneOf": [
+    { "const": "CUDF",
+      "description": "Common Ultrasonic Data File (CUDF) Ã¢â‚¬â€ a content format for representing ultrasound data. Listed as an official ultrasound format alongside UFF. " },
+    { "const": "UFF",
+      "description": "Ultrasound File Format (UFF) Ã¢â‚¬â€ an open, HDF5Ã¢â‚¬â€˜based research standard designed to store ultrasound channel and beamformed data, facilitating reproducibility and data sharing. " } ] }

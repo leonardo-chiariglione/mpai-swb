@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id": "https://schemas.mpai.community/MMC/V2.5/AIMs/PersonalStatusMultiplexing.json",
+  "title": "Personal Status Multiplexing V2.5",
+  "Identifier": {
+    "ImplementerID": "/* String assigned by IIDRA */",
+    "ImplementationID": "/* String from Implementer */",
+    "AIMName": "MMC-PSM-V2.5"
+  },
+  "APIProfile": "Basic",
+  "Description": "This AIM assembles the per-modality Personal Statuses - Text, Speech, Face, and Gesture - into a single Entity Personal Status. It combines; it does not compute. Each modality input is optional, but at least one shall be present; the Entity Personal Status carries whichever modalities are supplied.",
+  "ExternalPorts": [
+    {
+      "Name": "TextPersonalStatus",
+      "Direction": "Input",
+      "DataType": "MMC-TPS-V2.5",
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "SpeechPersonalStatus",
+      "Direction": "Input",
+      "DataType": "MMC-SPS-V2.5",
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "FacePersonalStatus",
+      "Direction": "Input",
+      "DataType": "MMC-FPS-V2.5",
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "GesturePersonalStatus",
+      "Direction": "Input",
+      "DataType": "MMC-GPS-V2.5",
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "EntityPersonalStatus",
+      "Direction": "Output",
+      "DataType": "MMC-EPS-V2.5",
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    }
+  ],
+  "SubAIMs": [],
+  "Topology": [],
+  "Implementations": [
+    {
+      "ImplementationURI": "/* URI storing Implementation */",
+      "BinaryName": "/* BinaryName */",
+      "Architecture": "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+      "OperatingSystem": "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | RTOS | Oniro | iOS */",
+      "Version": "/* Version */",
+      "Source": "/* AIMStorage | MPAIStore | AIMURL */",
+      "Destination": "/* Destination URI */"
+    }
+  ],
+  "ResourcePolicies": [
+    {
+      "Name": "Memory",
+      "Minimum": "/* number GB */",
+      "Maximum": "/* number GB */",
+      "Request": "/* number GB */"
+    },
+    {
+      "Name": "CPU:Class",
+      "Minimum": "/* Low | Medium | High */",
+      "Maximum": "/* Low | Medium | High */",
+      "Request": "/* Low | Medium | High */"
+    }
+  ],
+  "DataXMData": {},
+  "Documentation": [
+    {
+      "Type": "Tutorial",
+      "URI": "https://mpai.community/standards/mpai-mmc/v2-5/"
+    }
+  ]
+}

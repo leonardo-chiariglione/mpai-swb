@@ -1,0 +1,308 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIW-AIM-metadata.schema.json",
+    "title":  "PersonalStatusDisplay",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Name":  "MPAI-PAF",
+                                             "AIW":  "",
+                                             "AIM":  "PersonalStatusDisplay",
+                                             "Version":  "V1.5"
+                                         }
+                   },
+    "Description":  "This AIM outputs the Avatar Model and renders a speaking avatar from text and Personal Status.",
+    "Types":  [
+                  {
+                      "Name":  "TextObject_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "MLModel_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "PersonalStatus_t",
+                      "Type":  "uint8[]}"
+                  },
+                  {
+                      "Name":  "AvatarModel_t",
+                      "Type":  "uint8[]"
+                  }
+              ],
+    "Ports":  [
+                  {
+                      "Name":  "MachineID",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "string",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "TextObject",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "Text_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "SpeechModel",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "MLModel_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "PersonalStatus",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "PersonalStatus_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "AvatarModel",
+                      "Direction":  "OutputInput",
+                      "RecordType":  "Model_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "PortableAvatar",
+                      "Direction":  "OutputInput",
+                      "RecordType":  "PortableAvatar_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  }
+              ],
+    "SubAIMs":  [
+                    {
+                        "Name":  "PersonalStatusDemultiplexing",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-MMC",
+                                                                 "AIW":  "",
+                                                                 "AIM":  "PersonalStatusDemultiplexing",
+                                                                 "Version":  "V2.4"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "TextToSpeech",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-MMC",
+                                                                 "AIW":  "",
+                                                                 "AIM":  "TextToSpeech",
+                                                                 "Version":  "V2.4"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "EntityFaceDescription",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-PAF",
+                                                                 "AIW":  "",
+                                                                 "AIM":  "EntityFaceDescription",
+                                                                 "Version":  "V1.5"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "EntityBodyDescription",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-PAF",
+                                                                 "AIW":  "",
+                                                                 "AIM":  "EntityBodyDescription",
+                                                                 "Version":  "V1.5"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "PortableAvatarMultiplexing",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-PAF",
+                                                                 "AIW":  "",
+                                                                 "AIM":  "PortableAvatarMultiplexing",
+                                                                 "Version":  "1.5"
+                                                             }
+                                       }
+                    }
+                ],
+    "Topology":  [
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "PersonalStatus"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "PersonalStatusDemultiplexing",
+                                       "PortName":  "PersonalStatus"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "SpeechModel1"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "TextToSpeech",
+                                       "PortName":  "SpeechModel1"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "TextObject1"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "TextToSpeech",
+                                       "PortName":  "TextObject1"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "PersonalStatusDemultiplexing",
+                                        "PortName":  "SpeechPersonalStatus"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "TextToSpeech",
+                                       "PortName":  "SpeechPersonalStatus"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "TextToSpeech",
+                                        "PortName":  "MachineSpeech1"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "PortableAvataraMultiplexing",
+                                       "PortName":  "MachineSpeech1"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "TextObject2"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "EntityFaceDescription",
+                                       "PortName":  "TextObject2"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "PersonalStatusDemultiplexing",
+                                        "PortName":  "FacePersonalStatus"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "EntityFaceDescription",
+                                       "PortName":  "FacePersonalStatus"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "PersonalStatusDemultiplexing",
+                                        "PortName":  "GesturePersonalStatus"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "EntityFaceDescription",
+                                       "PortName":  "GesturePersonalStatus"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "TextObject3"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "EntityBodyDescription",
+                                       "PortName":  "TextObject3"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "MachineID"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "PortableAvataraMultiplexing",
+                                       "PortName":  "MachineID"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "SpeechModel2"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "PortableAvataraMultiplexing",
+                                       "PortName":  "SpeechModel2"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "EntityFaceDescription",
+                                        "PortName":  "MachineFaceDescriptors"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "PortableAvataraMultiplexing",
+                                       "PortName":  "MachineFaceDescriptors"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "EntityBodyDescription",
+                                        "PortName":  "MachineBodyDescriptors"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "PortableAvataraMultiplexing",
+                                       "PortName":  "MachineBodyDescriptors"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "AvatarModel"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "EntityFaceDescription",
+                                       "PortName":  "AvatarModel"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "PortableAvatarMultiplexing",
+                                        "PortName":  "PortableAvatar"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "",
+                                       "PortName":  "PortableAvatar"
+                                   }
+                     }
+                 ],
+    "Implementations":  [
+
+                        ],
+    "Documentation":  [
+                          {
+                              "Type":  "Tutorial",
+                              "URI":  "https://mpai.community/standards/mpai-paf/"
+                          }
+                      ],
+    "$id":  "https://schemas.mpai.community/PAF/V1.5/AIMs/PersonalStatusDisplay.json"
+}
+

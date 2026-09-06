@@ -1,0 +1,48 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/PAF/V1.6/AIMs/AvatarVideoconferenceServer.json",
+  "title":                "Avatar Videoconference Server V1.6",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-AVS-V1.6"},
+
+  "APIProfile":           "Secure",
+  "Description":          "At the start, this AIM receives Input Portable Avatars, selects the VisualEnvironment, places Avatar Models, and distributes the Portable Avatars. Then it continuously receives Input Portable Avatars, translates Text and Speech and distributes Portable Avatars.",
+
+  "ExternalPorts":        [{"Name": "Summary1",           "Direction": "Input",  "DataType": "MMC-SUM-V2.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AVSceneDescriptors", "Direction": "Input",  "DataType": "OSD-MSD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpatialAttitude",    "Direction": "Input",  "DataType": "OSD-OSA-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "PortableAvatar1",    "Direction": "Input",  "DataType": "PAF-PAV-V1.6", "Technology": "Software", "Protocol": "", "IsRemote": false, "PortNumber": 1},
+                           {"Name": "PortableAvatar2",    "Direction": "Input",  "DataType": "PAF-PAV-V1.6", "Technology": "Software", "Protocol": "", "IsRemote": false, "PortNumber": 2},
+                           {"Name": "SpeechObject",       "Direction": "Input",  "DataType": "OSD-SPO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "FaceObject",         "Direction": "Input",  "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Summary2",           "Direction": "Output", "DataType": "MMC-SUM-V2.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "PortableAvatar3",    "Direction": "Output", "DataType": "PAF-PAV-V1.6", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [{ "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-PDX-V1.6" } },
+                           { "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-TST-V2.5" } },
+                           { "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-SPA-V1.6" } },
+                           { "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-PMX-V1.6" } }],
+
+  "Topology":             [{ "Output": { "AIMName": "",             "PortName": "PortableAvatar"         }, "Input": { "AIMName": "PAF-PDX-V1.6", "PortName": "PortableAvatar"         } },
+                           { "Output": { "AIMName": "PAF-PDX-V1.6", "PortName": "TextObject"             }, "Input": { "AIMName": "MMC-TST-V2.5", "PortName": "TextObject"             } },
+                           { "Output": { "AIMName": "PAF-PDX-V1.6", "PortName": "SpeechObject"           }, "Input": { "AIMName": "MMC-TST-V2.5", "PortName": "SpeechObject"           } },
+                           { "Output": { "AIMName": "PAF-PDX-V1.6", "PortName": "LanguageSelector"       }, "Input": { "AIMName": "MMC-TST-V2.5", "PortName": "LanguageSelector"       } },
+                           { "Output": { "AIMName": "PAF-PDX-V1.6", "PortName": "ParticipantID"          }, "Input": { "AIMName": "PAF-SPA-V1.6", "PortName": "ParticipantID"          } },
+                           { "Output": { "AIMName": "",             "PortName": "SpeechObject"           }, "Input": { "AIMName": "PAF-SPA-V1.6", "PortName": "SpeechObject"           } },
+                           { "Output": { "AIMName": "",             "PortName": "FaceObject"             }, "Input": { "AIMName": "PAF-SPA-V1.6", "PortName": "FaceObject"             } },
+                           { "Output": { "AIMName": "",             "PortName": "AVSceneDescriptors"     }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "AVSceneDescriptors"     } },
+                           { "Output": { "AIMName": "",             "PortName": "SpatialAttitudes"       }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "SpatialAttitudes"       } },
+                           { "Output": { "AIMName": "",             "PortName": "PortableAvatar1"        }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "PortableAvatar1"        } },
+                           { "Output": { "AIMName": "MMC-TST-V2.5", "PortName": "TranslatedTextObject"   }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "TranslatedTextObject"   } },
+                           { "Output": { "AIMName": "MMC-TST-V2.5", "PortName": "TranslatedSpeechObject" }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "TranslatedSpeechObject" } },
+                           { "Output": { "AIMName": "PAF-SPA-V1.6", "PortName": "AvatarID"               }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "AvatarID"               } },
+                           { "Output": { "AIMName": "",             "PortName": "Summary2"               }, "Input": { "AIMName": "",             "PortName": "Summary2"               } },
+                           { "Output": { "AIMName": "PAF-PMX-V1.6", "PortName": "PortableAvatar"         }, "Input": { "AIMName": "",             "PortName": "PortableAvatar"         } }],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-paf/v1-6/"}]}

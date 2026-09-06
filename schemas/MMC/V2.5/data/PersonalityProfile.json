@@ -1,0 +1,219 @@
+{ "$schema":                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                      "https://schemas.mpai.community/MMC/V2.5/data/PersonalityProfile.json",
+  "title":                    "Personality Profile V2.5",
+  "$comment":                 "Schema capturing core traits (Big Five / HEXACO), facets, dynamic overlays (state/context), and calibration policy with ESG/PCG mapping hooks.",
+  "type":                     "object",
+  "required":                 [ "Header", "PersonalityProfileID", "model", "traits", "calibration" ],
+  "additionalProperties":     false,
+
+  "$defs": {
+
+    "score":                  { "type": "object", "required": [ "value" ], "additionalProperties": false, "properties": {
+      "value":                { "type": "number", "minimum": 0, "maximum": 1, "$comment": "Normalized score 0.0Ã¢â‚¬â€œ1.0" },
+      "raw":                  { "type": "number", "$comment": "Raw score in instrument's original scale" },
+      "stanine":              { "type": "number", "minimum": 1, "maximum": 9 },
+      "percentile":           { "type": "number", "minimum": 0, "maximum": 100 },
+      "ci95":                 { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2,
+                                "$comment": "95% confidence interval [low, high] in normalized scale." },
+      "source":               { "type": "string", "enum": [ "selfReport","observerReport","behavioral","inferred","blended" ],
+                                "$comment": "Primary data source" },
+      "confidence":           { "type": "number", "minimum": 0, "maximum": 1, "$comment": "Measurement confidence 0Ã¢â‚¬â€œ1" } } },
+
+    "trait":                  { "type": "object", "required": [ "score" ], "additionalProperties": false, "properties": {
+      "score":                { "$ref": "#/$defs/score" },
+      "facets":               { "type": "object", "additionalProperties": false,
+                              "$comment": "Facet-level scores for this trait.",
+                              "patternProperties": { "^[A-Za-z][A-Za-z0-9_\\-]{1,64}$": { "$ref": "#/$defs/score" } } },
+      "notes":                { "type": "string" } } },
+
+    "traits":                 { "type": "object", "required": [ "openness","conscientiousness","extraversion","agreeableness",
+                                "neuroticism" ], "additionalProperties": false, "properties": {
+      "openness":             { "$ref": "#/$defs/trait", "$comment": "Also called Intellect/Imagination." },
+      "conscientiousness":    { "$ref": "#/$defs/trait" },
+      "extraversion":         { "$ref": "#/$defs/trait" },
+      "agreeableness":        { "$ref": "#/$defs/trait" },
+      "neuroticism":          { "$ref": "#/$defs/trait", "$comment": "Also inverted as Emotional Stability." },
+      "honestyHumility":      { "$ref": "#/$defs/trait",
+                                "$comment": "HEXACO addition; optional under Big Five." } } },
+
+    "facets":                 { "type": "object", "additionalProperties": false,
+                                "$comment": "Canonical facet labels per trait; optional if facet scores embedded at trait level.",
+                                "properties": {
+      "openness":             { "$ref": "#/$defs/facetList" },
+      "conscientiousness":    { "$ref": "#/$defs/facetList" },
+      "extraversion":         { "$ref": "#/$defs/facetList" },
+      "agreeableness":        { "$ref": "#/$defs/facetList" },
+      "neuroticism":          { "$ref": "#/$defs/facetList" },
+      "honestyHumility":      { "$ref": "#/$defs/facetList" } } },
+
+    "facetList":              { "type": "object", "additionalProperties": false,
+                                "$comment": "Facet score dictionary keyed by facet canonical name.",
+                                "patternProperties": { "^[A-Za-z][A-Za-z0-9_\\-]{1,64}$": { "$ref": "#/$defs/score" } } },
+
+    "dynamicOverlays":        { "type": "object", "additionalProperties": false, "properties": {
+      "stateOverlays":        { "type": "array", "items": { "$ref": "#/$defs/overlay" },
+                                "$comment": "Transient states like mood, stress, fatigue." },
+      "contextOverlays":      { "type": "array", "items": { "$ref": "#/$defs/contextOverlay" },
+                                "$comment": "Situational rules dependent on context (e.g., work vs home)." } } },
+
+    "overlay":                { "type": "object", "required": [ "id","label","targets","weight" ], "additionalProperties": false,
+                                "properties": {
+      "id":                   { "type": "string", "$comment": "Unique overlay id" },
+      "label":                { "type": "string" },
+      "targets":              { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/overlayTarget" } },
+      "weight":               { "type": "number", "minimum": -1, "maximum": 1,
+                                "$comment": "Signed strength; scales modulation effect." },
+      "decay":                { "type": "object", "additionalProperties": false, "properties": {
+        "halfLifeHours":      { "type": "number", "minimum": 0, "$comment": "0=static until expiry." },
+        "floor":              { "type": "number", "minimum": 0, "maximum": 1,
+                                            "$comment": "Residual effect lower bound (abs) relative to weight." } } },
+      "effectiveAt":          { "type": "string", "format": "date-time" },
+      "expiresAt":            { "type": "string", "format": "date-time" },
+      "provenance":           { "type": "string", "$comment": "How this overlay was inferred or measured." },
+      "notes":                { "type": "string" } } },
+
+    "overlayTarget":          { "type": "object", "required": [ "path","operation" ], "additionalProperties": false, "properties": {
+      "path":                 { "type": "string",
+                                "$comment": "JSON Pointer path to the score being modulated, e.g., '/traits/extraversion/score/value'." },
+      "operation":            { "type": "string", "enum": [ "add","multiply","blend","cap" ],
+                                "$comment": "How to combine: add to value; multiply; blend toward target; cap to limit." },
+      "parameter":            { "type": [ "number","object","null" ],
+                                "$comment": "For blend, {target: 0..1, alpha: 0..1}." },
+      "bounds":               { "type": "object", "additionalProperties": false, "properties": {
+        "min":                { "type": "number" },
+        "max":                { "type": "number" } },
+                                "$comment": "Clamp after modulation (normalized scale)." } } },
+
+    "contextOverlay":         { "allOf": [ { "$ref": "#/$defs/overlay" } ], "type": "object", "properties": {
+      "trigger":              { "$ref": "#/$defs/trigger" },
+      "audience":             { "type": "string", "$comment": "e.g., 'work','home','multiplayer','solo'." } },
+                                "required": [ "id","label","targets","weight","trigger" ] },
+
+    "trigger":                { "type": "object", "additionalProperties": false, "properties": { "anyOf":
+                              { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+      "allOf": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+      "not":   { "$ref": "#/$defs/condition" } },
+                                "$comment": "Boolean logic for when to apply overlay; if omitted, applies while effective." },
+
+    "condition":              { "type": "object", "required": [ "source","operator","value" ], "additionalProperties": false,
+                                "properties": {
+      "source":               { "type": "string", "$comment": "Signal name or JSON Pointer (e.g., '/context/location')." },
+      "operator":             { "type": "string", "enum": [ "eq","neq","gt","gte","lt","lte","in","nin","regex","exists" ] },
+      "value":                {},
+      "sampleWindowSec":      { "type": "number", "minimum": 0, "$comment": "If streaming, window to evaluate." } } },
+
+    "calibration":            { "type": "object", "required": [ "version","method","lastCalibrated" ],
+                                "additionalProperties": false, "properties": {
+      "version":              { "type": "string", "$comment": "Calibration policy version." },
+      "method":               { "type": "array", "minItems": 1, "items": {
+                                "type": "string", "enum": [ "IPIP-NEO","BFI-2","HEXACO-PI-R","TIPI","IRT","behavioral","hybrid" ] } },
+      "scaling":              { "type": "string", "enum": [ "0-1","0-100","z","t-score","sten","stanine" ],
+                                "$comment": "Primary reporting scale used in 'score.value'." },
+      "norms":                { "type": "object", "additionalProperties": false, "properties": {
+        "population":         { "type": "string", "$comment": "Description of normative sample (e.g., 'global adult, n=...')." },
+        "year":               { "type": "integer", "minimum": 1900, "maximum": 2100 },
+        "locale":             { "type": "string" },
+        "ageRange":           { "type": "string" },
+        "genderBalance":      { "type": "string" } } },
+      "reliability":          { "type": "object", "additionalProperties": false, "properties": {
+        "alpha":              { "type": "number", "minimum": 0, "maximum": 1, "$comment": "Cronbach's alpha (per trait if array)." },
+        "omega":              { "type": "number", "minimum": 0, "maximum": 1 },
+        "testRetest":         { "type": "number", "minimum": 0, "maximum": 1,
+                                            "$comment": "Stability over time (r)." } } },
+      "validity":             { "type": "object", "additionalProperties": false, "properties": {
+        "convergent":         { "type": "string" },
+        "discriminant":       { "type": "string" },
+        "criterion":          { "type": "string" } } },
+      "driftMonitoring":      { "type": "object", "additionalProperties": false, "properties": {
+        "enabled":            { "type": "boolean", "default": false },
+        "metric":             { "type": "string", "enum": [ "KL","PSI","KS","Hellinger","MAE" ] },
+        "threshold":          { "type": "number" },
+        "action":             { "type": "string", "enum": [ "flag","recalibrate","freezeOverlays" ] } } },
+      "updateRules":          { "type": "array", "items": { "type": "object", "additionalProperties": false, "properties": {
+        "when":               { "$ref": "#/$defs/trigger" },
+        "update":             { "type": "string", "enum": [ "recompute","decay-only","lock" ] },
+        "cooldownHours":      { "type": "number", "minimum": 0 } } } },
+      "notes":                { "type": "string" },
+      "lastCalibrated":       { "type": "string", "format": "date-time" },
+      "nextReviewBy":         { "type": "string", "format": "date-time" } },
+                                "$comment": "Defines how scores were obtained, scaled, and maintained over time." },
+
+    "mappings":               { "type": "object", "additionalProperties": false, "properties": {
+      "ESG":                  { "$ref": "#/$defs/esgMapping" },
+      "PCG":                  { "$ref": "#/$defs/pcgMapping" } },
+                                "$comment": "Extension hooks to map personality to external systems (e.g., ESG or PCG)." },
+
+    "esgMapping":             { "type": "object", "additionalProperties": false, "properties": {
+      "schema":               { "type": "string",
+                                "$comment": "Name or URI of your ESG schema; clarify meaning of ESG in this context." },
+      "dimensions":           { "type": "array", "items": {
+                                "type": "object", "required": [ "id","label","formula" ], "additionalProperties": false, "properties": {
+        "id":                 { "type": "string" },
+        "label":              { "type": "string" },
+        "formula":            { "type": "string", "$comment": "Declarative mapping from traits/facets to this ESG dimension." },
+        "bounds":             { "type": "object", "additionalProperties": false, "properties": {
+          "min":              { "type": "number" },
+          "max":              { "type": "number" } } },
+        "notes":              { "type": "string" } } } } } },
+
+    "pcgMapping":             { "type": "object", "additionalProperties": false, "properties": {
+      "contentParams":        { "type": "array", "items": {
+                                "type": "object", "required": [ "key","strategy" ], "additionalProperties": false, "properties": {
+        "key":                { "type": "string", "$comment": "A PCG parameter (e.g., 'difficulty','pacing','lootDensity')." },
+        "strategy":           { "type": "string", "enum": [ "linear","piecewise","lookup","rules","ml" ] },
+        "definition":         { "type": "object", "$comment": "Strategy-specific payload (e.g., formula, table)." },
+        "guards":             { "$ref": "#/$defs/trigger", "$comment": "Optional conditions for applying this mapping." } } } },
+      "seedInfluence":        { "type": "number", "minimum": 0, "maximum": 1, "$comment": "How strongly personality biases the PRNG seed (0..1)." } } },
+
+    "meta":                   { "type": "object", "additionalProperties": false, "properties": {
+      "createdAt":            { "type": "string", "format": "date-time" },
+      "updatedAt":            { "type": "string", "format": "date-time" },
+      "createdBy":            { "type": "string" },
+      "labels":               { "type": "array", "items": { "type": "string" } } } } },
+
+  "properties":               {
+
+    "Header":                 { "type": "string", "const": "MMC-PRP-V2.5" },
+
+    "MInstanceID":            { "type": "string" },
+
+    "PersonalityProfileID":   { "type": "string", "format": "uuid", "$comment": "Unique identifier of the personality profile." },
+
+    "subject":                { "type": "object", "additionalProperties": false, "properties": {
+      "externalId":           { "type": "string" },
+      "pseudonymous":         { "type": "boolean", "default": true },
+      "age":                  { "type": [ "integer","null" ], "minimum": 0 },
+      "locale":               { "type": [ "string","null" ] } } },
+
+    "model":                  { "type": "string", "enum": [ "BigFive","HEXACO","BigFive+Aspects" ],
+                                "$comment": "Controls which trait set is expected. HEXACO adds Honesty-Humility." },
+
+    "locale":                 { "type": "string" },
+
+    "timestamp":              { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+    "traits":                 { "$ref": "#/$defs/traits" },
+
+    "facets":                 { "$ref": "#/$defs/facets" },
+
+    "dynamicOverlays":        { "$ref": "#/$defs/dynamicOverlays" },
+
+    "calibration":            { "$ref": "#/$defs/calibration" },
+
+    "mappings":               { "$ref": "#/$defs/mappings" },
+
+    "meta":                   { "$ref": "#/$defs/meta" },
+
+    "Trace":                  { "$ref": "https://schemas.mpai.community/AIF/V3.0/data/Trace.json" },
+
+    "DescrMetadata":          { "type": "string", "maxLength": 2048 } },
+
+  "allOf": [
+                              { "if":   { "properties": { "model": { "const": "HEXACO" } } },
+                                "then": { "properties": { "traits": { "required": [ "honestyHumility" ] } } },
+                                "$comment": "HEXACO adds Honesty-Humility." },
+
+                              { "if":   { "properties": { "model": { "const": "BigFive" } } },
+                                "then": { "properties": { "traits": { "properties": {
+    "honestyHumility":                  { "readOnly": true } } } } },
+                                "$comment": "In pure Big Five, H is not scored; may be null." } ] }

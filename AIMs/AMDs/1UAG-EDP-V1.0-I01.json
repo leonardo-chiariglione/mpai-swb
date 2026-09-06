@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id": "file:///D:/AI/AIMs/AMDs/1UAG-EDP-V1.0-I01.json",
+  "title": "Entity Dialogue Processing AIW V1.0 - Implementation I01",
+  "Identifier": {
+    "ImplementerID": "MPAI",
+    "ImplementationID": "UAG-EDP-V1.0-I01",
+    "AIMName": "UAG-EDP-V1.0"
+  },
+  "APIProfile": "Basic",
+  "Description": "Processes a dialogue turn. One SubAIM, Entity Dialogue Processing. The UA writes the user's Text (and optionally the Text Descriptors, Personal Status, User ID, Object IDs, Scene, and running Summary) to boundary ports; the Controller routes them to EDP; the Machine's response Text, Personal Status, and updated Summary come back. The two OSD-IID inputs (User ID, Object IDs) are told apart by PortNumber on the AIM Input side, mirroring UAG-IDR.",
+  "ExternalPorts": [
+    {
+      "Name": "Summary",
+      "Direction": "Input",
+      "DataType": "MMC-SUM-V2.5",
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "TextObject",
+      "Direction": "Input",
+      "DataType": ["OSD-BTO-V1.5", "OSD-TXO-V1.5"],
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "TextDescriptors",
+      "Direction": "Input",
+      "DataType": "MMC-TDO-V2.5",
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "PersonalStatus",
+      "Direction": "Input",
+      "DataType": "MMC-EPS-V2.5",
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "UserID",
+      "Direction": "Input",
+      "DataType": "OSD-IID-V1.5",
+      "PortNumber": 1,
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "VisualObjectIDs",
+      "Direction": "Input",
+      "DataType": "OSD-IID-V1.5",
+      "PortNumber": 2,
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "AudioObjectIDs",
+      "Direction": "Input",
+      "DataType": "OSD-IID-V1.5",
+      "PortNumber": 3,
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "BMS",
+      "Direction": "Input",
+      "DataType": "OSD-BMS-V1.5",
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "MachineTextObject",
+      "Direction": "Output",
+      "DataType": "OSD-BTO-V1.5",
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "MachinePersonalStatus",
+      "Direction": "Output",
+      "DataType": "MMC-EPS-V2.5",
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "EditedSummary",
+      "Direction": "Output",
+      "DataType": "MMC-SUM-V2.5",
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    }
+  ],
+  "SubAIMs": [
+    {
+      "Identifier": {
+        "ImplementerID": "1",
+        "ImplementationID": "MMC-EDP-V2.5-I01",
+        "AIMName": "MMC-EDP-V2.5"
+      }
+    }
+  ],
+  "Topology": [
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "Summary"
+      },
+      "Input": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "Summary"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "TextObject"
+      },
+      "Input": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "TextObject"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "TextDescriptors"
+      },
+      "Input": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "TextDescriptors"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "PersonalStatus"
+      },
+      "Input": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "PersonalStatus"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "UserID"
+      },
+      "Input": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "UserID"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "VisualObjectIDs"
+      },
+      "Input": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "VisualObjectIDs",
+        "PortNumber": 2
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "AudioObjectIDs"
+      },
+      "Input": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "AudioObjectIDs",
+        "PortNumber": 3
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "BMS"
+      },
+      "Input": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "BMS"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "MachineTextObject"
+      },
+      "Input": {
+        "AIMName": "",
+        "PortName": "MachineTextObject"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "MachinePersonalStatus"
+      },
+      "Input": {
+        "AIMName": "",
+        "PortName": "MachinePersonalStatus"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "MMC-EDP-V2.5",
+        "PortName": "EditedSummary"
+      },
+      "Input": {
+        "AIMName": "",
+        "PortName": "EditedSummary"
+      }
+    }
+  ],
+  "Implementations": [
+    {
+      "ImplementationURI": "file:///D:/AI/AIMs/UAG-EDP-V1.0-I01",
+      "MASPort": 443,
+      "BinaryName": "Mpai.Uag.Edp",
+      "Architecture": "x86-64",
+      "OperatingSystem": "Windows",
+      "Version": "1.0",
+      "Source": "AIMStorage"
+    }
+  ],
+  "ResourcePolicies": [
+    {
+      "Name": "Memory",
+      "Minimum": "1 GB",
+      "Request": "2 GB",
+      "Maximum": "8 GB"
+    }
+  ],
+  "DataXMData": {},
+  "Documentation": [
+    {
+      "Type": "Specification",
+      "URI": "https://mpai.community/standards/mpai-mmc/v2-5/"
+    }
+  ]
+}

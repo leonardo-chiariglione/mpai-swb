@@ -1,0 +1,28 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/PAF/V1.6/AIMs/VisualSceneCreation.json",
+  "title":                "Visual Scene Creation V1.6",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-VSC-V1.6"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM composes the Visual Scene.",
+
+  "ExternalPorts":        [{"Name": "AvatarID",                    "Direction": "Input",  "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioVisualSceneDescriptors", "Direction": "Input",  "DataType": "OSD-MSD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AvatarModel",                 "Direction": "Input",  "DataType": "OSD-3DO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpatialAttitude",             "Direction": "Input",  "DataType": "OSD-OSA-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualSceneDescriptors",      "Direction": "Output", "DataType": "OSD-VSD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "MouthSpatialAttitude",        "Direction": "Output", "DataType": "OSD-OSA-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-paf/v1-6/"}]}

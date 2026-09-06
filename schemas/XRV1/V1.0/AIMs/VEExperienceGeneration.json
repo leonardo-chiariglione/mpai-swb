@@ -1,0 +1,30 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/XRV1/V1.0/AIMs/VEExperienceGeneration.json",
+  "title":                "VE Experience Generation V1.0",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "XRV-VEG-V1.0"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM receives the Show Descriptors, the Virtual Environment Action Identifiers, and the Virtual Environment Venue Specification, and provides the Virtual Environment Data Out.",
+
+  "ExternalPorts":        [{"Name": "ShowDescriptors",         "Direction": "Input",  "DataType": "XRV-SHD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEActionIDs",             "Direction": "Input",  "DataType": "XRV-ACT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false, "PortNumber": 1},
+                           {"Name": "VEVenueSpecification",    "Direction": "Input",  "DataType": "XRV-VVS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Script",                  "Direction": "Input",  "DataType": "XRV-SPT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ActionTable",             "Direction": "Input",  "DataType": "XRV-ACT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false, "PortNumber": 2},
+                           {"Name": "ScriptVenueAssociations", "Direction": "Input",  "DataType": "XRV-SVA-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ParticipantData",         "Direction": "Input",  "DataType": "XRV-PTD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEDataOut",               "Direction": "Output", "DataType": "XRV-VDO-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-xrv/ltp/v1-0/"}]}

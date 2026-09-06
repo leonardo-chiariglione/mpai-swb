@@ -1,0 +1,25 @@
+{ "$schema":                "https://json-schema.org/draft/2020-12/schema",
+  "$id":                    "https://schemas.mpai.community/CAE1/V2.5/data/AudioSourceModel.json",
+  "title":                  "Audio Source Model V2.5",
+  "description":            "Polynomial as an array of terms for Model.",
+  "type":                   "object",
+  "additionalProperties":   false,
+  "required":               ["Terms"],
+  "properties":             {
+
+    "Header":               { "type": "string", "const": "MMM-ASM-V1,5" },
+    "MInstanceID":          { "type": "string" },
+    "UEnvironmentID":       { "type": "string" },
+    "AudioSourceModelID":   { "type": "string" },
+    "AudioSourceModelTime": { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+    "PolynomialVariable":   { "type": "string", "enum": [ "AngleSine", "AngleCosine" ] },
+
+    "Polynomial":           { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "properties": {
+      "Coefficient":        { "type": "number", "description": "The numeric coefficient of the term." },
+      "Exponent":           { "type": "integer", "minimum": 0, "description": "The exponent of the variable in the Term." } } } },
+
+    "Variable":             { "type": "string", "default": "x", "description": "The variable used in the polynomial." },
+
+    "DataXMData":           {"$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":        { "type": "string", "maxLength": 2048 } } }

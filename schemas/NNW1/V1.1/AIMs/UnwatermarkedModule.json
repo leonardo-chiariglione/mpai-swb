@@ -1,0 +1,72 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "UnwatermarkedModule",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Name":  "MPAI-NNW",
+                                             "AIW":  "NNW-WTI",
+                                             "AIM":  "NNW-UWM",
+                                             "Version":  "1"
+                                         },
+                       "Description":  "This AIM can be any AIMs that can produce an inference.",
+                       "Types":  [
+                                     {
+                                         "Name":  "UnwatermarkedParameters_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "TestingDataset_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "UnwatermarkedInference_t",
+                                         "Type":  "uint8[]"
+                                     }
+                                 ],
+                       "Ports":  [
+                                     {
+                                         "Name":  "UnwatermarkedParameters",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "UnwatermarkedParameters_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "TestingDataset",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "TestingDataset_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "UnwatermarkedInference",
+                                         "Direction":  "OutputInput",
+                                         "RecordType":  "UnwatermarkedInference_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     }
+                                 ],
+                       "SubAIMs":  [
+
+                                   ],
+                       "Topology":  [
+
+                                    ],
+                       "Implementations":  [
+
+                                           ],
+                       "Documentation":  [
+                                             {
+                                                 "Type":  "Tutorial",
+                                                 "URI":  "https://mpai.community/standards/MPAI-NNW/"
+                                             }
+                                         ]
+                   },
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIMs/UnwatermarkedModule.json"
+}
+

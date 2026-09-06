@@ -1,0 +1,72 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "Comparator",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Name":  "MPAI-NNW",
+                                             "AIW":  "NNW-WIR",
+                                             "AIM":  "NNW-CMP",
+                                             "Version":  "1"
+                                         },
+                       "Description":  "This AIM implements the comparison between two bitstring and returns the BER.",
+                       "Types":  [
+                                     {
+                                         "Name":  "OriginalPayload_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "RetrievedPayload_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "CountError_t",
+                                         "Type":  "uint8"
+                                     }
+                                 ],
+                       "Ports":  [
+                                     {
+                                         "Name":  "OriginalPayload",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "OriginalPayload_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "RetrievedPayload",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "RetrievedPayload_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "CountError",
+                                         "Direction":  "OutputInput",
+                                         "RecordType":  "CountError_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     }
+                                 ],
+                       "SubAIMs":  [
+
+                                   ],
+                       "Topology":  [
+
+                                    ],
+                       "Implementations":  [
+
+                                           ],
+                       "Documentation":  [
+                                             {
+                                                 "Type":  "Tutorial",
+                                                 "URI":  "https://mpai.community/standards/MPAI-NNW/"
+                                             }
+                                         ]
+                   },
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIMs/Comparator.json"
+}
+

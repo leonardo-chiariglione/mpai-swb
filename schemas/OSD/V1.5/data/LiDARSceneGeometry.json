@@ -1,0 +1,45 @@
+{ "$schema":                                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                      "https://schemas.mpai.community/OSD/V1.5/data/LiDARSceneGeometry.json",
+  "title":                                    "LiDARScene Geometry V1.5", "description": "Includes Objects, Basic Scene geom. & Scene geom.",
+                                              "type": "object", "required": [ "Header", "LiDARSceneGeometryID", "LiDARSceneGeometrySpaceTime" ], "additionalProperties": false, "properties":                   {
+
+    "Header":                                 { "type": "string", "const": "OSD-LSG-V1.5" },
+    "MInstanceID":                            { "type": "string" },
+    "LiDARSceneGeometryID":                   { "type": "string" },
+    "LiDARSceneGeometrySpaceTime":            { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "ObjectCount":                            { "type": "integer", "minimum": 0 },
+    "Objects":                                { "type": "array", "items": { "type": "object", "additionalProperties": false,
+      "properties":                           {
+        "ObjectSpaceTime":                    { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "ObjectIDOrGeometry":                 { "$ref": "#/$defs/ObjectIDOrGeometry" } } } },
+
+    "SubLiDARSceneCount":                     { "type": "integer", "minimum": 0 },
+    "SubLiDARScenes":                         { "type": "array", "items": { "type": "object", "additionalProperties": false,
+                                                "properties": {
+        "SubLiDARSceneSpaceTime":             { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "SubLSceneIDOrSubLScene":             { "$ref": "#/$defs/SubLSceneIDOrSubLScene" } } } },
+
+    "BasicLiDARSceneOrLiDARScene":            { "$ref": "#/$defs/BasicLiDARSceneOrLiDARScene" },
+
+    "DataXMData":                             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                          { "type": "string", "maxLength": 2048 } },
+
+  "$defs":                                    {
+
+    "GeometryObject":                         { "type": "object", "required": [ "ObjectSpaceTime", "ObjectQualifier" ],
+                                                "additionalProperties": false, "properties": {
+      "ObjectSpaceTime":                      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "ObjectQualifier":                      { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/LiDARQualifier.json" } } },
+
+    "ObjectIDOrGeometry":                     { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                                { "$ref": "#/$defs/GeometryObject" },
+                                                { "type": "string" } ] } },
+
+    "SubLSceneIDOrSubLScene":                 { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                                { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/LiDARSceneGeometry.json" },
+                                                { "type": "string" } ] } },
+
+    "BasicLiDARSceneOrLiDARScene":            { "type": "array", "items": { "oneOf": [
+                                                { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/BasicLiDARSceneGeometry.json" },
+                                                { "$ref": "#/$defs/BasicLiDARSceneOrLiDARScene" } ] } } } }

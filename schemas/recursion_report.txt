@@ -1,0 +1,8 @@
+
+==============================
+FILES WITH INTERNAL RECURSION
+==============================
+
+No recursion detected.
+
+✅ Done.

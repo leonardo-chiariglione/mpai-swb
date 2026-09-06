@@ -1,0 +1,252 @@
+AJV Validation Report
+Family (targets): OSD\V1.5\data
+Preloaded families: AIF\V3.0\data, CAE1\V2.4\data, MMM4\V2.2\data, TFA\V1.5\data
+Command: npx ajv-cli@latest compile --spec=draft2020 -c ajv-formats -s .\OSD\V1.5\data\*.json -r .\AIF\V3.0\data\*.json -r .\CAE1\V2.4\data\*.json -r .\MMM4\V2.2\data\*.json -r .\TFA\V1.5\data\*.json
+Timestamp: 2026-03-22 11:59:32
+Exit code: 1
+
+RESULTS - total: 120, valid: 2, invalid: 118
+
+INVALID SCHEMAS:
+ - ./OSD/V1.5/data/3DModelEventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/3DModelEventDescriptors.json
+ - ./OSD/V1.5/data/3DModelObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/3DModelObject.json
+ - ./OSD/V1.5/data/3DModelSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/3DModelSceneDescriptors.json
+ - ./OSD/V1.5/data/3DModelSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/3DModelSceneGeometry.json
+ - ./OSD/V1.5/data/AcousticProfile.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/Plot.json from id https://schemas.mpai.community/OSD/V1.5/data/AcousticProfile.json
+ - ./OSD/V1.5/data/AffordanceTags.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/Annotation.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/Annotation.json
+ - ./OSD/V1.5/data/AudioEventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioEventDescriptors.json
+ - ./OSD/V1.5/data/AudioMotionFlags.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/Time.json from id https://schemas.mpai.community/OSD/V1.5/types/AudioMotionFlags.json
+ - ./OSD/V1.5/data/AudioObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioObject.json
+ - ./OSD/V1.5/data/AudioProximityClass.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/Time.json from id https://schemas.mpai.community/OSD/V1.5/types/AudioProximityClass.json
+ - ./OSD/V1.5/data/AudioSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioSceneDescriptors.json
+ - ./OSD/V1.5/data/AudioSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioSceneGeometry.json
+ - ./OSD/V1.5/data/AudioSource.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioSource.json
+ - ./OSD/V1.5/data/AudioVisualEventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioVisualEventDescriptors.json
+ - ./OSD/V1.5/data/AudioVisualObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioVisualObject.json
+ - ./OSD/V1.5/data/AudioVisualSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioVisualSceneDescriptors.json
+ - ./OSD/V1.5/data/AudioVisualSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/AudioVisualSceneGeometry.json
+ - ./OSD/V1.5/data/Basic3DModelObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/Basic3DModelObject.json
+ - ./OSD/V1.5/data/Basic3DModelSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/Basic3DModelSceneDescriptors.json
+ - ./OSD/V1.5/data/Basic3DModelSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/Basic3DModelSceneGeometry.json
+ - ./OSD/V1.5/data/BasicAudioObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicAudioObject.json
+ - ./OSD/V1.5/data/BasicAudioSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicAudioSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicAudioSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicAudioSceneGeometry.json
+ - ./OSD/V1.5/data/BasicAudioVisualObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicAudioVisualObject.json
+ - ./OSD/V1.5/data/BasicAudioVisualSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicAudioVisualSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicAudioVisualSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicAudioVisualSceneGeometry.json
+ - ./OSD/V1.5/data/BasicEventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicEventDescriptors.json
+ - ./OSD/V1.5/data/BasicLiDARObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicLiDARObject.json
+ - ./OSD/V1.5/data/BasicLiDARSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicLiDARSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicLiDARSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicLiDARSceneGeometry.json
+ - ./OSD/V1.5/data/BasicLocationObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicLocationObject.json
+ - ./OSD/V1.5/data/BasicObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicObject.json
+ - ./OSD/V1.5/data/BasicOfflineMapObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicOfflineMapObject.json
+ - ./OSD/V1.5/data/BasicOfflineMapSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicOfflineMapSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicOfflineMapSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicOfflineMapSceneGeometry.json
+ - ./OSD/V1.5/data/BasicPerceptibleEntity.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/Object.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicPerceptibleEntity.json
+ - ./OSD/V1.5/data/BasicRADARObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicRADARObject.json
+ - ./OSD/V1.5/data/BasicRADARSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicRADARSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicRADARSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicRADARSceneGeometry.json
+ - ./OSD/V1.5/data/BasicSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicSceneGeometry.json
+ - ./OSD/V1.5/data/BasicSpeechObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicSpeechObject.json
+ - ./OSD/V1.5/data/BasicSpeechSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicSpeechSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicSpeechSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicSpeechSceneGeometry.json
+ - ./OSD/V1.5/data/BasicTextObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/TextStaticFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/TextQualifier.json
+ - ./OSD/V1.5/data/BasicUltrasoundObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicUltrasoundObject.json
+ - ./OSD/V1.5/data/BasicUltrasoundSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicUltrasoundSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicUltrasoundSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicUltrasoundSceneGeometry.json
+ - ./OSD/V1.5/data/BasicVisualObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicVisualObject.json
+ - ./OSD/V1.5/data/BasicVisualSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicVisualSceneDescriptors.json
+ - ./OSD/V1.5/data/BasicVisualSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/BasicVisualSceneGeometry.json
+ - ./OSD/V1.5/data/BoundingBox.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/Visual2DStaticFormats.json from id https://schemas.mpai.community/OSD/V1.5/data/BoundingBox.json
+ - ./OSD/V1.5/data/ColourObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.4/formats/ColourSpaces.json from id https://schemas.mpai.community/TFA/V1.5/data/ColourQualifier.json
+ - ./OSD/V1.5/data/Coordinates.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/Coordinates.json
+ - ./OSD/V1.5/data/DeviceSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/Time.json from id https://schemas.mpai.community/OSD/V1.5/data/DeviceSceneGeometry.json
+ - ./OSD/V1.5/data/EnhancedVisualSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/EnhancedVisualSceneDescriptors.json
+ - ./OSD/V1.5/data/EventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/EventDescriptors.json
+ - ./OSD/V1.5/data/ExtendedVisualSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/ExtendedVisualSceneDescriptors.json
+ - ./OSD/V1.5/data/GeometricSolid.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/RightParallelepiped.json from id https://schemas.mpai.community/OSD/V1.5/data/GeometricSolid.json
+ - ./OSD/V1.5/data/InstanceIdentifier.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/InstanceIdentifier.json
+ - ./OSD/V1.5/data/InteractionPotential.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/LiDAREventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/LiDAREventDescriptors.json
+ - ./OSD/V1.5/data/LiDARObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/LiDARObject.json
+ - ./OSD/V1.5/data/LiDARSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/LiDARSceneDescriptors.json
+ - ./OSD/V1.5/data/LiDARSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/LiDARSceneGeometry.json
+ - ./OSD/V1.5/data/LightSource.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/LightSource.json
+ - ./OSD/V1.5/data/LocationObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/LocationObject.json
+ - ./OSD/V1.5/data/Object.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/Object.json
+ - ./OSD/V1.5/data/ObjectAffordance.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/TimeExpression.json from id https://schemas.mpai.community/OSD/V1.5/data/ObjectAffordance.json
+ - ./OSD/V1.5/data/OcclusionFlag.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/OfflineMapEventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/OfflineMapEventDescriptors.json
+ - ./OSD/V1.5/data/OfflineMapObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/OfflineMapObject.json
+ - ./OSD/V1.5/data/OfflineMapSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/OfflineMapSceneDescriptors.json
+ - ./OSD/V1.5/data/OfflineMapSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/OfflineMapSceneGeometry.json
+ - ./OSD/V1.5/data/Orientation.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/ObjectTypes.json from id https://schemas.mpai.community/OSD/V1.5/types/Orientation.json
+ - ./OSD/V1.5/data/Path.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/PointOfView.json from id https://schemas.mpai.community/OSD/V1.5/data/Path.json
+ - ./OSD/V1.5/data/PerceptibleEntity.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/Object.json
+ - ./OSD/V1.5/data/Plot.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/Plot.json
+ - ./OSD/V1.5/data/Point.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/PointOfView.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/PointOfView.json
+ - ./OSD/V1.5/data/PoseMatrix.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/Position.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/types/Position.json
+ - ./OSD/V1.5/data/RADAREventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/RADARaEventDescriptors.json
+ - ./OSD/V1.5/data/RADARObject.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/RADARObject.json
+ - ./OSD/V1.5/data/RADARSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/RADARSceneDescriptors.json
+ - ./OSD/V1.5/data/RADARSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/RADARSceneGeometry.json
+ - ./OSD/V1.5/data/RangeConstraint.json
+   error: strict mode: unknown keyword: "Direction"
+ - ./OSD/V1.5/data/RightParallelepiped.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/RightParallelepiped.json
+ - ./OSD/V1.5/data/RRULE.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/SalienceScore.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/SceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/SceneDescriptors.json
+ - ./OSD/V1.5/data/SceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/SceneGeometry.json
+ - ./OSD/V1.5/data/Selector.json
+   error: strict mode: unknown keyword: "Required"
+ - ./OSD/V1.5/data/SimpleLocation.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json from id https://schemas.mpai.community/OSD/V1.5/data/SimpleLocation.json
+ - ./OSD/V1.5/data/SimpleTime.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/SpaceTime.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json from id https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json
+ - ./OSD/V1.5/data/SpatialAnchor.json
+   error: can't resolve reference https://schemas.mpai.community/OSD/V1.5/data/Location.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAnchor.json
+ - ./OSD/V1.5/data/SpatialAttitude.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/SpatialCue.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialCue.json
+ - ./OSD/V1.5/data/SpeechEventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/SpeechObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/SpeechSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/SpeechSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/TemporalCue.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/TextObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/TextureMap.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/Time.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/TimeExpression.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/MLModelTypes.json from id https://schemas.mpai.community/TFA/V1.5/data/MLModelQualifier.json
+ - ./OSD/V1.5/data/Trajectory.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/UltrasoundEventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/UltrasoundObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/UltrasoundSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/UltrasoundSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/VisualEventDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/VisualObject.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/VisualSceneDescriptors.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+ - ./OSD/V1.5/data/VisualSceneGeometry.json
+   error: can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json
+
+VALID SCHEMAS:
+ - ./OSD/V1.5/data/CoordinateTypes.json
+ - ./OSD/V1.5/data/Depth.json
+
+

@@ -1,0 +1,27 @@
+{ "$id":                              "https://schemas.mpai.community/OSD/V1.5/data/RADAREventDescriptors.json",
+  "$schema":                          "https://json-schema.org/draft/2020-12/schema",
+  "title":                            "RADAREvent Descriptors V1.5",
+  "type":                             "object",
+  "required":                         [ "Header", "RADAREventDescriptorsID", "RADAREventDescriptorsSpaceTime" ],
+  "additionalProperties":             false,
+  "properties":                       {
+
+    "Header":                         { "type": "string", "const": "OSD-REV-V1.5" },
+    "MInstanceID":                    { "type": "string" },
+    "UEnvironmentID":                 { "type": "string" },
+
+    "RADAREventDescriptorsID":        { "type": "string" },
+
+    "RADAREventDescriptorsSpaceTime": { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "RADAREventDescriptors":          { "type": "array", "items": { "type": "object", "additionalProperties": false, "properties": {
+
+      "RSceneIDOrRScene":             { "$ref": "#/$defs/RSceneIDOrRScene" } } } },
+
+    "DataXMData":                     { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                  { "type": "string", "maxLength": 2048 } },
+
+  "$defs":                            {
+    "RSceneIDOrRScene":               { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/RADARSceneDescriptors.json" },
+                                      { "type": "string" } ] } } } }

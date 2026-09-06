@@ -1,0 +1,52 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/MMC/V2.5/AIMs/SpeechTranslationWithDescriptors.json",
+  "title":                "Speech Translation with Descriptors V2.5",
+
+  "Identifier":           {"ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-STD-V2.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This Composite AIM receives an input Speech Object, the code of the input language, and the codes of the input and output language pair, and produces the translated Speech Object retaining the Speech Descriptors of the input Speech Object.",
+
+  "InternalTypes":        [{"Name": "RecognisedText",    "DataType": "OSD-TXO-V1.5"},
+                           {"Name": "TranslatedText",    "DataType": "OSD-TXO-V1.5"},
+                           {"Name": "SpeechDescriptors", "DataType": "OSD-SPD-V1.5"}],
+
+  "ExternalPorts":        [{"Name": "InputSpeech",           "Direction": "Input",  "DataType": "OSD-SPO-V1.5",                  "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "InputLanguageSelector", "Direction": "Input",  "DataType": "OSD-SEL-V1.5", "PortNumber": 1, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "PairLanguageSelector",  "Direction": "Input",  "DataType": "OSD-SEL-V1.5", "PortNumber": 2, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "TranslatedSpeech",      "Direction": "Output", "DataType": "OSD-SPO-V1.5",                  "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [{ "Identifier": { "ImplementerID": "/* from IIDRA */", "ImplementationID": "/* from Implementer */", "AIMName": "MMC-ASR-V2.5" } },
+                           { "Identifier": { "ImplementerID": "/* from IIDRA */", "ImplementationID": "/* from Implementer */", "AIMName": "MMC-ISD-V2.5" } },
+                           { "Identifier": { "ImplementerID": "/* from IIDRA */", "ImplementationID": "/* from Implementer */", "AIMName": "MMC-TTT-V2.5" } },
+                           { "Identifier": { "ImplementerID": "/* from IIDRA */", "ImplementationID": "/* from Implementer */", "AIMName": "MMC-TSD-V2.5" } } ],
+
+  "Topology":             [{ "Output": { "AIMName": "",             "PortName": "InputSpeech"                            }, "Input": { "AIMName": "MMC-ASR-V2.5", "PortName": "InputSpeech"           } },
+                           { "Output": { "AIMName": "",             "PortName": "InputSpeech"                            }, "Input": { "AIMName": "MMC-ISD-V2.5", "PortName": "InputSpeech"           } },
+                           { "Output": { "AIMName": "",             "PortName": "InputLanguageSelector", "PortNumber": 1 }, "Input": { "AIMName": "MMC-ASR-V2.5", "PortName": "InputLanguageSelector" } },
+                           { "Output": { "AIMName": "",             "PortName": "PairLanguageSelector", "PortNumber": 2  }, "Input": { "AIMName": "MMC-TTT-V2.5", "PortName": "PairLanguageSelector"  } },
+                           { "Output": { "AIMName": "MMC-ASR-V2.5", "PortName": "RecognisedText"                         }, "Input": { "AIMName": "MMC-TTT-V2.5", "PortName": "RecognisedText"        } },
+                           { "Output": { "AIMName": "MMC-ISD-V2.5", "PortName": "SpeechDescriptors"                      }, "Input": { "AIMName": "MMC-TSD-V2.5", "PortName": "SpeechDescriptors"     } },
+                           { "Output": { "AIMName": "MMC-TTT-V2.5", "PortName": "TranslatedText"                         }, "Input": { "AIMName": "MMC-TSD-V2.5", "PortName": "TranslatedText"        } },
+                           { "Output": { "AIMName": "MMC-TSD-V2.5", "PortName": "TranslatedSpeech"                       }, "Input": { "AIMName": "",             "PortName": "TranslatedSpeech"      } }],
+
+  "Implementations":      [{"ImplementationURI": "/* URI storing Implementation */",
+                            "BinaryName":       "/* BinaryName */",
+                            "Architecture":     "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+                            "OperatingSystem":  "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | RTOS | Oniro | iOS */",
+                            "Version":          "/* Version */",
+                            "Source":           "/* AIMStorage | MPAIStore | AIMURL */",
+                            "Destination":      "/* Destination URI */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",               "Minimum": "/* GB */",                                                                                                                                        "Maximum": "/* GB */",                                                                                                                                        "Request": "/* GB */"},
+                           {"Name": "CPU:Number",           "Minimum": "/* integer, 0=all */",                                                                                                                               "Maximum": "/* integer, 0=all */",                                                                                                                               "Request": "/* integer, 0=all */"},
+                           {"Name": "CPU:Class",            "Minimum": "/* Low | Medium | High */",                                                                                                                          "Maximum": "/* Low | Medium | High */",                                                                                                                          "Request": "/* Low | Medium | High */"},
+                           {"Name": "GPU:Number",           "Minimum": "/* integer, 0=all */",                                                                                                                               "Maximum": "/* integer, 0=all */",                                                                                                                               "Request": "/* integer, 0=all */"},
+                           {"Name": "GPU:CUDA:Class",       "Minimum": "/* SM10|SM11|SM12|SM13|SM20|SM21|SM30|SM32|SM35|SM37|SM50|SM52|SM53|SM60|SM61|SM62|SM70|SM72|SM75|SM80|SM86|SM87|SM90 */",                         "Maximum": "/* SM10|SM11|SM12|SM13|SM20|SM21|SM30|SM32|SM35|SM37|SM50|SM52|SM53|SM60|SM61|SM62|SM70|SM72|SM75|SM80|SM86|SM87|SM90 */",                         "Request": "/* SM10|SM11|SM12|SM13|SM20|SM21|SM30|SM32|SM35|SM37|SM50|SM52|SM53|SM60|SM61|SM62|SM70|SM72|SM75|SM80|SM86|SM87|SM90 */"},
+                           {"Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* float_GB_GDDR|GDDR2|GDDR3|GDDR4|GDDR5|GDDR5X|GDDR6|GDDR6X */",                                                                                  "Maximum": "/* float_GB_GDDR|GDDR2|GDDR3|GDDR4|GDDR5|GDDR5X|GDDR6|GDDR6X */",                                                                                  "Request": "/* float_GB_GDDR|GDDR2|GDDR3|GDDR4|GDDR5|GDDR5X|GDDR6|GDDR6X */"},
+                           {"Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* float_GHz */",                                                                                                                                    "Maximum": "/* float_GHz */",                                                                                                                                    "Request": "/* float_GHz */"}],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-mmc/v2-5/ai-modules/speech-translation-with-descriptors/"}]}

@@ -1,0 +1,32 @@
+{ "$schema":               "https://json-schema.org/draft/2020-12/schema",
+  "$id":                   "https://schemas.mpai.community/AIF/V3.0/data/AIFMetadata.json",
+  "title":                 "AIF metadata V3.0",
+  "type":                  "object",
+  "required":              ["ImplementerID", "Version"],
+  "properties":            {
+
+    "Header":              { "type": "string", "const": "AIF-AFM-V3.0" },
+    "ImplementerID":       { "type": "string", "description": "String assigned by IIDRA" },
+    "Version":             { "type": "string", "description": "Provided by the Implementer. Replaced by '*' in technical specifications" },
+    "APIProfile":          { "type": "string", "enum": ["Basic", "Secure"], "description": "Provided in Profile Chapter. Selected by the Implementer" },
+
+    "Resources":           { "type": "object", "properties": {
+      "ComputingPolicies": { "type": "array", "items": { "type": "object", "required": ["Name"], "properties": {
+        "Name":            { "type": "string" },
+        "Minimum":         { "type": "string" },
+        "Maximum":         { "type": "string" } } } },
+      "Storage":           { "type": "string" },
+      "Controller":        { "type": "string" },
+      "Extension":         { "type": "string" } } },
+
+    "Services":            { "type": "object", "properties": {
+      "Communication":     { "type": "string" },
+
+      "TrustedServices":   { "type": "object", "properties": {
+        "Communication":   { "type": "string" },
+        "Authentication":  { "type": "string" },
+        "Encryption":      { "type": "string" },
+        "Attestation":     { "type": "string" },
+        "Extension":       { "type": "string" } } },
+
+      "TimeBase":          { "type": "string", "enum": ["NTP", "RTP", "RTCP"] } } } } }

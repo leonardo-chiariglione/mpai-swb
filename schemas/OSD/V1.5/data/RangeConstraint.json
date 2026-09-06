@@ -1,0 +1,29 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/data/RangeConstraint.json",
+  "title":                "Range Constraint V1.5",
+  "description":          "Numeric and directional constraints for spatial cue interpretation.",
+  "type":                 "object",
+  "additionalProperties": false,
+  "properties":           {
+
+    "Header":             { "type": "string", "const": "OSD-RCN-V1.5" },
+    "MInstanceID":        { "type": "string", "description": "Identifier of M-Instance." },
+    "UEnvironmentID":     { "type": "string", "description": "Identifier of UEnvironment." },
+    "RangeConstraintID":  { "type": "string", "description": "Identifier of Range Constraint." },
+    "RangeConstraintTime":{ "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json" },
+
+    "Distance":           { "type": "object", "additionalProperties": false, "description": "Allowed distance range in metres.", "properties": {
+      "min":              { "type": "number", "minimum": 0 },
+      "max":              { "type": "number", "minimum": 0 } } },
+
+    "DirectionalOffset":  { "type": "object", "additionalProperties": false, "description": "Structured directional offset using MKS units.",
+                            "required": [ "Direction", "Value", "Unit" ] }, "properties": {
+      "Direction":        { "type": "string", "enum": [ "right", "left", "front", "back", "up", "down" ] },
+      "Value":            { "type": "number", "description": "Magnitude of the offset in the specified unit." },
+      "Unit":             { "type": "string", "enum": [ "m", "dm", "cm", "mm" ] } },
+
+    "KeywordRange":       { "type": "string", "description": "Semantic range constraint analogous to Keyword.",
+                            "enum": [ "near", "far", "left", "right", "front", "back", "up", "down", "inside", "outside" ] },
+
+    "DataXMData":         { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":      { "type": "string", "maxLength": 2048 } } }

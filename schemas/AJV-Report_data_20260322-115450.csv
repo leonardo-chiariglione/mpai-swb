@@ -1,0 +1,7 @@
+"Schema","Status","Error"
+"./PAF/V1.6/data/Avatar.json","invalid","can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json"
+"./PAF/V1.6/data/BodyDescriptorsObject.json","invalid","can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/BodyDescriptorsContentFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/BodyDescriptorsQualifier.json"
+"./PAF/V1.6/data/FaceDescriptorsObject.json","invalid","can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/FaceDescriptorsContentFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/FaceDescriptorsQualifier.json"
+"./PAF/V1.6/data/GestureDescriptorsObject.json","invalid","can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/BodyDescriptorsContentFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/GestureDescriptorsQualifier.json"
+"./PAF/V1.6/data/MoCapObject.json","invalid","can't resolve reference https://schemas.mpai.community/TFA/V1.5/formats/MoCapContentFormats.json from id https://schemas.mpai.community/TFA/V1.5/data/MoCapQualifier.json"
+"./PAF/V1.6/data/PortableAvatar.json","invalid","can't resolve reference https://schemas.mpai.community/TFA/V1.5/types/CoordinateTypes.json from id https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json"

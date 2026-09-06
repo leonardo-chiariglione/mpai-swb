@@ -1,0 +1,4 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id":     "https://schemas.mpai.community/TFA/V1.4/formats/EEGTransportFormats.json",
+  "title":   "EEGTransportFormats",
+  "type":    "string", "enum": [ "Minimum-EEG-MAT", "Minimum-MEG-MAT", "Standard-EEG-MAT", "Standard-MEG-MAT" ] }

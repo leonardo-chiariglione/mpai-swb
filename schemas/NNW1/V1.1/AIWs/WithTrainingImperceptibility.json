@@ -1,0 +1,273 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "WithTrainingImperceptibility",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Standard":  "MPAI-NNW",
+                                             "AIW":  "NNW-WTI",
+                                             "AIM":  "NNW-WTI",
+                                             "Version":  "1"
+                                         }
+                   },
+    "APIProfile":  "Basic",
+    "Description":  "This AIF is used to call the AIW of NNW imperceptibility evaluation when the payload is inserted during training ",
+    "Types":  [
+                  {
+                      "Name":  "TestingDataset_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "TrainingDataset_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "Payload_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "UnwatermarkedParameters_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "WatermarkedParameters_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "UnwatermarkedInference_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "WatermarkedInference_t",
+                      "Type":  "uint8[]"
+                  }
+              ],
+    "Ports":  [
+                  {
+                      "Name":  "TestingDataset_1",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "TestingDataset_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "TrainingDataset_1",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "TrainingDataset_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "TrainingDataset_2",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "TrainingDataset_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "Payload",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "Payload_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "TestingDataset_2",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "TestingDataset_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "UnwatermarkedParameters",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "UnwatermarkedParameters_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "WatermarkedParameters",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "WatermarkedParameters_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "UnwatermarkedInference",
+                      "Direction":  "OutputInput",
+                      "RecordType":  "UnwatermarkedInference_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  },
+                  {
+                      "Name":  "WatermarkedInference",
+                      "Direction":  "OutputInput",
+                      "RecordType":  "WatermarkedInference_t",
+                      "Technology":  "Software",
+                      "Protocol":  "",
+                      "IsRemote":  false
+                  }
+              ],
+    "SubAIMs":  [
+                    {
+                        "Name":  "UnwatermarkedAIM",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-WTI",
+                                                                 "AIM":  "UnwatermarkedAIM",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "WatermarkedAIM",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-WTI",
+                                                                 "AIM":  " WatermarkedAIM ",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "WTIWatermarkEmbedder",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-WTI",
+                                                                 "AIM":  "WTIWatermarkEmbedder",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "AIMtrainer",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-WTI",
+                                                                 "AIM":  "AIMtrainer",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    }
+                ],
+    "Topology":  [
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "TrainingDataset_1"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "AIMTrainer",
+                                       "PortName":  "TrainingDataset_1"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "AIMTrainer",
+                                        "PortName":  "UnwatermarkedParameters"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "UnwatermarkedAIM",
+                                       "PortName":  "UnwatermarkedParameters"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "TestingDataset_1"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "UnwatermarkedAIM",
+                                       "PortName":  "TestingDataset_1"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "UnwatermarkedAIM",
+                                        "PortName":  "UnwatermarkedInference"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "",
+                                       "PortName":  "UnwatermarkedInference"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "TrainingDataset_2"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "WTIWatermarkEmbedder",
+                                       "PortName":  "TrainingDataset_2"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "Payload"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "WTIWatermarkEmbedder",
+                                       "PortName":  "Payload"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "WTIWatermarkEmbedder",
+                                        "PortName":  "WatermarkedParameters"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "WatermarkedAIM",
+                                       "PortName":  "WatermarkedParameters"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "TestingDataset_2"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "WatermarkedAIM",
+                                       "PortName":  "TestingDataset_2"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "WatermarkedAIM",
+                                        "PortName":  "WatermarkedInference"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "",
+                                       "PortName":  "WatermarkedInference"
+                                   }
+                     }
+                 ],
+    "Implementations":  [
+
+                        ],
+    "Documentation":  [
+                          {
+                              "Type":  "Tutorial",
+                              "URI":  "https://mpai.community/standards/MPAI-NNW/"
+                          }
+                      ],
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIWs/WithTrainingImperceptibility.json"
+}
+

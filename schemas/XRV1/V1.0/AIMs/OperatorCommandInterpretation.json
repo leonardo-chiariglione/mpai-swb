@@ -1,0 +1,31 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/XRV1/V1.0/AIMs/OperatorCommandInterpretation.json",
+  "title":                "Operator Command Interpretation V1.0",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "XRV-OCI-V1.0"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM receives the Real and Virtual Environment Operator Descriptors and the Cue Point Identifier and provides the Operator Status of both Environments.",
+
+  "ExternalPorts":        [{"Name": "REOperatorDescriptors",   "Direction": "Input",  "DataType": "XRV-ROD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEOperatorDescriptors",   "Direction": "Input",  "DataType": "XRV-VOD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "CuePointID",              "Direction": "Input",  "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Script",                  "Direction": "Input",  "DataType": "XRV-SPT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ActionTable",             "Direction": "Input",  "DataType": "XRV-ACT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ScriptVenueAssociations", "Direction": "Input",  "DataType": "XRV-SVA-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ParticipantData",         "Direction": "Input",  "DataType": "XRV-PTD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REOperatorStatus",        "Direction": "Output", "DataType": "XRV-ROS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEOperatorStatus",        "Direction": "Output", "DataType": "XRV-VOS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-xrv/ltp/v1-0/"}]}

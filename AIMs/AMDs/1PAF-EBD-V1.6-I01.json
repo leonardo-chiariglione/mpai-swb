@@ -1,0 +1,24 @@
+{ "Identifier":       { "ImplementerID": "1", "ImplementationID": "PAF-EBD-V1.6-I01", "AIMName": "PAF-EBD-V1.6" },
+
+  "APIProfile":       "Basic",
+  "Description":      "Entity Body Description: receives a Body Visual Object and produces its Body Descriptors (PAF-BDO). Detects the most prominent person (YOLOX), crops it, estimates a 3D body pose (BlazePose GHUM), and emits the pose as a BVH skeleton (ContentFormat BVH) - a 3D posture expressing body semantics for Personal Status.",
+
+  "ExternalPorts":    [{"Name": "BodyVisualObject", "Direction": "Input",  "DataType": "OSD-BVO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                       {"Name": "BodyDescriptors",  "Direction": "Output", "DataType": "PAF-BDO-V1.6", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":          [],
+  "Topology":         [],
+
+  "Implementations":  [{"ImplementationURI": "file:///D:/AI/AIMs/PAF-EBD-V1.6-I01",
+                        "MASPort":           443,
+                        "BinaryName":        "Mpai.Paf.Ebd",
+                        "Architecture":      "x86-64",
+                        "OperatingSystem":   "Windows",
+                        "Version":           "1.6",
+                        "Source":            "AIMStorage"}],
+
+  "ResourcePolicies": [{"Name": "Memory",    "Minimum": "1 GB", "Request": "2 GB",   "Maximum": "4 GB"},
+                       {"Name": "CPU:Class", "Minimum": "Low",  "Request": "Medium", "Maximum": "High"}],
+
+  "DataXMData":       {},
+  "Documentation":    [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-paf/v1-6/"}]}

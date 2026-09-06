@@ -1,0 +1,31 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/XRV1/V1.0/AIMs/PerformanceStatusInterpretation.json",
+  "title":                "Performance Status Interpretation V1.0",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "XRV-PFI-V1.0"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM receives the Real and Virtual Environment Performance Descriptors and the Cue Point Identifier and provides the Performance Status of both Environments.",
+
+  "ExternalPorts":        [{"Name": "REPerformanceDescriptors", "Direction": "Input",  "DataType": "XRV-RFD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEPerformanceDescriptors", "Direction": "Input",  "DataType": "XRV-VFD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "CuePointID",               "Direction": "Input",  "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Script",                   "Direction": "Input",  "DataType": "XRV-SPT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ActionTable",              "Direction": "Input",  "DataType": "XRV-ACT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ScriptVenueAssociations",  "Direction": "Input",  "DataType": "XRV-SVA-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ParticipantData",          "Direction": "Input",  "DataType": "XRV-PTD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REPerformanceStatus",      "Direction": "Output", "DataType": "XRV-RFS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEPerformanceStatus",      "Direction": "Output", "DataType": "XRV-VFS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-xrv/ltp/v1-0/"}]}

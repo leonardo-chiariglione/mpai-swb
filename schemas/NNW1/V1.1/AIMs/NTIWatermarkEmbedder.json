@@ -1,0 +1,72 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "NTIWatermarkEmbedder",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Name":  "MPAI-NNW",
+                                             "AIW":  "NNW-NTI",
+                                             "AIM":  "NNW-NWE",
+                                             "Version":  "1"
+                                         },
+                       "Description":  "This AIM implements the watermark embedder which embeds the payload in an AIM and returns the watermarked parameters.",
+                       "Types":  [
+                                     {
+                                         "Name":  "UntrainedParameters_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "bitstring",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "WatermarkedParameters_t",
+                                         "Type":  "uint8[]"
+                                     }
+                                 ],
+                       "Ports":  [
+                                     {
+                                         "Name":  "UntrainedParameters",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "UntrainedParameters_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "Payload",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "Payload_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "WatermarkedParameters",
+                                         "Direction":  "OutputInput",
+                                         "RecordType":  "WatermarkedParameters_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     }
+                                 ],
+                       "SubAIMs":  [
+
+                                   ],
+                       "Topology":  [
+
+                                    ],
+                       "Implementations":  [
+
+                                           ],
+                       "Documentation":  [
+                                             {
+                                                 "Type":  "Tutorial",
+                                                 "URI":  "https://mpai.community/standards/MPAI-NNW/"
+                                             }
+                                         ]
+                   },
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIMs/NTIWatermarkEmbedder.json"
+}
+

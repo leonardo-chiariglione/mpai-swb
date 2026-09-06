@@ -1,0 +1,75 @@
+{ "$schema":                         "https://json-schema.org/draft/2020-12/schema",
+  "$id":                              "https://schemas.mpai.community/XRV1/V1.0/data/VEPerformanceStatus.json",
+  "title":                            "VE Performance Status V1.0",
+  "description":                      "Status report for Virtual Environment (VE) performance: scene, individual/collective statuses, objects, and cameras.",
+  "type":                             "object",
+  "additionalProperties":             false,
+  "required":                         [ "Header", "VEPerformanceStatusID", "VEPerformanceStatusData" ],
+  "properties":                       {
+
+    "Header":                         { "type": "string", "const": "XRV-VFS-V1.0", "maxLength": 16 },
+    "UEnvironmentID":                 { "type": "string" },
+    "VEPerformanceStatusID":          { "type": "string" },
+    "VEPerformanceStatusTime":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+    "AVSceneDescriptors":             { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/AudioVisualSceneDescriptors.json" },
+
+    "VEPerformanceStatusData":        { "type": "object", "additionalProperties": false, "required": [ "IndividualStatuses", "CollectiveStatuses", "Objects" ], "properties": {
+
+        "IndividualStatuses":         { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": [ "VEPerformerID" ], "properties": {
+
+            "VEPerformerID":          { "type": "string" },
+            "SpatialAttitude":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json" },
+
+            "AvatarOrAvatarID":       { "type": "array", "items": { "oneOf": [
+                                      { "$ref": "https://schemas.mpai.community/XRV1/V1.0/data/SpeakingAvatar.json" },
+                                      { "type": "string" } ] }, "description": "Array of Avatars (objects) or Avatar IDs (string)." },
+
+            "AudioBehaviour":         { "$ref": "https://schemas.mpai.community/XRV1/V1.0/data/AudioBehaviour.json" },
+            "VisualBehaviour":        { "$ref": "https://schemas.mpai.community/XRV1/V1.0/data/VisualBehaviour.json" },
+            "PersonalStatus":         { "$ref": "https://schemas.mpai.community/MMC/V2.5/data/PersonalStatus.json" },
+
+            "Brainwavefreq":          { "type": "object", "additionalProperties": false, "properties": {
+              "alpha":                { "type": "number" },
+              "theta":                { "type": "number" },
+              "delta":                { "type": "number" },
+              "beta":                 { "type": "number" },
+              "gamma":                { "type": "number" } } },
+
+            "BiometricData":          { "$ref": "https://schemas.mpai.community/AIH1/V1.0/data/BiometricData.json" } } } },
+
+        "CollectiveStatuses":         { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": [ "GroupID" ], "properties": {
+
+            "GroupID":                { "type": "string" },
+            "CentroidPosition":       { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Position.json" },
+            "PrincipalAxes":          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Orientation.json" },
+
+            "PrincipalAxisVariances": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3, "description": "Variances along principal axes [V1, V2, V3]." },
+            "PerformerPercentage":    { "type": "number", "minimum": 0, "maximum": 100 },
+
+            "Brainwavefreq":          { "type": "object", "additionalProperties": false, "properties": {
+              "alpha":                { "type": "number" },
+              "theta":                { "type": "number" },
+              "delta":                { "type": "number" },
+              "beta":                 { "type": "number" },
+              "gamma":                { "type": "number" } } },
+
+            "AudioBehaviour":         { "$ref": "https://schemas.mpai.community/XRV1/V1.0/data/AudioBehaviour.json" },
+            "VisualBehaviour":        { "$ref": "https://schemas.mpai.community/XRV1/V1.0/data/VisualBehaviour.json" },
+
+            "Performers":             { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": [ "PerformerID" ], "properties": {
+              "PerformerID":          { "type": "string" },
+              "DistanceFromCentroid": { "type": "number", "minimum": 0 } } } } } } },
+
+        "Objects":                    { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": [ "VEObjectID" ], "properties": {
+            "VEObjectID":             { "type": "string" },
+            "VEObject":               { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/3DModelObject.json" },
+            "SpatialAttitude":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json" } } } },
+
+        "VCameraData":                { "type": "array", "items": { "type": "object", "additionalProperties": false, "properties": {
+            "VEVisualObject":         { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/3DModelObject.json" },
+            "FieldOfView":            { "type": "number", "minimum": 0, "maximum": 180 },
+            "VEAudioObject":          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/3DModelObject.json" },
+            "SpatialAttitude":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpatialAttitude.json" } } } } } },
+
+    "DataXMdata":                     { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                  { "type": "string", "maxLength": 2048 } } }

@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mpai.community/OSD/V1.5/data/EnhancedVisualSceneDescriptors.json",
+  "title": "Enhanced Visual Scene Descriptors V1.5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "Header",
+    "MInstanceID",
+    "EnhancedVisualSceneDescriptorsID",
+    "BaseVSDID"
+  ],
+  "properties": {
+    "Header": {
+      "type": "string",
+      "const": "OSD-EVD-V1.5"
+    },
+    "MInstanceID": {
+      "type": "string"
+    },
+    "UEnvironmentID": {
+      "type": "string"
+    },
+    "EnhancedVisualSceneDescriptorsID": {
+      "type": "string"
+    },
+    "BaseVSDID": {
+      "type": "string"
+    },
+    "EnhancedVisualSceneDescriptorsSpaceTime": {
+      "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json"
+    },
+    "Entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EntityID",
+          "VSDItemID"
+        ],
+        "properties": {
+          "EntityID": {
+            "type": "string"
+          },
+          "VSDItemID": {
+            "type": "string"
+          },
+          "VisualObject": {
+            "$ref": "https://schemas.mpai.community/OSD/V1.5/data/VisualObject.json"
+          },
+          "RelativeDepth": {
+            "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Depth.json"
+          },
+          "OcclusionFlag": {
+            "$ref": "https://schemas.mpai.community/OSD/V1.5/data/OcclusionFlag.json"
+          },
+          "Affordance": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/VisualAffordanceItem"
+            }
+          },
+          "InteractionPotential": {
+            "$ref": "https://schemas.mpai.community/OSD/V1.5/data/InteractionPotential.json"
+          },
+          "Salience": {
+            "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SalienceScore.json"
+          }
+        }
+      }
+    },
+    "RankedEntities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "SalientEntities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "DomainRequest": {
+      "type": "string"
+    },
+    "DomainResponse": {
+      "type": "string"
+    },
+    "DataXMData": {
+      "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json"
+    },
+    "DescrMetadata": {
+      "type": "string",
+      "maxLength": 2048
+    }
+  },
+  "$defs": {
+    "ConstraintItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Reason"
+      ],
+      "properties": {
+        "Reason": {
+          "type": "string",
+          "enum": [
+            "locked",
+            "occluded",
+            "out_of_reach",
+            "safety_violation",
+            "domain_rule",
+            "disabled"
+          ]
+        },
+        "Severity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        }
+      }
+    },
+    "VisualAffordanceItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Tag",
+        "Feasible",
+        "Confidence"
+      ],
+      "properties": {
+        "Tag": {
+          "type": "string",
+          "enum": [
+            "Graspable",
+            "Pushable",
+            "Openable",
+            "Rotatable",
+            "Liftable",
+            "Insertable",
+            "Selectable"
+          ]
+        },
+        "Feasible": {
+          "type": "boolean"
+        },
+        "Constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConstraintItem"
+          }
+        },
+        "Referent": {
+          "type": "string"
+        },
+        "Confidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "Compliance": {
+          "type": "string",
+          "enum": [
+            "compliant",
+            "violating",
+            "unknown"
+          ]
+        },
+        "FallbackApplied": {
+          "type": "boolean"
+        },
+        "FallbackTag": {
+          "type": "string",
+          "enum": [
+            "Selectable"
+          ]
+        }
+      }
+    }
+  }
+}

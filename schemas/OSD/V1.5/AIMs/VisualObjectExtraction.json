@@ -1,0 +1,26 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/VisualObjectExtraction.json",
+  "title":                "Visual Object Extraction V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VOE-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM extracts the Visual Object indicated by a Point of View in a space described by a Visual Scene Geometry, and provides its Instance Identifier.",
+
+  "ExternalPorts":        [{"Name": "PointOfView",         "Direction": "Input",  "DataType": "OSD-OPV-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualSceneGeometry", "Direction": "Output", "DataType": "OSD-VSG-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualObjects",       "Direction": "Output", "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ObjectID",            "Direction": "Output", "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

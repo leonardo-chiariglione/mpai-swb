@@ -1,0 +1,184 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "NoInferenceRobustness",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Standard":  "MPAI-NNW",
+                                             "AIW":  "NNW-NIR",
+                                             "AIM":  "NNW-NIR",
+                                             "Version":  "1"
+                                         }
+                   },
+    "APIProfile":  "Basic",
+    "Description":  "This AIF is used to call the AIW of NNW robustness evaluation when the payload is retrieved in the parameters",
+    "Types":  [
+                  {
+                      "Name":  "OriginalPayload_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "WatermarkedParameters_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "ModifiedParameters_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "RetrievedPayload_t",
+                      "Type":  "uint8[]"
+                  },
+                  {
+                      "Name":  "CountError_t",
+                      "Type":  "uint8"
+                  }
+              ],
+    "Ports":  [
+                  {
+                      "Name":  "OriginalPayload",
+                      "Direction":  " InputOutput ",
+                      "RecordType":  "OriginalPayload_t"
+                  },
+                  {
+                      "Name":  "WatermarkedParameters",
+                      "Direction":  " InputOutput ",
+                      "RecordType":  "WatermarkedParameters_t"
+                  },
+                  {
+                      "Name":  "ModifiedParameters",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "ModifiedParameters_t"
+                  },
+                  {
+                      "Name":  "RetrievedPayload_1",
+                      "Direction":  "InputOutput",
+                      "RecordType":  "RetrievedPayload_t"
+                  },
+                  {
+                      "Name":  "RetrievedPayload_2",
+                      "Direction":  "OutputInput",
+                      "RecordType":  "RetrievedPayload_t"
+                  },
+                  {
+                      "Name":  "CountError",
+                      "Direction":  "OutputInput",
+                      "RecordType":  "CountError_t"
+                  }
+              ],
+    "SubAIMs":  [
+                    {
+                        "Name":  "ModificationModule",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-NIR",
+                                                                 "AIM":  "ModificationModule",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "NIRWatermarkDecoder",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-NIR",
+                                                                 "AIM":  "NIRWatermarkDecoder",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    },
+                    {
+                        "Name":  "Comparator",
+                        "Identifier":  {
+                                           "ImplementerID":  "/* String assigned by IIDRA */",
+                                           "Specification":  {
+                                                                 "Standard":  "MPAI-NNW",
+                                                                 "AIW":  "NNW-NIR",
+                                                                 "AIM":  "Comparator",
+                                                                 "Version":  "1"
+                                                             }
+                                       }
+                    }
+                ],
+    "Topology":  [
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "OriginalPayload"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "Comparator",
+                                       "PortName":  "OriginalPayload"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "",
+                                        "PortName":  "WatermarkedParameters"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "ModificationModule",
+                                       "PortName":  "WatermarkedParameters"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "ModificationModule",
+                                        "PortName":  "ModifiedParameters"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "NIRWatermarkDecoder",
+                                       "PortName":  "ModifiedParameters"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "NIRWatermarkDecoder",
+                                        "PortName":  "RetrievedPayload_1"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "Comparator",
+                                       "PortName":  "RetrievedPayload_1"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "NIRWatermarkDecoder",
+                                        "PortName":  "RetrievedPayload_2"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "",
+                                       "PortName":  "RetrievedPayload_2"
+                                   }
+                     },
+                     {
+                         "Output":  {
+                                        "AIMName":  "Comparator",
+                                        "PortName":  "CountError"
+                                    },
+                         "Input":  {
+                                       "AIMName":  "",
+                                       "PortName":  "CountError"
+                                   }
+                     }
+                 ],
+    "Implementations":  [
+
+                        ],
+    "ResourcePolicies":  [
+
+                         ],
+    "Documentation":  [
+                          {
+                              "Type":  "tutorial",
+                              "URI":  "https://mpai.community/standards/mpai-nnw/"
+                          }
+                      ],
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIWs/NoInferenceRobustness.json"
+}
+

@@ -1,0 +1,25 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/VisualChangeDetection.json",
+  "title":                "Visual Change Detection V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VCD-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM detects changes in a sequence of Visual Objects and produces the Time and the Visual Object at which a change occurs.",
+
+  "ExternalPorts":        [{"Name": "Video", "Direction": "Input",  "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Time",  "Direction": "Output", "DataType": "OSD-TIM-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Image", "Direction": "Output", "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

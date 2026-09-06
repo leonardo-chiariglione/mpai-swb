@@ -1,0 +1,32 @@
+{ "$schema":                    "https://json-schema.org/draft/2020-12/schema",
+  "$id":                        "https://schemas.mpai.community/MMC/V2.5/data/IdentityMapping.json",
+  "title":                      "Identity Mapping V2.5",
+  "description":                "Maps modality-specific IDs to a reconciled ID.",
+  "type":                       "object",
+  "required":                   [ "Header", "ReconciledIdentity", "Associations" ],
+  "properties":                 {
+
+    "Header":                   { "type": "string", "const": "MMC-IDM-V2.5" },
+    "MInstanceID":              { "type": "string" },
+    "UEnvironmentID":           { "type": "string" },
+    "IdentityMappingID":        { "type": "string" },
+    "IdentityMappingTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+    "ReconciledIdentity":       { "type": "string", "description": "Unified identity identifier produced by the IDR AIM." },
+
+    "Associations":             { "type": "array", "minItems": 1, "items": { "type": "object", "required": [ "Modality",
+                                  "InputIdentity", "AssociationStatus" ], "additionalProperties": false, "properties": {
+      "Modality":               { "type": "string", "enum": [ "Speech", "Face", "Voiceprint", "Gait", "Body", "Device",
+                                  "BiometricFusion", "Manual", "Other" ],
+                                  "description": "Perceptual or logical modality that produced the input identity." },
+      "InputIdentity":          { "type": "string", "description": "Identity identifier produced by a modality-specific AIM." },
+      "AssociationConfidence":  { "type": "number", "minimum": 0, "maximum": 1,
+                                  "description": "Confidence of input ID corresponds to the reconciled identity." },
+      "TemporalValidity":       { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json",
+                                  "description": "Time interval during which the association is valid." },
+      "AssociationStatus":      { "type": "string", "enum": [ "Confirmed", "Tentative", "Ambiguous", "Withdrawn" ],
+                                  "description": "Current status of the identity association." } } } },
+
+    "DataXMData":               { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":            { "type": "string", "maxLength": 2048 } } }
+

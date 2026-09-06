@@ -1,0 +1,86 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id": "https://schemas.mpai.community/MMC/V2.5/AIMs/ConversationWithPersonalStatus.json",
+  "title": "Conversation with Personal Status Composite V2.5",
+
+  "Identifier":   { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-CPS-V2.5" },
+
+  "APIProfile":   "Basic",
+  "Description":  "This composite AIM implements a conversation conveying Personal Status.",
+
+  "ExternalPorts":  [
+    { "Name": "InputVisual"  , "Direction": "Input",   "DataType": "OSD-VIO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "InputSpeech"  , "Direction": "Input",   "DataType": "OSD-SPO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "InputText"    , "Direction": "Input",   "DataType": "OSD-TXO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "MediaSelector", "Direction": "Input",   "DataType": "OSD-SEL-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "MachineVisual", "Direction": "Output",  "DataType": "OSD-VIO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "MachineSpeech", "Direction": "Output",  "DataType": "OSD-SPO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "MachineText"  , "Direction": "Output",  "DataType": "OSD-TXO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false }
+  ],
+
+  "SubAIMs":  [
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VSD-V1.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-SSD-V1.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VOI-V1.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-ASR-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-NLU-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-PSE-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-EDP-V2.5" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-PSD-V1.6" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-AVR-V1.6" } }
+  ],
+
+  "Topology":  [
+    { "Output": { "AIMName": ""            , "PortName": "InputVisual"           }, "Input": { "AIMName": "OSD-VSD-V1.5", "PortName": "InputVisual" } },
+    { "Output": { "AIMName": ""            , "PortName": "InputSpeech"           }, "Input": { "AIMName": "OSD-SSD-V1.5", "PortName": "InputSpeech" } },
+    { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "BodyDescriptors"       }, "Input": { "AIMName": "OSD-VOI-V1.5", "PortName": "BodyDescriptors" } },
+    { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualSceneGeometry"   }, "Input": { "AIMName": "OSD-VOI-V1.5", "PortName": "VisualSceneGeometry" } },
+    { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualObjects"         }, "Input": { "AIMName": "OSD-VOI-V1.5", "PortName": "VisualObjects" } },
+    { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "BodyDescriptors"       }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "BodyObject" } },
+    { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "FaceDescriptors"       }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "FaceObject" } },
+    { "Output": { "AIMName": "OSD-SSD-V1.5", "PortName": "SpeechObject"          }, "Input": { "AIMName": "MMC-ASR-V2.5", "PortName": "SpeechObject" } },
+    { "Output": { "AIMName": "OSD-SSD-V1.5", "PortName": "SpeechObject"          }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "SpeechObject" } },
+    { "Output": { "AIMName": "OSD-VOI-V1.5", "PortName": "InstanceID"            }, "Input": { "AIMName": "MMC-NLU-V2.5", "PortName": "InstanceID" } },
+    { "Output": { "AIMName": "OSD-VOI-V1.5", "PortName": "InstanceID"            }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "InstanceID" } },
+    { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualSceneGeometry"   }, "Input": { "AIMName": "MMC-NLU-V2.5", "PortName": "VisualSceneGeometry" } },
+    { "Output": { "AIMName": "MMC-ASR-V2.5", "PortName": "RecognisedText"        }, "Input": { "AIMName": "MMC-NLU-V2.5", "PortName": "TextObject", "PortNumber": 1 } },
+    { "Output": { "AIMName": ""            , "PortName": "InputText"             }, "Input": { "AIMName": "MMC-NLU-V2.5", "PortName": "TextObject", "PortNumber": 2 } },
+    { "Output": { "AIMName": ""            , "PortName": "MediaSelector"         }, "Input": { "AIMName": "MMC-NLU-V2.5", "PortName": "Selector" } },
+    { "Output": { "AIMName": "MMC-NLU-V2.5", "PortName": "Meaning"               }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "TextObject" } },
+    { "Output": { "AIMName": "MMC-NLU-V2.5", "PortName": "Meaning"               }, "Input": { "AIMName": "MMC-EDP-V2.5", "PortName": "Meaning" } },
+    { "Output": { "AIMName": "MMC-NLU-V2.5", "PortName": "RefinedText"           }, "Input": { "AIMName": "MMC-EDP-V2.5", "PortName": "TextObject", "PortNumber": 1 } },
+    { "Output": { "AIMName": "MMC-NLU-V2.5", "PortName": "VisualSceneGeometry"   }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "AVSceneGeometry" } },
+    { "Output": { "AIMName": ""            , "PortName": "InputText"             }, "Input": { "AIMName": "MMC-EDP-V2.5", "PortName": "TextObject", "PortNumber": 2 } },
+    { "Output": { "AIMName": "MMC-PSE-V2.5", "PortName": "PersonalStatus"        }, "Input": { "AIMName": "MMC-EDP-V2.5", "PortName": "PersonalStatus" } },
+    { "Output": { "AIMName": "MMC-EDP-V2.5", "PortName": "MachinePersonalStatus" }, "Input": { "AIMName": "PAF-PSD-V1.6", "PortName": "PersonalStatus" } },
+    { "Output": { "AIMName": "MMC-EDP-V2.5", "PortName": "MachineTextObject"     }, "Input": { "AIMName": "PAF-PSD-V1.6", "PortName": "TextObject" } },
+    { "Output": { "AIMName": "PAF-PSD-V1.6", "PortName": "PortableAvatar"        }, "Input": { "AIMName": "PAF-AVR-V1.6", "PortName": "PortableAvatar" } },
+    { "Output": { "AIMName": "PAF-AVR-V1.6", "PortName": "MachineSpeech"         }, "Input": { "AIMName": ""            , "PortName": "MachineSpeech" } },
+    { "Output": { "AIMName": "PAF-AVR-V1.6", "PortName": "MachineVisual"         }, "Input": { "AIMName": ""            , "PortName": "MachineVisual" } },
+    { "Output": { "AIMName": "MMC-EDP-V2.5", "PortName": "MachineTextObject"     }, "Input": { "AIMName": ""            , "PortName": "MachineText" } }
+  ],
+
+  "Implementations":  [
+   {
+    "BinaryName": "/* provided by implementer */",
+    "Architecture": "/* x86-64 | ARM64 */",
+    "OperatingSystem": "/* Windows | Linux | MacOS */",
+    "Version": "/* implementer version */",
+    "Source": "/* AIMStorage | MPAIStore */",
+    "Destination": "/* provided by implementer */"
+   }
+  ],
+
+  "ResourcePolicies":  [
+    { "Name": "Memory"              , "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */" },
+    { "Name": "CPU:Number"          , "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */" },
+    { "Name": "CPU:Class"           , "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */" },
+    { "Name": "GPU:Number"          , "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */" },
+    { "Name": "GPU:CUDA:Class"      , "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */" },
+    { "Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */" },
+    { "Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* GB/s */",           "Maximum": "/* GB/s */",           "Request": "/* GB/s */" }
+  ],
+
+  "DataXMData":  { },
+
+  "Documentation":  [{ "Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-mmc/v2-5/" }] }

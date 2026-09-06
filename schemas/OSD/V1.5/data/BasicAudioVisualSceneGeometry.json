@@ -1,0 +1,25 @@
+{ "$schema":                                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                      "https://schemas.mpai.community/OSD/V1.5/data/BasicAudioVisualSceneGeometry.json",
+  "title":                                    "Basic 3D Model Scene Geometry V1.5",
+  "type":                                     "object",
+  "additionalProperties":                     false,
+  "required":                                 [ "Header", "BasicAudioVisualSceneGeometryID", "BasicAudioVisualSceneGeometrySpaceTime",
+                                                "AudioVisualObjectCount", "AudioVisualObjects" ],
+  "properties":                               {
+
+    "Header":                                 { "type": "string", "const": "OSD-BMG-V1.5" },
+    "MInstanceID":                            { "type": "string" },
+    "UEnvironmentID":                         { "type": "string" },
+    "BasicAudioVisualSceneGeometryID":        { "type": "string" },
+    "BasicAudioVisualSceneGeometryTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json" },
+
+    "BasicAudioVisualSceneGeometrySpaceTime": { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "AudioVisualObjectCount":                 { "type": "integer", "minimum": 0 },
+    "AudioVisualObjects":                     { "type": "array", "minItems": 0, "items": { "type": "object", "additionalProperties": false,
+                                                "required": [ "AudioVisualObjectSpaceTime", "AudioVisualObjectQualifier" ], "properties": {
+      "AudioVisualObjectSpaceTime":           { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "AudioVisualObjectQualifier":           { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/AudioVisualQualifier.json" } } } },
+
+    "DataXMData":                             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                          { "type": "string", "maxLength": 2048 } } }

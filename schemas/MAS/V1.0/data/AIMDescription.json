@@ -1,0 +1,33 @@
+{ "$schema":                "https://json-schema.org/draft/2020-12/schema",
+  "$id":                    "https://schemas.mpai.community/MAS/V1.0/AIMDescription.json",
+  "title":                  "AIM Description V1.0",
+  "type":                   "object", 
+  "required":               [ "Identifier", "Ports", "SubAIMs", "Topology", "Implementations" ],
+  "additionalProperties":   false, 
+  "properties":             {
+
+  "Identifier":             { "type": "object", "required": [ "ImplementerID", "AIM" ], "additionalProperties": false, "$anchor": "identifier", "properties": {
+    "ImplementerID":        { "type": "string" },
+    "AIM":                  { "type": "string", "pattern": "^[A-Z]{3}-[A-Z]{3}-V\\d+\\.\\d+$" },
+    "Profile":              { "type": "string" } } },
+
+    "APIProfile":           { "type": "string", "enum": [ "Basic", "Secure" ] },
+    "Description":          { "type": "string" },
+
+    "Types":                { "type": "array", "items": { "type": "object", "required": [ "Name", "Type" ], "additionalProperties": false, "properties": {
+      "Name":               { "type": "string" },
+      "Type":               { "type": "string" } } } },
+
+    "Ports":                { "type": "array", "items": { "type": "object", "required": [ "Name", "Direction", "RecordType", "Protocol"], "additionalProperties": false, "properties": {
+      "Name":               { "type": "string" },
+      "Direction":          { "type": "string", "enum": [ "OutputInput", "InputOutput" ] },
+      "RecordType":         { "type": "string" },
+      "Protocol":           { "type": "string" } } } },
+
+    "Documentation":        { "type": "array", "items": { "type": "object", "required": [ "Type", "URI" ], "additionalProperties": false, "properties": {
+      "Type":               { "type": "string", "enum": [ "Specification", "Manual", "Tutorial", "Video" ] },
+      "URI":                {"type": "string", "format": "uri" } } } },
+
+    "DataXMData":           { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":        { "type": "string", "maxLength": 2048, "description": "Descriptive Metadata." } } }
+

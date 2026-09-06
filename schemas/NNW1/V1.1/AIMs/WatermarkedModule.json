@@ -1,0 +1,72 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "WatermarkedModule",
+    "AIM":  {
+                "ImplementerID":  "/* String assigned by IIDRA */",
+                "Specification":  {
+                                      "Name":  "MPAI-NNW",
+                                      "AIW":  "NNW-WTI",
+                                      "AIM":  "NNW-WMM",
+                                      "Version":  "1"
+                                  },
+                "Description":  "This AIM can be any AIMs that can produce an inference.",
+                "Types":  [
+                              {
+                                  "Name":  "WatermarkedParameters_t",
+                                  "Type":  "uint8[]"
+                              },
+                              {
+                                  "Name":  "TestingDataset_t",
+                                  "Type":  "uint8[]"
+                              },
+                              {
+                                  "Name":  "WatermarkedInference_t",
+                                  "Type":  "uint8[]"
+                              }
+                          ],
+                "Ports":  [
+                              {
+                                  "Name":  "WatermarkedParameters",
+                                  "Direction":  "InputOutput",
+                                  "RecordType":  "WatermarkedParameters_t",
+                                  "Technology":  "Software",
+                                  "Protocol":  "",
+                                  "IsRemote":  false
+                              },
+                              {
+                                  "Name":  "TestingDataset",
+                                  "Direction":  "InputOutput",
+                                  "RecordType":  "TestingDataset_t",
+                                  "Technology":  "Software",
+                                  "Protocol":  "",
+                                  "IsRemote":  false
+                              },
+                              {
+                                  "Name":  "WatermarkedInference",
+                                  "Direction":  "OutputInput",
+                                  "RecordType":  "WatermarkedInference_t",
+                                  "Technology":  "Software",
+                                  "Protocol":  "",
+                                  "IsRemote":  false
+                              }
+                          ],
+                "SubAIMs":  [
+
+                            ],
+                "Topology":  [
+
+                             ],
+                "Implementations":  [
+
+                                    ],
+                "Documentation":  [
+                                      {
+                                          "Type":  "Tutorial",
+                                          "URI":  "https://mpai.community/standards/MPAI-NNW/"
+                                      }
+                                  ]
+            },
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIMs/WatermarkedModule.json"
+}
+

@@ -1,0 +1,33 @@
+{ "$schema":                      "https://json-schema.org/draft/2020-12/schema",
+  "$id":                          "https://schemas.mpai.community/OSD/V1.5/data/AudioProximityClass.json",
+  "title":                        "Audio Proximity Class V1.5",
+  "type":                         "object",
+  "additionalProperties":         false,
+  "description":                  "Categorisation of audio source distanceS from user, based on spatial geometry & acoustic cues.",
+  "required":                     ["Header", "MInstanceID", "AudioProximityClass", "Trace"],
+  "properties": {
+
+    "Header":                     { "type": "string", "const": "OSD-APC-V1.5" },
+    "MInstanceID":                { "type": "string", "description": "Identifier of the Metaverse (Virtual) instance." },
+    "UEnvironmentID":             { "type": "string", "description": "Identifier of the Metaverse (Virtual) instance." },
+
+    "AudioProximityClass":        { "type": "array", "description": "List of proximity classifications for each audio object.", "items": {
+                                    "type": "object", "additionalProperties": false,
+                                    "required": ["AudioObjectID", "ProximityLevel", "ProximityConfidence"], "properties": {
+
+          "AudioObjectID":        { "type": "string", "description": "Unique identifier of the audio object." },
+
+          "ProximityLevel":       { "type": "string", "enum": ["Near", "Mid", "Far"],
+                                   "description": "Discrete proximity class relative to the user." },
+
+          "ProximityConfidence":  { "type": "number", "minimum": 0, "maximum": 1,
+                                   "description": "Confidence score for proximity classification (0..1)." },
+
+          "DistanceEstimate":     { "type": "number", "minimum": 0,
+                                   "description": "Optional estimated distance in metres from the user." },
+
+          "TemporalWindow":       { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json",
+                                   "description": "Time window over which proximity was evaluated." } } } },
+
+    "DataXMD":                    { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":               { "type": "string", "maxLength": 2048 } } }

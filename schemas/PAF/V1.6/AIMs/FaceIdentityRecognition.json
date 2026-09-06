@@ -1,0 +1,28 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/PAF/V1.6/AIMs/FaceIdentityRecognition.json",
+  "title":                "Face Identity Recognition V1.6",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-FIR-V1.6"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM identifies faces in the bounding boxes of an image.",
+
+  "ExternalPorts":        [{"Name": "TextObject",          "Direction": "Input",  "DataType": "OSD-TXO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Image",               "Direction": "Input",  "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "FaceTime",            "Direction": "Input",  "DataType": "OSD-TIM-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualSceneGeometry", "Direction": "Input",  "DataType": "OSD-VSG-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "FaceID",              "Direction": "Output", "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "BoundingBox",         "Direction": "Output", "DataType": "OSD-BBX-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-paf/v1-6/"}]}

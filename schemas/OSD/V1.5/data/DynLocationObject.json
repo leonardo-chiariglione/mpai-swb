@@ -1,0 +1,50 @@
+{ "$id":                          "https://schemas.mpai.community/OSD/V1.5/data/DynLocationObject.json",
+  "$schema":                      "https://json-schema.org/draft/2020-12/schema",
+  "title":                        "Location Object V1.5",
+  "type":                         "object",
+  "required":                     [ "Header", "LocationObjectID", "LocationObjectSpaceTime" ],
+  "additionalProperties":         false,
+  "properties":                   {
+
+    "Header":                     { "type": "string", "const": "OSD-DLO-V1.5" },
+    "MInstanceID":                { "type": "string" },
+    "UEnvironmentID":             { "type": "string" },
+    "LocationObjectID":           { "type": "string" },
+    "LocationObjectTime":         { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json" },
+
+    "BasicLocationCount":         { "type": "integer" },
+    "BasicLocations":             { "type": "array", "items": { "type": "object", "additionalProperties": false, "properties": {
+      "BasicLocationSpaceTime":   { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "BasicLocIDOrBasicLoc":     { "$ref": "#/$defs/BasicLocIDOrBasicLoc" } } } },
+
+    "SubLocationCount":           { "type": "integer" },
+    "SubLocations":               { "type": "array", "items": { "type": "object", "additionalProperties": false, "properties": {
+      "SubLocationSpaceTime":     { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "SubLocIDOrSubLoc":         { "$ref": "#/$defs/SubLocIDOrSubLoc" } } } },
+
+    "LocationOrBasicLocation":    { "type": "array", "items": { "$ref": "#/$defs/LocationOrBasicLocation" } },
+
+    "DataXMData":                 { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":              { "type": "string", "maxLength": 2048 } },
+
+  "$defs":                        {
+
+    "DynamicRef":                 { "type": "object", "required": [ "id", "type" ], "additionalProperties": false, "properties": {
+      "id":                       { "type": "string", "description": "Instance identifier of the referenced object" },
+      "type":                     { "type": "string", "description": "Class name of the referenced object, used by the application to resolve its schema at runtime" } } },
+
+    "LocationOrBasicLocation":    { "type": "array", "items": { "oneOf": [
+                                  { "$ref": "#/$defs/DynamicRef", "properties": { "type": { "type": "string", "enum": [ "BasicLocationObject", "LocationObject" ] } },
+                                    "description": "Dynamic reference resolved at runtime via id+type: accepts BasicLocationObject or any LocationObject subtype" },
+                                  { "$ref": "#/$defs/LocationOrBasicLocation", "description": "Nested recursive grouping of location references" } ] } },
+
+    "BasicLocIDOrBasicLoc":       { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                  { "$ref": "#/$defs/DynamicRef", "properties": { "type": { "type": "string", "const": "BasicLocationObject" } },
+                                    "description": "Dynamic reference resolved at runtime via id+type: accepts BasicLocationObject only" },
+                                  { "type": "string", "description": "Bare string instance ID; application infers type as BasicLocationObject from context" } ] } },
+
+    "SubLocIDOrSubLoc":           { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                  { "$ref": "#/$defs/DynamicRef", "properties": { "type": { "type": "string", 
+                                    "description": "Any class derived from LocationObject â€” e.g. LocationObject, GeoLocation, IndoorLocation; resolved by the application type registry" } },
+                                    "description": "Dynamic reference resolved at runtime via id+type: accepts any LocationObject subtype" },
+                                  { "type": "string", "description": "Bare string instance ID; application resolves the concrete type from its own object registry" } ] } } } }

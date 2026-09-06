@@ -1,0 +1,24 @@
+{ "$schema":                                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                      "https://schemas.mpai.community/OSD/V1.5/data/BasicUltrasoundSceneGeometry.json",
+  "title":                                    "Basic 3D Model Scene Geometry V1.5",
+  "type":                                     "object",
+  "additionalProperties":                     false,
+  "required":                                 [ "Header", "BasicUltrasoundSceneGeometryID", "BasicUltrasoundSceneGeometrySpaceTime",
+                                                "UltrasoundObjectCount", "UltrasoundObjects" ],
+  "properties":                               {
+
+    "Header":                                 { "type": "string", "const": "OSD-BUG-V1.5" },
+    "MInstanceID":                            { "type": "string" },
+    "BasicUltrasoundSceneGeometryID":         { "type": "string" },
+    "BasicUltrasoundSceneGeometryTime":       { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "BasicUltrasoundSceneGeometrySpaceTime":  { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "UltrasoundObjectCount":                  { "type": "integer", "minimum": 0 },
+    "UltrasoundObjects":                      { "type": "array", "minItems": 0, "items": { "type": "object", "additionalProperties": false,
+                                                "required": [ "UltrasoundObjectSpaceTime", "UltrasoundObjectQualifier" ], "properties": {
+      "UltrasoundObjectSpaceTime":            { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "UltrasoundObjectQualifier":            { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/UltrasoundQualifier.json" } } } },
+
+    "DataEMData":                             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                          { "type": "string", "maxLength": 2048 } } }

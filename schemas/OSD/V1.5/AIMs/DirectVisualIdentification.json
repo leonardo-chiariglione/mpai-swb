@@ -1,0 +1,47 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/DirectVisualIdentification.json",
+  "title":                "Direct Visual Identification V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-DVI-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This Composite AIM identifies a Visual Object in a Scene by directly processing the input Visual Object, producing its Visual Instance ID.",
+
+  "ExternalPorts":        [{"Name": "VisualObject",     "Direction": "Input",  "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualInstanceID", "Direction": "Output", "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [{ "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VSD-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VOE-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VDI-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VII-V1.5" } }],
+
+  "Topology":             [{ "Output": { "AIMName": "",             "PortName": "VisualObject"        }, "Input": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualObject"        } },
+                           { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualSceneGeometry" }, "Input": { "AIMName": "OSD-VOE-V1.5", "PortName": "VisualSceneGeometry" } },
+                           { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualObjects"       }, "Input": { "AIMName": "OSD-VOE-V1.5", "PortName": "VisualObjects"       } },
+                           { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualSceneGeometry" }, "Input": { "AIMName": "OSD-VDI-V1.5", "PortName": "VisualSceneGeometry" } },
+                           { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "BodyDescriptors"     }, "Input": { "AIMName": "OSD-VDI-V1.5", "PortName": "BodyDescriptors"     } },
+                           { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "VisualSceneGeometry" }, "Input": { "AIMName": "OSD-VII-V1.5", "PortName": "VisualSceneGeometry" } },
+                           { "Output": { "AIMName": "OSD-VOE-V1.5", "PortName": "VisualObjects"       }, "Input": { "AIMName": "OSD-VII-V1.5", "PortName": "VisualObjects"       } },
+                           { "Output": { "AIMName": "OSD-VSD-V1.5", "PortName": "BodyDescriptors"     }, "Input": { "AIMName": "OSD-VII-V1.5", "PortName": "BodyDescriptors"     } },
+                           { "Output": { "AIMName": "OSD-VDI-V1.5", "PortName": "VisualDirection"     }, "Input": { "AIMName": "OSD-VII-V1.5", "PortName": "VisualDirection"     } },
+                           { "Output": { "AIMName": "OSD-VII-V1.5", "PortName": "VisualInstanceID"    }, "Input": { "AIMName": "",             "PortName": "VisualInstanceID"    } }],
+
+  "Implementations":      [{"BinaryName":      "/* provided by implementer */",
+                            "Architecture":    "/* x86-64 | ARM64 */",
+                            "OperatingSystem": "/* Windows | Linux | MacOS */",
+                            "Version":         "/* implementer version */",
+                            "Source":          "/* AIMStorage | MPAIStore */",
+                            "Destination":     "/* provided by implementer */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",               "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */"},
+                           {"Name": "CPU:Number",           "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */"},
+                           {"Name": "CPU:Class",            "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */"},
+                           {"Name": "GPU:Number",           "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */"},
+                           {"Name": "GPU:CUDA:Class",       "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */"},
+                           {"Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */"},
+                           {"Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* GB/s */",           "Maximum": "/* GB/s */",           "Request": "/* GB/s */"}],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

@@ -1,0 +1,25 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/VisualDirectionIdentification.json",
+  "title":                "Visual Direction Identification V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VDI-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM identifies the Point of View signalled by the index finger of a human or avatar body in a space described by a Visual Scene Geometry.",
+
+  "ExternalPorts":        [{"Name": "BodyDescriptors",     "Direction": "Input",  "DataType": "PAF-BDO-V1.6", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualSceneGeometry", "Direction": "Input",  "DataType": "OSD-VSG-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "PointOfView",         "Direction": "Output", "DataType": "OSD-OPV-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

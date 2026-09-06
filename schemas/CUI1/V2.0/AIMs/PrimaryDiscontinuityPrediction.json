@@ -1,0 +1,46 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id": "https://schemas.mpai.community/CUI1/V2.0/AIMs/PrimaryDiscontinuityPrediction.json",
+  "title": "Primary Discontinuity Prediction V2.0",
+
+  "Identifier":   { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "CUI-PDP-V2.0" },
+
+  "APIProfile":   "Secure",
+  "Description":  "This AIM computes the Primary Discontinuity Descriptors of CUI-CAP.",
+
+  "ExternalPorts":  [
+    { "Name": "PredictionHorizon"              , "Direction": "Input",   "DataType": "number",        "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "ClimateRiskDescriptors"         , "Direction": "Input",   "DataType": "CUI-LRD-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "CyberRiskDescriptors"           , "Direction": "Input",   "DataType": "CUI-CRD-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "GovernanceDescriptors"          , "Direction": "Input",   "DataType": "CUI-GVS-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "FinancialDescriptors"           , "Direction": "Input",   "DataType": "CUI-FND-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "PrimaryDiscontinuityDescriptors", "Direction": "Output",  "DataType": "CUI-PSD-V2.0",  "Technology": "Software", "Protocol": "", "IsRemote": false }
+  ],
+
+  "SubAIMs":  [ ],
+  "Topology":  [ ],
+
+  "Implementations":  [
+   {
+    "BinaryName": "/* provided by implementer */",
+    "Architecture": "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+    "OperatingSystem": "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | Custom */",
+    "Version": "/* implementer version */",
+    "Source": "/* AIMStorage | MPAIStore | AIMURL */",
+    "Destination": "/* provided by implementer */"
+   }
+  ],
+
+  "ResourcePolicies":  [
+    { "Name": "Memory"              , "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */" },
+    { "Name": "CPU:Number"          , "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */" },
+    { "Name": "CPU:Class"           , "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */" },
+    { "Name": "GPU:Number"          , "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */" },
+    { "Name": "GPU:CUDA:Class"      , "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */" },
+    { "Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */" },
+    { "Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* GB/s */",           "Maximum": "/* GB/s */",           "Request": "/* GB/s */" }
+  ],
+
+  "DataXMData":  { },
+
+  "Documentation":  [{ "Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-cui/cpp/v2-0/" }] }

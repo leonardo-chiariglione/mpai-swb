@@ -1,0 +1,52 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/PAF/V1.6/AIMs/VideoconferenceClientTransmitter.json",
+  "title":                "Videoconference Client Transmitter V1.6",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-VCT-V1.6"},
+
+  "APIProfile":           "Secure",
+  "Description":          "This AIM composes the Portable Avatar for the Avatar-Based Videoconference Client Transmitter.",
+
+  "ExternalPorts":        [{"Name": "LanguageSelector",    "Direction": "Input",  "DataType": "OSD-SEL-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AvatarModel",         "Direction": "Input",  "DataType": "OSD-3DO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "InputText",           "Direction": "Input",  "DataType": "OSD-TXO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "InputAudio",          "Direction": "Input",  "DataType": "OSD-AUO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "InputVisual",         "Direction": "Input",  "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpeechObject",        "Direction": "Output", "DataType": "OSD-SPO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "InputPortableAvatar", "Direction": "Output", "DataType": "PAF-PAV-V1.6", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "FaceObject",          "Direction": "Output", "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [{ "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-MSD-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-ASR-V2.5" } },
+                           { "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-PSE-V2.5" } },
+                           { "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "PAF-PMX-V1.6" } }],
+
+  "Topology":             [{ "Output": { "AIMName": "",             "PortName": "InputAudio"                }, "Input": { "AIMName": "OSD-MSD-V1.5", "PortName": "InputAudio"                } },
+                           { "Output": { "AIMName": "",             "PortName": "InputText"                 }, "Input": { "AIMName": "OSD-MSD-V1.5", "PortName": "InputText"                 } },
+                           { "Output": { "AIMName": "",             "PortName": "InputVisual"               }, "Input": { "AIMName": "OSD-MSD-V1.5", "PortName": "InputVisual"               } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "InputSpeech1"              }, "Input": { "AIMName": "MMC-ASR-V2.5", "PortName": "InputSpeech1"              } },
+                           { "Output": { "AIMName": "MMC-ASR-V2.5", "PortName": "RecognisedText1"           }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "RecognisedText1"           } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "InputSpeech2"              }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "InputSpeech2"              } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "FaceDescriptors1"          }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "FaceDescriptors1"          } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "BodyDescriptors1"          }, "Input": { "AIMName": "MMC-PSE-V2.5", "PortName": "BodyDescriptors1"          } },
+                           { "Output": { "AIMName": "MMC-ASR-V2.5", "PortName": "RecognisedText2"           }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "RecognisedText2"           } },
+                           { "Output": { "AIMName": "MMC-PSE-V2.5", "PortName": "PersonalStatus"            }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "PersonalStatus"            } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "InputSpeech3"              }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "InputSpeech3"              } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "FaceDescriptors2"          }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "FaceDescriptors2"          } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "BodyDescriptors2"          }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "BodyDescriptors2"          } },
+                           { "Output": { "AIMName": "",             "PortName": "InputText"                 }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "InputText"                 } },
+                           { "Output": { "AIMName": "",             "PortName": "InputSelector"             }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "InputSelector"             } },
+                           { "Output": { "AIMName": "",             "PortName": "AvatarModel"               }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "AvatarModel"               } },
+                           { "Output": { "AIMName": "",             "PortName": "ParticipantID"             }, "Input": { "AIMName": "PAF-PMX-V1.6", "PortName": "ParticipantID"             } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "FaceObject"                }, "Input": { "AIMName": "",             "PortName": "FaceObject"                } },
+                           { "Output": { "AIMName": "OSD-MSD-V1.5", "PortName": "SpeechObject"              }, "Input": { "AIMName": "",             "PortName": "SpeechObject"              } },
+                           { "Output": { "AIMName": "PAF-PMX-V1.6", "PortName": "ParticipantPortableAvatar" }, "Input": { "AIMName": "",             "PortName": "ParticipantPortableAvatar" } }],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-paf/v1-6/"}]}

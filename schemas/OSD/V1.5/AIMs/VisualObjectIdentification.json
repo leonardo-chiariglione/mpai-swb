@@ -1,0 +1,35 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/VisualObjectIdentification.json",
+  "title":                "Visual Object Identification V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VOI-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM provides the ID of the Instance of the Visual Spatial Object indicated by a human or avatar.",
+
+  "ExternalPorts":        [{"Name": "BodyDescriptors",     "Direction": "Input",  "DataType": "PAF-BDO-V1.6", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualSceneGeometry", "Direction": "Input",  "DataType": "OSD-VSG-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualObject",        "Direction": "Input",  "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualInstanceID",    "Direction": "Output", "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [{ "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VDI-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VOE-V1.5" } },
+                           { "Identifier": { "ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VII-V1.5" } }],
+
+  "Topology":             [{ "Output": { "AIMName": "",             "PortName": "BodyDescriptors"     }, "Input": { "AIMName": "OSD-VDI-V1.5", "PortName": "BodyDescriptors"      } },
+                           { "Output": { "AIMName": "",             "PortName": "VisualSceneGeometry" }, "Input": { "AIMName": "OSD-VDI-V1.5", "PortName": "VisualSceneGeometry1" } },
+                           { "Output": { "AIMName": "OSD-VDI-V1.5", "PortName": "PointOfView"         }, "Input": { "AIMName": "OSD-VOE-V1.5", "PortName": "PointOfView"          } },
+                           { "Output": { "AIMName": "",             "PortName": "VisualSceneGeometry" }, "Input": { "AIMName": "OSD-VOE-V1.5", "PortName": "VisualSceneGeometry2" } },
+                           { "Output": { "AIMName": "",             "PortName": "VisualObject"        }, "Input": { "AIMName": "OSD-VOE-V1.5", "PortName": "VisualObject"         } },
+                           { "Output": { "AIMName": "OSD-VOE-V1.5", "PortName": "VisualObject"        }, "Input": { "AIMName": "OSD-VII-V1.5", "PortName": "VisualObject"         } },
+                           { "Output": { "AIMName": "",             "PortName": "VisualSceneGeometry" }, "Input": { "AIMName": "OSD-VII-V1.5", "PortName": "VisualSceneGeometry3" } },
+                           { "Output": { "AIMName": "OSD-VII-V1.5", "PortName": "VisualInstanceID"    }, "Input": { "AIMName": "",             "PortName": "VisualInstanceID"     } }],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

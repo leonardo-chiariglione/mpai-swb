@@ -1,0 +1,242 @@
+{
+  "$id": "https://schemas.mpai.community/OSD/V1.5/data/OWLTime.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OWL-Time — JSON Schema representation of http://www.w3.org/2006/time#",
+  "$comment": "Covers: TemporalEntity, Instant, Interval/ProperInterval/DateTimeInterval, Duration, DateTimeDescription, TimePosition, TemporalPosition, TRS. Open-world: additionalProperties are allowed on all classes to remain compatible with OWL-Time's open-world semantics.",
+
+  "$defs": {
+
+    "TRS": {
+      "$comment": "time:TRS — a temporal reference system; typically identified by URI",
+      "type": "object",
+      "properties": {
+        "@id": { "type": "string", "format": "uri", "description": "URI identifying the TRS, e.g. http://www.opengis.net/def/uom/ISO-8601/0/Gregorian" }
+      }
+    },
+
+    "TimeZone": {
+      "$comment": "time:TimeZone",
+      "type": "object",
+      "properties": {
+        "@id": { "type": "string", "description": "URI or IANA timezone name, e.g. America/New_York" }
+      }
+    },
+
+    "DayOfWeek": {
+      "$comment": "time:DayOfWeek — named individual",
+      "type": "string",
+      "enum": [
+        "time:Monday", "time:Tuesday", "time:Wednesday", "time:Thursday",
+        "time:Friday", "time:Saturday", "time:Sunday"
+      ]
+    },
+
+    "MonthOfYear": {
+      "$comment": "time:MonthOfYear — named individual (greg: individuals)",
+      "type": "string",
+      "enum": [
+        "greg:January", "greg:February", "greg:March",    "greg:April",
+        "greg:May",     "greg:June",     "greg:July",     "greg:August",
+        "greg:September","greg:October", "greg:November", "greg:December"
+      ]
+    },
+
+    "GeneralDateTimeDescription": {
+      "$comment": "time:GeneralDateTimeDescription — calendar/clock description with explicit TRS",
+      "type": "object",
+      "properties": {
+        "hasTRS":       { "$ref": "#/$defs/TRS" },
+        "timeZone":     { "$ref": "#/$defs/TimeZone" },
+        "unitType":     { "$ref": "#/$defs/TemporalUnit" },
+        "year":         { "type": "integer" },
+        "month":        { "type": "integer", "minimum": 1, "maximum": 12 },
+        "day":          { "type": "integer", "minimum": 1, "maximum": 31 },
+        "hour":         { "type": "integer", "minimum": 0, "maximum": 23 },
+        "minute":       { "type": "integer", "minimum": 0, "maximum": 59 },
+        "second":       { "type": "number",  "minimum": 0, "exclusiveMaximum": 61 },
+        "week":         { "type": "integer", "minimum": 1, "maximum": 53 },
+        "dayOfYear":    { "type": "integer", "minimum": 1, "maximum": 366 },
+        "dayOfWeek":    { "$ref": "#/$defs/DayOfWeek" },
+        "monthOfYear":  { "$ref": "#/$defs/MonthOfYear" }
+      }
+    },
+
+    "DateTimeDescription": {
+      "$comment": "time:DateTimeDescription — hasTRS is implicitly Gregorian",
+      "$ref": "#/$defs/GeneralDateTimeDescription"
+    },
+
+    "TemporalUnit": {
+      "$comment": "time:TemporalUnit — granularity/precision named individual",
+      "type": "string",
+      "enum": [
+        "time:unitYear",    "time:unitMonth",  "time:unitWeek",
+        "time:unitDay",     "time:unitHour",   "time:unitMinute",
+        "time:unitSecond",  "time:unitMillisecond"
+      ]
+    },
+
+    "GeneralDurationDescription": {
+      "$comment": "time:GeneralDurationDescription — component-wise duration with explicit TRS",
+      "type": "object",
+      "properties": {
+        "hasTRS":   { "$ref": "#/$defs/TRS" },
+        "years":    { "type": "number" },
+        "months":   { "type": "number" },
+        "weeks":    { "type": "number" },
+        "days":     { "type": "number" },
+        "hours":    { "type": "number" },
+        "minutes":  { "type": "number" },
+        "seconds":  { "type": "number" }
+      }
+    },
+
+    "DurationDescription": {
+      "$comment": "time:DurationDescription — hasTRS implicitly Gregorian",
+      "$ref": "#/$defs/GeneralDurationDescription"
+    },
+
+    "TimePosition": {
+      "$comment": "time:TimePosition — numeric or nominal position within a TRS",
+      "type": "object",
+      "required": ["hasTRS"],
+      "properties": {
+        "hasTRS":           { "$ref": "#/$defs/TRS" },
+        "numericPosition":  { "type": "number",  "description": "time:numericPosition — e.g. Unix epoch seconds" },
+        "nominalPosition":  { "type": "string",  "description": "time:nominalPosition — e.g. geologic era name" }
+      },
+      "oneOf": [
+        { "required": ["numericPosition"] },
+        { "required": ["nominalPosition"] }
+      ]
+    },
+
+    "TemporalPosition": {
+      "$comment": "time:TemporalPosition — union of TimePosition and GeneralDateTimeDescription",
+      "oneOf": [
+        { "$ref": "#/$defs/TimePosition" },
+        { "$ref": "#/$defs/GeneralDateTimeDescription" }
+      ]
+    },
+
+    "Duration": {
+      "$comment": "time:Duration — either an xsd:duration string, a numeric+unit pair, or a component description",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^-?P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$",
+          "description": "ISO 8601 / xsd:duration string, e.g. P1Y2M3DT4H5M6S"
+        },
+        {
+          "type": "object",
+          "required": ["numericDuration", "unitType"],
+          "properties": {
+            "numericDuration": { "type": "number" },
+            "unitType":        { "$ref": "#/$defs/TemporalUnit" }
+          },
+          "description": "time:numericDuration + time:unitType scalar form"
+        },
+        { "$ref": "#/$defs/GeneralDurationDescription" }
+      ]
+    },
+
+    "Instant": {
+      "$comment": "time:Instant — a temporal entity with zero extent; must carry at least one position",
+      "type": "object",
+      "required": ["inTemporalPosition"],
+      "properties": {
+        "inTemporalPosition": { "$ref": "#/$defs/TemporalPosition",
+                                "description": "time:inTemporalPosition" },
+        "inXSDDateTimeStamp": { "type": "string", "format": "date-time",
+                                "description": "time:inXSDDateTimeStamp (xsd:dateTimeStamp — requires timezone)" },
+        "inXSDDateTime":      { "type": "string", "format": "date-time",
+                                "description": "time:inXSDDateTime (deprecated in favour of inXSDDateTimeStamp)" },
+        "inXSDDate":          { "type": "string", "format": "date",
+                                "description": "time:inXSDDate" },
+        "inXSDgYear":         { "type": "string", "pattern": "^-?\\d{4,}$",
+                                "description": "time:inXSDgYear" },
+        "inXSDgYearMonth":    { "type": "string", "pattern": "^-?\\d{4,}-\\d{2}$",
+                                "description": "time:inXSDgYearMonth" }
+      }
+    },
+
+    "IntervalRelations": {
+      "$comment": "Allen interval algebra — time:intervalBefore, time:intervalAfter, etc.",
+      "type": "object",
+      "properties": {
+        "intervalBefore":     { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalAfter":      { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalMeets":      { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalMetBy":      { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalOverlaps":   { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalOverlappedBy":{ "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalStarts":     { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalStartedBy":  { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalDuring":     { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalContains":   { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalFinishes":   { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalFinishedBy": { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalEquals":     { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalDisjoint":   { "$ref": "#/$defs/TemporalEntityRef" },
+        "intervalIn":         { "$ref": "#/$defs/TemporalEntityRef" }
+      }
+    },
+
+    "TemporalEntityRef": {
+      "$comment": "Reference to any TemporalEntity — inline or dynamic id+type ref (your pattern)",
+      "oneOf": [
+        { "$ref": "#/$defs/Instant" },
+        { "$ref": "#/$defs/ProperInterval" },
+        {
+          "type": "object",
+          "required": ["id", "type"],
+          "additionalProperties": false,
+          "properties": {
+            "id":   { "type": "string" },
+            "type": { "type": "string", "enum": ["Instant", "ProperInterval", "DateTimeInterval", "Interval"] }
+          },
+          "description": "Dynamic reference resolved at runtime via id+type"
+        }
+      ]
+    },
+
+    "ProperInterval": {
+      "$comment": "time:ProperInterval — an interval where hasBeginning and hasEnd are distinct Instants",
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/IntervalRelations" }
+      ],
+      "properties": {
+        "hasBeginning":    { "$ref": "#/$defs/Instant",   "description": "time:hasBeginning" },
+        "hasEnd":          { "$ref": "#/$defs/Instant",   "description": "time:hasEnd" },
+        "hasDuration":     { "$ref": "#/$defs/Duration",  "description": "time:hasDuration" },
+        "hasDurationDescription": { "$ref": "#/$defs/GeneralDurationDescription" },
+        "inside":          { "$ref": "#/$defs/Instant",   "description": "time:inside — an Instant inside this interval" }
+      }
+    },
+
+    "DateTimeInterval": {
+      "$comment": "time:DateTimeInterval — ProperInterval whose extent is a single DateTimeDescription",
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/ProperInterval" }
+      ],
+      "properties": {
+        "hasDateTimeDescription": { "$ref": "#/$defs/GeneralDateTimeDescription",
+                                    "description": "time:hasDateTimeDescription" },
+        "xsdDateTime": { "type": "string", "format": "date-time",
+                         "description": "time:xsdDateTime (deprecated)" }
+      }
+    },
+
+    "TemporalEntity": {
+      "$comment": "time:TemporalEntity — union root: Instant | ProperInterval (| DateTimeInterval via allOf)",
+      "oneOf": [
+        { "$ref": "#/$defs/Instant" },
+        { "$ref": "#/$defs/ProperInterval" },
+        { "$ref": "#/$defs/DateTimeInterval" }
+      ]
+    }
+
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id": "file:///D:/AI/AIMs/AMDs/1UAG-NLU-V1.0-I01.json",
+  "title": "Natural Language Understanding AIW V1.0 - Implementation I01",
+  "Identifier": {
+    "ImplementerID": "MPAI",
+    "ImplementationID": "UAG-NLU-V1.0-I01",
+    "AIMName": "UAG-NLU-V1.0"
+  },
+  "APIProfile": "Basic",
+  "Description": "Understands a text. One SubAIM, Natural Language Understanding. The UA writes a Basic Text Object (or Text Object) to InputText OR RecognisedText - either may be absent - and the Controller routes it to NLU; the Text Descriptors, Refined Text, and Text Personal Status come back. Text ports accept OSD-BTO and OSD-TXO. The two text inputs are told apart by PortNumber (1 = Input Text, 2 = Recognised Text) on the AIM Input side, and both are optional, mirroring the proven UAG-IDR pattern.",
+  "ExternalPorts": [
+    {
+      "Name": "InputText",
+      "Direction": "Input",
+      "DataType": [
+        "OSD-BTO-V1.5",
+        "OSD-TXO-V1.5"
+      ],
+      "PortNumber": 1,
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "RecognisedText",
+      "Direction": "Input",
+      "DataType": [
+        "OSD-BTO-V1.5",
+        "OSD-TXO-V1.5"
+      ],
+      "PortNumber": 2,
+      "IsOptional": true,
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "TextDescriptors",
+      "Direction": "Output",
+      "DataType": "MMC-TDO-V2.5",
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "RefinedText",
+      "Direction": "Output",
+      "DataType": [
+        "OSD-BTO-V1.5",
+        "OSD-TXO-V1.5"
+      ],
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    },
+    {
+      "Name": "TextPersonalStatus",
+      "Direction": "Output",
+      "DataType": "MMC-TPS-V2.5",
+      "Technology": "Software",
+      "Protocol": "",
+      "IsRemote": false
+    }
+  ],
+  "SubAIMs": [
+    {
+      "Identifier": {
+        "ImplementerID": "1",
+        "ImplementationID": "MMC-NLU-V2.5-I01",
+        "AIMName": "MMC-NLU-V2.5"
+      }
+    }
+  ],
+  "Topology": [
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "InputText"
+      },
+      "Input": {
+        "AIMName": "MMC-NLU-V2.5",
+        "PortName": "InputText"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "",
+        "PortName": "RecognisedText"
+      },
+      "Input": {
+        "AIMName": "MMC-NLU-V2.5",
+        "PortName": "RecognisedText",
+        "PortNumber": 2
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "MMC-NLU-V2.5",
+        "PortName": "TextDescriptors"
+      },
+      "Input": {
+        "AIMName": "",
+        "PortName": "TextDescriptors"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "MMC-NLU-V2.5",
+        "PortName": "RefinedText"
+      },
+      "Input": {
+        "AIMName": "",
+        "PortName": "RefinedText"
+      }
+    },
+    {
+      "Output": {
+        "AIMName": "MMC-NLU-V2.5",
+        "PortName": "TextPersonalStatus"
+      },
+      "Input": {
+        "AIMName": "",
+        "PortName": "TextPersonalStatus"
+      }
+    }
+  ],
+  "Implementations": [
+    {
+      "ImplementationURI": "file:///D:/AI/AIMs/UAG-NLU-V1.0-I01",
+      "MASPort": 443,
+      "BinaryName": "Mpai.Uag.Nlu",
+      "Architecture": "x86-64",
+      "OperatingSystem": "Windows",
+      "Version": "1.0",
+      "Source": "AIMStorage"
+    }
+  ],
+  "ResourcePolicies": [
+    {
+      "Name": "Memory",
+      "Minimum": "0.5 GB",
+      "Request": "1 GB",
+      "Maximum": "2 GB"
+    }
+  ],
+  "DataXMData": {},
+  "Documentation": [
+    {
+      "Type": "Specification",
+      "URI": "https://mpai.community/standards/mpai-mmc/v2-5/"
+    }
+  ]
+}

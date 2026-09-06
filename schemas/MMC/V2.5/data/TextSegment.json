@@ -1,0 +1,22 @@
+{ "$schema":                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                      "https://schemas.mpai.community/MMC/V2.5/data/TextSegment.json",
+  "title":                    "Text Segment V2.5",
+  "type":                     "object",
+  "properties":               {
+
+    "Header":                 { "type": "string", "const": "MMC-TXS-V2.5" },
+    "MInstanceID":            { "type": "string" },
+    "MEnvironmentID":         { "type": "string" },
+    "TextSegmentID":          { "type": "string" },
+    "TextSegmentTime":        { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/TextQualifier.json" },
+
+    "TextObjectQualifier":    { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/TextQualifier.json" },
+
+    "TextSegmentData":        { "type": "object", "properties": {
+      "Time":                 { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+      "ConfidenceScore":      { "type": "number", "minimum": 0, "maximum": 1 },
+      "Segment":              { "type": "array", "items": { "type": "object", "properties": {
+        "Word":               { "$ref": "https://schemas.mpai.community/MMC/V2.5/data/TextWord.json" } } } } } },
+
+    "DataXMData":     { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":  { "type": "string", "maxLength": 2048 } } }

@@ -1,0 +1,51 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/CAE3/V1.0/AIMs/AudioSceneManager.json",
+  "title":                "Audio Scene Manager V1.0",
+
+  "Identifier":           {"ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "CAE-ASM-V1.0"},
+
+  "APIProfile":           "Basic",
+  "Description":          "Audio Scene Manager: acquires audio, edits it into Objects, composes Objects into a Scene, and delivers the Scene. Acquisition and delivery ARE SubAIMs here, unlike in MMC-AMQ and MMC-TST, and legitimately: CAE-AOA and CAE-ASD sit at a HARDWARE boundary and their consumer is the LISTENER - a person in a dome or wearing headphones - not the User Agent. The Audio Scene Descriptors leave separately, from CAE-ASE, because they return to the User Agent's Object and Scene windows to be redrawn while the audio leaves the system for a human ear. An Object Port accepts a Basic Audio Object or a full one and a Scene Port either kind of Descriptors; the Header of what arrives says which it is, an Object holding one Object being Basic and one holding more than one being full. Each user action is one User Command on a Command Port, so an interactive session is a sequence of runs with what is open held by each AIM between them and the Assets in Shared Storage.",
+
+  "InternalTypes":        [{"Name": "AcquiredAudioObject", "DataType": ["OSD-BAO-V1.5", "OSD-AUO-V1.5"]},
+                           {"Name": "EditedAudioObject", "DataType": ["OSD-BAO-V1.5", "OSD-AUO-V1.5"]},
+                           {"Name": "SceneDescriptors", "DataType": ["OSD-BAS-V1.5", "OSD-ASD-V1.5"]}],
+
+  "ExternalPorts":        [{"Name": "AudioSource", "Direction": "Input", "DataType": "OSD-AUO-V1.5", "IsOptional": true, "Technology": "Hardware", "Protocol": "", "IsRemote": false},
+                           {"Name": "AcquisitionCommand", "Direction": "Input", "DataType": "CAE-UCM-V1.0", "PortNumber": 1, "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ObjectCommand", "Direction": "Input", "DataType": "CAE-UCM-V1.0", "PortNumber": 2, "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SceneCommand", "Direction": "Input", "DataType": "CAE-UCM-V1.0", "PortNumber": 3, "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "DeliveryCommand", "Direction": "Input", "DataType": "CAE-UCM-V1.0", "PortNumber": 4, "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ListenerPointOfView", "Direction": "Input", "DataType": "OSD-OPV-V1.5", "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioObject", "Direction": "Input", "DataType": ["OSD-BAO-V1.5", "OSD-AUO-V1.5"], "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioScene", "Direction": "Input", "DataType": ["OSD-BAS-V1.5", "OSD-ASD-V1.5"], "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioSceneDescriptors", "Direction": "Output", "DataType": ["OSD-BAS-V1.5", "OSD-ASD-V1.5"], "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioDestination", "Direction": "Output", "DataType": "OSD-AUO-V1.5", "Technology": "Hardware", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [{"Identifier": {"ImplementerID": "/* from IIDRA */", "ImplementationID": "/* from Implementer */", "AIMName": "CAE-AOA-V1.0"}},
+                           {"Identifier": {"ImplementerID": "/* from IIDRA */", "ImplementationID": "/* from Implementer */", "AIMName": "CAE-AOE-V1.0"}},
+                           {"Identifier": {"ImplementerID": "/* from IIDRA */", "ImplementationID": "/* from Implementer */", "AIMName": "CAE-ASE-V1.0"}},
+                           {"Identifier": {"ImplementerID": "/* from IIDRA */", "ImplementationID": "/* from Implementer */", "AIMName": "CAE-ASD-V1.0"}}],
+
+  "Topology":             [{ "Output": { "AIMName": "", "PortName": "AudioSource" }, "Input": { "AIMName": "CAE-AOA-V1.0", "PortName": "InputAudio" } },
+                           { "Output": { "AIMName": "", "PortName": "AcquisitionCommand", "PortNumber": 1 }, "Input": { "AIMName": "CAE-AOA-V1.0", "PortName": "UserCommand" } },
+                           { "Output": { "AIMName": "CAE-AOA-V1.0", "PortName": "OutputAudio" }, "Input": { "AIMName": "CAE-AOE-V1.0", "PortName": "AudioObject" } },
+                           { "Output": { "AIMName": "", "PortName": "ObjectCommand", "PortNumber": 2 }, "Input": { "AIMName": "CAE-AOE-V1.0", "PortName": "UserCommand" } },
+                           { "Output": { "AIMName": "", "PortName": "AudioObject" }, "Input": { "AIMName": "CAE-AOE-V1.0", "PortName": "AudioObject" } },
+                           { "Output": { "AIMName": "CAE-AOE-V1.0", "PortName": "AudioObject" }, "Input": { "AIMName": "CAE-ASE-V1.0", "PortName": "AudioObject" } },
+                           { "Output": { "AIMName": "", "PortName": "SceneCommand", "PortNumber": 3 }, "Input": { "AIMName": "CAE-ASE-V1.0", "PortName": "UserCommand" } },
+                           { "Output": { "AIMName": "", "PortName": "ListenerPointOfView" }, "Input": { "AIMName": "CAE-ASE-V1.0", "PortName": "ListenerPointOfView" } },
+                           { "Output": { "AIMName": "", "PortName": "AudioScene" }, "Input": { "AIMName": "CAE-ASE-V1.0", "PortName": "AudioScene" } },
+                           { "Output": { "AIMName": "CAE-ASE-V1.0", "PortName": "AudioSceneDescriptors" }, "Input": { "AIMName": "", "PortName": "AudioSceneDescriptors" } },
+                           { "Output": { "AIMName": "CAE-ASE-V1.0", "PortName": "AudioSceneDescriptors" }, "Input": { "AIMName": "CAE-ASD-V1.0", "PortName": "AudioSceneDescriptors" } },
+                           { "Output": { "AIMName": "", "PortName": "DeliveryCommand", "PortNumber": 4 }, "Input": { "AIMName": "CAE-ASD-V1.0", "PortName": "UserCommand" } },
+                           { "Output": { "AIMName": "CAE-ASD-V1.0", "PortName": "AudioDestination" }, "Input": { "AIMName": "", "PortName": "AudioDestination" } }],
+
+  "Implementations":      [{"ImplementationURI": "/* URI storing Implementation */", "BinaryName": "/* BinaryName */", "Architecture": "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */", "OperatingSystem": "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | RTOS | Oniro | iOS */", "Version": "/* Version */", "Source": "/* AIMStorage | MPAIStore | AIMURL */", "Destination": "/* Destination URI */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory", "Minimum": "/* GB */", "Request": "/* GB */", "Maximum": "/* GB */"}, {"Name": "CPU:Class", "Minimum": "/* Low | Medium | High */", "Request": "/* Low | Medium | High */", "Maximum": "/* Low | Medium | High */"}],
+
+  "DataXMData":           {},
+
+  "Documentation":        [{"Type": "Specification", "URI": "https://mpai.community/standards/mpai-cae/"}]}

@@ -1,0 +1,4 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id":     "https://schemas.mpai.community/TFA/V1.4/formats/GenomicsTranportFormats.json",
+  "title":   "GenomicsTranportFormats",
+  "type":    "string", "enum": [ "BAM", "BED", "CRAM", "FASTA", "FASTQ", "MPEG-G", "SAM", "TSV", "WIGGLE" ] } 

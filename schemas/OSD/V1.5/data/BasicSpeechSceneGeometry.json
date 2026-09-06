@@ -1,0 +1,25 @@
+{ "$schema":                              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                  "https://schemas.mpai.community/OSD/V1.5/data/BasicSpeechSceneGeometry.json",
+  "title":                                "Basic 3D Model Scene Geometry V1.5",
+  "type":                                 "object",
+  "additionalProperties":                 false,
+  "required":                             [ "Header", "BasicSpeechSceneGeometryID", "BasicSpeechSceneGeometrySpaceTime",
+                                            "SpeechObjectCount", "SpeechObjects" ],
+  "properties":                           {
+
+    "Header":                             { "type": "string", "const": "OSD-BSG-V1.5" },
+    "MInstanceID":                        { "type": "string" },
+    "UEnvironmentID":                     { "type": "string" },
+    "BasicSpeechSceneGeometryID":         { "type": "string" },
+    "BasicSpeechSceneGeometryTime":       { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json" },
+
+    "BasicSpeechSceneGeometrySpaceTime":  { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "SpeechObjectCount":                  { "type": "integer", "minimum": 0 },
+    "SpeechObjects":                      { "type": "array", "minItems": 0, "items": { "type": "object", "additionalProperties": false,
+                                            "required": [ "SpeechObjectSpaceTime", "SpeechObjectQualifier" ], "properties": {
+      "SpeechObjectSpaceTime":            { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "SpeechObjectQualifier":            { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/SpeechQualifier.json" } } } },
+
+    "DataXMData":                         { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                      { "type": "string", "maxLength": 2048 } } }

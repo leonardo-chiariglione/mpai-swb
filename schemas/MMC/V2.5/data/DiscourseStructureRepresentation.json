@@ -1,0 +1,80 @@
+{ "$schema":                "https://json-schema.org/draft/2020-12/schema",
+  "$id":                    "https://schemas.mpai.community/MMC/V2.5/data/DiscourseStructureRepresentation.json",
+  "title":                  "Discourse Structure Representation V2.5",
+  "type":                   "object",
+  "description":            "Represents the dual structure of discourse (Segment and Content) and the explicit Mapping between them, in line with ISO/TS 24617-5:2014 (SemAF-DS).",
+  "additionalProperties":   false,
+  "required":               [ "SegmentGraph", "ContentGraph", "Mapping" ],
+  "properties":             {
+
+    "Header":               { "type": "string", "const": "MMC-DSR-V2.2" },
+    "MInstanceID":          { "type": "string" },
+    "UEnvironmentID":       { "type": "string" },
+    "DisStruRefID":         { "type": "string" },
+    "DisStruRefTime":       { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+    "SegmentGraph":         { "$ref": "#/$defs/SegmentGraph" },
+    "ContentGraph":         { "$ref": "#/$defs/ContentGraph" },
+    "Mapping":              { "$ref": "#/$defs/Mapping" },
+
+    "DataXMData":           { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":        { "type": "object" } },
+
+  "$defs":                  {
+
+    "SegmentGraph":         { "title": "Segment (Realization/Presentation) Structure", "type": "object",
+                              "additionalProperties": false, "required": [ "segments" ], "properties": {
+      "segments":           { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Segment" },
+                              "description": "Discourse segments (words, phrases, clauses, sentences, paragraphs, sections, chapters)." } } },
+
+    "Segment":              { "type": "object", "additionalProperties": true, "required": [ "segmentId", "type" ], "properties": {
+      "segmentId":          { "type": "string", "minLength": 1 },
+      "type":               { "type": "string", "enum": [ "word", "phrase", "clause", "sentence", "paragraph", "section", "chapter" ],
+                              "description": "Segment type per SemAF-DS examples (text-focused; extensible to other modalities)." },
+      "governing":          { "type": "boolean", "description": "Whether this is a governing segment (used in bracketing/stand-off conventions)." },
+      "textSpan":           { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2,
+                              "description": "[start, end) character offsets in the source text." },
+      "subSpans":           { "type": "array", "items": { "type": "array", "items": { "type": "integer" },
+                              "minItems": 2, "maxItems": 2 },
+                              "description": "Optional list of discontiguous spans when a segment is discontinuous." },
+      "timeSpan":           { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2,
+                              "description": "[start, end) seconds in media (if applicable)." },
+      "attributes":         { "type": "object" } } },
+
+    "ContentGraph":         { "title": "Content (Abstract Meaning) Structure", "type": "object", "additionalProperties": false,
+                              "required": [ "nodes" ], "properties": {
+
+      "nodes":              { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ContentNode" },
+                              "description": "Content nodes (semantic/pragmatic entities such as events, states, processes, relations, propositions, objects, circumstances)." },
+
+      "relations":          { "type": "array", "items": { "$ref": "#/$defs/ContentRelation" },
+                              "description": "Edges/relations in the content graph (relation inventory may be defined in a profile, e.g., SemAF Part 8)." } } },
+
+    "ContentNode":          { "type": "object", "additionalProperties": true, "required": [ "contentId", "class" ], "properties": {
+      "contentId":          { "type": "string", "minLength": 1 },
+      "class":              { "type": "string", "enum": [ "event", "state", "process", "relation", "proposition", "object", "circumstance" ],
+                              "description": "Semantic/pragmatic class per SemAF-DS definitions." },
+      "label":              { "type": "string" },
+      "features":           { "type": "object" } } },
+
+    "ContentRelation":      { "type": "object", "additionalProperties": false, "required": [ "source", "target", "type" ],
+                              "properties": {
+      "source":             { "type": "string", "minLength": 1 },
+      "target":             { "type": "string", "minLength": 1 },
+      "type":               { "type": "string", "description": "Relation type; vocabulary may be constrained by profile (e.g., DR-core)." },
+      "attributes":         { "type": "object" } } },
+
+    "Mapping":              { "title": "Mapping between Segment and Content structures", "type": "object",
+                              "additionalProperties": false, "required": [ "links" ], "properties": {
+      "links":              { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/MapLink" },
+                              "description": "Each link connects a content node to one or more segment(s)." } } },
+
+    "MapLink":              { "type": "object", "additionalProperties": false, "required": [ "contentRef", "segmentRefs" ],
+                              "properties": {
+      "contentRef":         { "type": "string", "minLength": 1 },
+      "segmentRefs":        { "type": "array", "minItems": 1, "items": { "type": "string" } },
+      "textSpan":           { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 },
+      "timeSpan":           { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 } } },
+
+    "DataXMData":           { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":        { "type": "string", "maxLength": 2048 } } }      

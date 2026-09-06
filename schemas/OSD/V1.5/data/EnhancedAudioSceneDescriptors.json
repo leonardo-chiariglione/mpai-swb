@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mpai.community/OSD/V1.5/data/EnhancedAudioSceneDescriptors.json",
+  "title": "Enhanced Audio Scene Descriptors V1.5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "Header",
+    "MInstanceID",
+    "EnhancedAudioSceneDescriptorsID",
+    "BaseASDID"
+  ],
+  "properties": {
+    "Header": {
+      "type": "string",
+      "const": "OSD-EAD-V1.5"
+    },
+    "MInstanceID": {
+      "type": "string"
+    },
+    "UEnvironmentID": {
+      "type": "string"
+    },
+    "EnhancedAudioSceneDescriptorsID": {
+      "type": "string"
+    },
+    "EnhancedAudioSceneDescriptorTime": {
+      "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json"
+    },
+    "BaseASDID": {
+      "type": "string"
+    },
+    "EnhancedAudioSceneDescriptorsSpaceTime": {
+      "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json"
+    },
+    "Entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EntityID",
+          "ASDItemID"
+        ],
+        "properties": {
+          "EntityID": {
+            "type": "string"
+          },
+          "ASDItemID": {
+            "type": "string"
+          },
+          "AudioObject": {
+            "$ref": "https://schemas.mpai.community/OSD/V1.5/data/AudioObject.json"
+          }
+        }
+      }
+    },
+    "Relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "RelationType"
+        ],
+        "properties": {
+          "RelationType": {
+            "type": "string",
+            "enum": [
+              "Proximity",
+              "Masking",
+              "Dominance",
+              "SpatialRelation"
+            ]
+          },
+          "SourceID": {
+            "type": "string"
+          },
+          "TargetID": {
+            "type": "string"
+          },
+          "Weight": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "ProximityClasses": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/ProximityClass.json"
+      }
+    },
+    "MotionFlags": {
+      "type": "array",
+      "items": {
+        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/MotionFlag.json"
+      }
+    },
+    "RankedEntities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "FilteredEntities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "SceneState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "AcousticProfile": {
+          "$ref": "https://schemas.mpai.community/OSD/V1.5/data/AcousticProfile.json"
+        }
+      }
+    },
+    "DomainRequest": {
+      "type": "string"
+    },
+    "DomainResponse": {
+      "type": "string"
+    },
+    "DataXMData": {
+      "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json"
+    },
+    "DescrMetadata": {
+      "type": "string",
+      "maxLength": 2048
+    }
+  }
+}

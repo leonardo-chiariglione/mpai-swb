@@ -1,0 +1,49 @@
+{ "$schema":                      "https://json-schema.org/draft/2020-12/schema",
+  "$id":                          "https://schemas.mpai.community/OSD/V1.5/data/SceneGeometry.json",
+  "title":                        "Scene Geometry V1.5",
+  "description":                  "Scene geometry w/ geometry objects, basic scene geom. & scene geom.",
+  "type":                         "object",
+  "required":                     [ "Header", "SceneGeometryID", "SceneGeometrySpaceTime" ],
+  "additionalProperties":         false,
+  "properties":                   {
+
+    "Header":                     { "type": "string", "const": "OSD-SCG-V1.5" },
+    "MInstanceID":                { "type": "string" },
+    "UEnvironmentID":             { "type": "string" },
+    "SceneGeometryID":            { "type": "string" },
+    "SceneGeometrySpaceTime":     { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "ObjectCount":                { "type": "integer", "minimum": 0 },
+    "Objects":                    { "type": "array", "items": { "type": "object", "additionalProperties": false,
+      "properties":               {
+        "ObjectSpaceTime":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "ObjectIDOrGeometry":     { "$ref": "#/$defs/ObjectIDOrGeometry" } } } },
+
+    "SubSceneCount":              { "type": "integer", "minimum": 0 },
+    "SubScenes":                  { "type": "array", "items": { "type": "object", "additionalProperties": false, "properties":               {
+        "SubSceneSpaceTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+        "SubSceneIDOrSubScene":   { "$ref": "#/$defs/SubSceneIDOrSubScene" } } } },
+
+    "BasicSceneOrScene":          { "$ref": "#/$defs/BasicSceneOrScene" },
+
+    "DataXMData":                 { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":              { "type": "string", "maxLength": 2048 } },
+
+  "$defs":                        {
+
+    "GeometryObject":             { "type": "object", "required": [ "ObjectSpaceTime", "ObjectQualifier" ], "additionalProperties": false,
+                                    "properties": {
+      "ObjectSpaceTime":          { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "ObjectQualifier":          { "$ref": "https://schemas.mpai.community/TFA/V1.5/data/AnyQualifier.json" } } },
+
+    "ObjectIDOrGeometry":         { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                    { "$ref": "#/$defs/GeometryObject" },
+                                    { "type": "string" } ] } },
+
+    "SubSceneIDOrSubScene":       { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                    { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SceneGeometry.json" },
+                                    { "type": "string" } ] } },
+
+    "BasicSceneOrScene":          { "type": "array", "items": { "oneOf": [
+                                    { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/BasicSceneGeometry.json" },
+                                    { "$ref": "#/$defs/BasicSceneOrScene" } ] } } } }

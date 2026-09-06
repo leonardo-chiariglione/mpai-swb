@@ -1,0 +1,23 @@
+{ "$id":                                    "https://schemas.mpai.community/OSD/V1.5/data/OfflineMapEventDescriptors.json",
+  "$schema":                                "https://json-schema.org/draft/2020-12/schema",
+  "title":                                  "OfflineMapEvent Descriptors V1.5",
+  "description":                            "OfflineMapEvent descriptor set.",
+  "type":                                   "object",
+  "required":                               [ "Header", "OfflineMapEventDescriptorsID", "OfflineMapEventDescriptorsSpaceTime" ],
+  "additionalProperties":                   false,
+  "properties":                             {
+
+    "Header":                               { "type": "string", "const": "OSD-OEV-V1.5" },
+    "MInstanceID":                          { "type": "string" },
+    "UEnvironmentID":                       { "type": "string" },
+    "OfflineMapEventDescriptorsID":         { "type": "string" },
+    "OfflineMapEventDescriptorsSpaceTime":  { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "OfflineMapEventDescriptors":           { "type": "array", "items": { "type": "object", "additionalProperties": false, "properties": {
+      "OSceneIDOrOScene":                   { "description": "Embedded Event Descriptors (recursive) or an Event ID (by reference).",
+                                              "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                            { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/OfflineMapSceneDescriptors.json" },
+                                            { "type": "string" } ] } } } } },
+
+    "DataXMData":                           { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                        { "type": "string", "maxLength": 2048 } } }

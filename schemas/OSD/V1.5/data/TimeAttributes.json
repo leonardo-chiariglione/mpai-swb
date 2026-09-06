@@ -1,0 +1,22 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/data/TimeAttributes.json",
+  "title":                "Time Attributes V1.5",
+  "type":                 "object",
+  "additionalProperties": false,
+  "required":             ["Header" ],
+  "properties": {
+
+    "Header":             { "type": "string", "const": "OSD-TMP-V1.5" },
+    "MInstanceID":        { "type": "string" },
+    "UEnvironmentID":     { "type": "string" },
+    "TimeAttributesID":   { "type": "string" },
+
+    "TimeAttributesData": { "type": "object", "additionalProperties": false, "required": [ "Kind" ], "properties": {
+      "Kind":             { "type": "string", "enum": [ "point", "interval", "duration" ] },
+      "IntervalForm":     { "type": "string", "enum": [ "startEnd", "startDuration", "durationEnd" ] },
+      "Recurrence":       { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+      "Exceptions":       { "type": "array", "items": { "type": "object", "additionalProperties": false,
+                            "required": [ "Exception" ], "properties": {
+        "Exception":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" } } } } } },
+
+    "DescrMetadata":      { "type": "string", "maxLength": 2048 } } }

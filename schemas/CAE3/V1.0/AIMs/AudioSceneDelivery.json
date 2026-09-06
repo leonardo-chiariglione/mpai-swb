@@ -1,0 +1,33 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/CAE3/V1.0/AIMs/AudioSceneDelivery.json",
+  "title":                "Audio Scene Delivery V1.0",
+
+  "Identifier":           {"ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "CAE-ASD-V1.0"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM renders an Audio Scene to a destination - headphones, loudspeakers, a dome. The Scene Port accepts Basic Audio Scene Descriptors or full ones. Its output Port is Hardware and its consumer is the LISTENER, who may not be the person editing: the Audio Scene Descriptors reach the User Agent from CAE-ASE directly, without crossing this AIM, because they are data returning to a control loop while this is a rendering leaving the system for a human ear.",
+
+  "InternalTypes":        [],
+
+  "ExternalPorts":        [{"Name": "UserCommand",           "Direction": "Input",  "DataType": "CAE-UCM-V1.0",                    "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioSceneDescriptors", "Direction": "Input",  "DataType": ["OSD-BAS-V1.5", "OSD-ASD-V1.5"], "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioDestination",      "Direction": "Output", "DataType": "OSD-AUO-V1.5",                    "Technology": "Hardware", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [],
+  "Topology":             [],
+
+  "Implementations":      [{"ImplementationURI": "/* URI storing Implementation */",
+                            "BinaryName":       "/* BinaryName */",
+                            "Architecture":     "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+                            "OperatingSystem":  "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | RTOS | Oniro | iOS */",
+                            "Version":          "/* Version */",
+                            "Source":           "/* AIMStorage | MPAIStore | AIMURL */",
+                            "Destination":      "/* Destination URI */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",    "Minimum": "/* GB */",                  "Request": "/* GB */",                  "Maximum": "/* GB */"},
+                           {"Name": "CPU:Class", "Minimum": "/* Low | Medium | High */", "Request": "/* Low | Medium | High */", "Maximum": "/* Low | Medium | High */"}],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Specification", "URI": "https://mpai.community/standards/mpai-cae/"}]}

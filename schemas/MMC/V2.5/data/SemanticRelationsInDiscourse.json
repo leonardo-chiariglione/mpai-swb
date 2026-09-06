@@ -1,0 +1,62 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                  "https://schemas.mpai.community/MMC/V2.5/data/SemanticRelationsInDiscourse.json",
+  "title":                "Semantic Relations in Discourse V2.5",
+  "type":                 "object",
+  "description":          "JSON Schema for local (low-level) discourse relations between situations mentioned in discourse; each relation annotated independently, with explicit/implicit status, arguments, and optional anchors.",
+  "additionalProperties": false,
+  "required":             [ "Relations" ],
+  "properties":           {
+
+    "Header":             { "type": "string", "const": "MMC-SRD-V2.5" },
+    "MInstanceID":        { "type": "string" },
+    "UEnvironmentID":     { "type": "string" },
+    "SemRelDisID":        { "type": "string" },
+    "SemRelDisTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+    "LocalTrace":         { "type": "object", "additionalProperties": false, "required": [ "origin", "timestamp" ], "properties": {
+      "origin":           { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/ProcessInstance.json" },
+      "timestamp":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" } } },
+
+    "Relations":          { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Relation" } },
+
+    "Metadata":           { "type": "object", "additionalProperties": true, "properties": {
+      "language":         { "type": "string" },
+      "schemaVersion":    { "type": "string" },
+      "profileVocabulary":{ "type": "string",
+                            "description": "Identifier of the profile/vocabulary constraining relation types." } } },
+
+    "DataXMData":         { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":      { "type": "string", "maxLength": 2048 } },
+
+  "$defs": {
+    "Relation":           { "title": "Discourse Relation", "type": "object", "required": [ "relationId", "type", "arguments" ],
+                            "additionalProperties": false, "properties": {
+      "relationId":       { "type": "string" },
+      "type":             { "type": "string", "description": "Relation type (e.g., Cause, Contrast, Condition, Elaboration, Temporal-Before). Constrained by profileVocabulary." },
+      "variant":          { "type": "string", "description": "Optional pragmatic/sense variant where applicable (profile-specific)." },
+      "explicitness":     { "type": "string", "enum": [ "explicit", "implicit" ],
+                            "description": "Whether the relation is realized by an explicit connective or inferred implicitly." },
+      "connective":       { "type": "object", "additionalProperties": false, "properties": {
+        "lexeme":         { "type": "string" },
+        "textSpan":       { "type": "array", "items": { "type": "integer" },
+                            "minItems": 2, "maxItems": 2, "description": "[start, end) character offsets of the connective." } } },
+      "asymmetric":       { "type": "boolean", "description": "Whether the relation is asymmetric." },
+      "arguments":        { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/Argument" } },
+      "hierarchyPath":    { "type": "array", "items": { "type": "string" },
+                            "description": "Optional hierarchical classification path of the relation (e.g., [\"Contrast\", \"Antithesis\"])." },
+      "attributes":       { "type": "object" } } },
+
+    "Argument":           { "title": "Relation Argument", "type": "object",
+                            "required": [ "role" ], "additionalProperties": false, "properties": {
+      "role":             { "type": "string", "enum": [ "Arg1", "Arg2", "ArgN" ] },
+      "contentRef":       { "type": "string",
+                            "description": "ID of the content node (e.g., event/state/proposition) serving as the argument." },
+      "segmentRef":       { "type": "string",
+                            "description": "ID of the segment linked to this argument (if directly anchored)." },
+      "textSpan":         { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2,
+                            "description": "[start, end) character offsets of the argument span." },
+      "timeSpan":         { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2,
+                            "description": "[start, end) seconds in media for multimodal anchoring." },
+      "importance":       { "type": "number", "minimum": 0, "maximum": 1,
+                            "description": "Optional relative importance weight of the argument (0..1)." },
+      "attributes":       { "type": "object" } } } } }

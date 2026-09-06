@@ -1,0 +1,60 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$comment":  "https://schemas.mpai.community/AIF/V2.0/AIF-metadata.schema.json",
+    "title":  "ModifiedModule",
+    "Identifier":  {
+                       "ImplementerID":  "/* String assigned by IIDRA */",
+                       "Specification":  {
+                                             "Name":  "MPAI-NNW",
+                                             "AIW":  "NNW-WIR",
+                                             "AIM":  "NNW-MDM",
+                                             "Version":  "1"
+                                         },
+                       "Description":  "This AIM implements the alteration of a neural networkÃ¢â‚¬â„¢s parameters and returns altered parameters.",
+                       "Types":  [
+                                     {
+                                         "Name":  "ModifiedParameters_t",
+                                         "Type":  "uint8[]"
+                                     },
+                                     {
+                                         "Name":  "ModifiedInference_t",
+                                         "Type":  "uint8[]"
+                                     }
+                                 ],
+                       "Ports":  [
+                                     {
+                                         "Name":  "ModifiedParameters",
+                                         "Direction":  "InputOutput",
+                                         "RecordType":  "WatermarkedParameters_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     },
+                                     {
+                                         "Name":  "ModifiedInference",
+                                         "Direction":  "OutputInput",
+                                         "RecordType":  "ModifiedParameters_t",
+                                         "Technology":  "Software",
+                                         "Protocol":  "",
+                                         "IsRemote":  false
+                                     }
+                                 ],
+                       "SubAIMs":  [
+
+                                   ],
+                       "Topology":  [
+
+                                    ],
+                       "Implementations":  [
+
+                                           ],
+                       "Documentation":  [
+                                             {
+                                                 "Type":  "Tutorial",
+                                                 "URI":  "https://mpai.community/standards/MPAI-NNW/"
+                                             }
+                                         ]
+                   },
+    "$id":  "https://schemas.mpai.community/NNW1/V1.1/AIMs/ModifiedModule.json"
+}
+

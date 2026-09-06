@@ -1,0 +1,6 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id":     "https://schemas.mpai.community/TFA/V1.5/formats/CommunicationProtocolTypes.json",
+  "title":   "Communication Protocol Types V1.5",
+  "type":     "string", "enum": [ "CoAP", "gRPC", "HTTP", "HTTPS", "ICMP", "IP", "MQTT", "QUIC", "RTSP", "SCTP", "SIP",
+                                  "TCP", "UDP", "WebSocket" ] }
+

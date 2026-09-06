@@ -1,0 +1,23 @@
+{ "$schema":            "https://json-schema.org/draft/2020-12/schema",
+  "$id":                "https://schemas.mpai.community/MMC/V2.5/data/SpeechModel.json",
+  "title":              "Speech Model V2.5",
+  "type":               "object",
+  "properties":         {
+
+    "Header":           { "type": "string", "const": "MMC-SML-V2.5" },
+    "MInstanceID":      { "type": "string" },
+    "UEnvironmentID":   { "type": "string" },
+    "SpeechModelID":    { "type": "string" },
+    "SpeechModelTime":  { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+    "SpeechModelData":  { "type": "array", "items": { "anyOf": [
+                        { "type": "object", "properties": {
+      "DataLength":     { "type": "integer" },
+      "DataURI":        { "type": "string", "format": "uri" } } },
+                        { "type": "object", "properties": {
+      "Data":           { "type": "string" } } },
+                        { "type": "object", "properties": {
+      "DataID":         { "type": "string" } } } ] } },
+
+    "DataXMData":       { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":    { "type": "string", "maxLength": 2048 } } }

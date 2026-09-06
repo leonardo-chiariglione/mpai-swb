@@ -1,0 +1,89 @@
+{ "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "https://schemas.mpai.community/AIF/V3.0/AIMMetadata.json",
+  "$id": "https://schemas.mpai.community/AIH1/V1.0/AIMs/HealthFrontEnd.json",
+  "title": "Health Front End V1.0",
+
+  "Identifier":   { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "AIH-HFE-V1.0" },
+
+  "APIProfile":   "Basic",
+  "Description":  "This AIM implements the AIH-HSP Health Front End.",
+
+  "InternalTypes":  [
+    { "Name": "AIHData"       , "DataType": "AIH-AHD-V1.0" },
+    { "Name": "ARAData"       , "DataType": "AIH-ARD-V1.0" },
+    { "Name": "AIHDataProcess", "DataType": "AIH-AHP-V1.0" },
+    { "Name": "HealthData"    , "DataType": "AIH-HLD-V1.0" },
+    { "Name": "ModelLicence"  , "DataType": "AIH-MDL-V1.0" },
+    { "Name": "Register"      , "DataType": "AIH-REG-V1.0" },
+    { "Name": "FederatedLearn", "DataType": "AIH-FDL-V1.0" }
+  ],
+
+  "ExternalPorts":  [
+    { "Name": "RegisterRequestUN"        , "Direction": "Input",   "DataType": "AIH-REG-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "RegisterResponseUN"       , "Direction": "Input",   "DataType": "AIH-REG-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "FederatedLearnRequestUN"  , "Direction": "Input",   "DataType": "AIH-FDL-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "AIHDataProcessRequestUNH" , "Direction": "Input",   "DataType": "AIH-AHP-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "AIHDataProcessResponseUN" , "Direction": "Input",   "DataType": "AIH-AHP-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "HealthDataUN"             , "Direction": "Input",   "DataType": "AIH-HLD-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "ModelLicenceUN"           , "Direction": "Input",   "DataType": "AIH-MDL-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "AIHDataProcessRequestUNS" , "Direction": "Input",   "DataType": "AIH-AHP-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "RegisterRequestNB"        , "Direction": "Output",  "DataType": "AIH-REG-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "FederatedLearnResponseNB" , "Direction": "Output",  "DataType": "AIH-FDL-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "AIHDataProcessRequestNB"  , "Direction": "Output",  "DataType": "AIH-AHP-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "AIHDataProcessResponseNB" , "Direction": "Output",  "DataType": "AIH-AHP-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false },
+    { "Name": "AIHDataProcessResponseNBS", "Direction": "Output",  "DataType": "AIH-AHP-V1.0",  "Technology": "Software", "Protocol": "", "IsRemote": false }
+  ],
+
+  "SubAIMs":  [
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "AIH-MDL-V1.0" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "AIH-HDP-V1.0" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "AIH-ARA-V1.0" } },
+    { "Identifier": { "ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "AIH-STR-V1.0" } }
+  ],
+
+  "Topology":  [
+    { "Output": { "AIMName": ""            , "PortName": "HealthDataUN"             }, "Input": { "AIMName": "AIH-MDL-V1.0", "PortName": "HealthDataNM" } },
+    { "Output": { "AIMName": ""            , "PortName": "ModelLicenceUN"           }, "Input": { "AIMName": "AIH-MDL-V1.0", "PortName": "ModelLicenceNM" } },
+    { "Output": { "AIMName": "AIH-MDL-V1.0", "PortName": "AIHDataMH"                }, "Input": { "AIMName": "AIH-HDP-V1.0", "PortName": "AIHDataMH", "PortNumber": 1 } },
+    { "Output": { "AIMName": ""            , "PortName": "RegisterRequestUN"        }, "Input": { "AIMName": "AIH-HDP-V1.0", "PortName": "RegisterRequestNH", "PortNumber": 1 } },
+    { "Output": { "AIMName": ""            , "PortName": "RegisterResponseUN"       }, "Input": { "AIMName": "AIH-HDP-V1.0", "PortName": "RegisterResponseNH", "PortNumber": 2 } },
+    { "Output": { "AIMName": ""            , "PortName": "FederatedLearnRequestUN"  }, "Input": { "AIMName": "AIH-HDP-V1.0", "PortName": "FederatedLearnRequestNH" } },
+    { "Output": { "AIMName": ""            , "PortName": "AIHDataProcessRequestUNH" }, "Input": { "AIMName": "AIH-HDP-V1.0", "PortName": "AIHDataProcessRequestNH", "PortNumber": 1 } },
+    { "Output": { "AIMName": ""            , "PortName": "AIHDataProcessResponseUN" }, "Input": { "AIMName": "AIH-HDP-V1.0", "PortName": "AIHDataProcessResponseNH", "PortNumber": 2 } },
+    { "Output": { "AIMName": "AIH-HDP-V1.0", "PortName": "RegisterRequestHN"        }, "Input": { "AIMName": ""            , "PortName": "RegisterRequestNB" } },
+    { "Output": { "AIMName": "AIH-HDP-V1.0", "PortName": "FederatedLearnResponseHN" }, "Input": { "AIMName": ""            , "PortName": "FederatedLearnResponseNB" } },
+    { "Output": { "AIMName": "AIH-HDP-V1.0", "PortName": "AIHDataProcessRequestHN"  }, "Input": { "AIMName": ""            , "PortName": "AIHDataProcessRequestNB" } },
+    { "Output": { "AIMName": "AIH-HDP-V1.0", "PortName": "AIHDataProcessResponseHN" }, "Input": { "AIMName": ""            , "PortName": "AIHDataProcessResponseNB" } },
+    { "Output": { "AIMName": "AIH-HDP-V1.0", "PortName": "AIHDataHA"                }, "Input": { "AIMName": "AIH-ARA-V1.0", "PortName": "AIHDataHA" } },
+    { "Output": { "AIMName": "AIH-ARA-V1.0", "PortName": "ARADataAH"                }, "Input": { "AIMName": "AIH-HDP-V1.0", "PortName": "ARADataAH" } },
+    { "Output": { "AIMName": "AIH-HDP-V1.0", "PortName": "AIHDataHS"                }, "Input": { "AIMName": "AIH-STR-V1.0", "PortName": "AIHDataHS" } },
+    { "Output": { "AIMName": "AIH-STR-V1.0", "PortName": "AIHDataSH"                }, "Input": { "AIMName": "AIH-HDP-V1.0", "PortName": "AIHDataSH", "PortNumber": 2 } },
+    { "Output": { "AIMName": ""            , "PortName": "AIHDataProcessRequestUNS" }, "Input": { "AIMName": "AIH-STR-V1.0", "PortName": "AIHDataProcessRequestNS" } },
+    { "Output": { "AIMName": "AIH-STR-V1.0", "PortName": "AIHDataProcessResponseSN" }, "Input": { "AIMName": ""            , "PortName": "AIHDataProcessResponseNBS" } }
+  ],
+
+  "Implementations":  [
+   {
+    "ImplementationURI": "/* URI storing Implementation */",
+    "BinaryName": "/* BinaryName */",
+    "Architecture": "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+    "OperatingSystem": "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | RTOS | Oniro | iOS */",
+    "Version": "/* Version */",
+    "Source": "/* AIMStorage | MPAIStore | AIMURL */",
+    "Destination": "/* Destination URI */"
+   }
+  ],
+
+  "ResourcePolicies":  [
+    { "Name": "Memory"              , "Minimum": "/* GB */",                                                                                                                 "Maximum": "/* GB */",                                                                                                                 "Request": "/* GB */" },
+    { "Name": "CPU:Number"          , "Minimum": "/* integer, 0=all */",                                                                                                     "Maximum": "/* integer, 0=all */",                                                                                                     "Request": "/* integer, 0=all */" },
+    { "Name": "CPU:Class"           , "Minimum": "/* Low | Medium | High */",                                                                                                "Maximum": "/* Low | Medium | High */",                                                                                                "Request": "/* Low | Medium | High */" },
+    { "Name": "GPU:Number"          , "Minimum": "/* integer, 0=all */",                                                                                                     "Maximum": "/* integer, 0=all */",                                                                                                     "Request": "/* integer, 0=all */" },
+    { "Name": "GPU:CUDA:Class"      , "Minimum": "/* SM10|SM11|SM12|SM13|SM20|SM21|SM30|SM32|SM35|SM37|SM50|SM52|SM53|SM60|SM61|SM62|SM70|SM72|SM75|SM80|SM86|SM87|SM90 */", "Maximum": "/* SM10|SM11|SM12|SM13|SM20|SM21|SM30|SM32|SM35|SM37|SM50|SM52|SM53|SM60|SM61|SM62|SM70|SM72|SM75|SM80|SM86|SM87|SM90 */", "Request": "/* SM10|SM11|SM12|SM13|SM20|SM21|SM30|SM32|SM35|SM37|SM50|SM52|SM53|SM60|SM61|SM62|SM70|SM72|SM75|SM80|SM86|SM87|SM90 */" },
+    { "Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* float_GB_GDDR|GDDR2|GDDR3|GDDR4|GDDR5|GDDR5X|GDDR6|GDDR6X */",                                                          "Maximum": "/* float_GB_GDDR|GDDR2|GDDR3|GDDR4|GDDR5|GDDR5X|GDDR6|GDDR6X */",                                                          "Request": "/* float_GB_GDDR|GDDR2|GDDR3|GDDR4|GDDR5|GDDR5X|GDDR6|GDDR6X */" },
+    { "Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* float_GHz */",                                                                                                          "Maximum": "/* float_GHz */",                                                                                                          "Request": "/* float_GHz */" }
+  ],
+
+  "DataXMData":  { },
+
+  "Documentation":  [{ "Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-aih/hsp/v1-0/" }] }

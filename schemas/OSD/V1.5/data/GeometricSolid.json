@@ -1,0 +1,29 @@
+{ "$schema":                "https://json-schema.org/draft/2020-12/schema",
+  "$id":                    "https://schemas.mpai.community/OSD/V1.5/data/GeometricSolid.json",
+  "title":                  "Geometric Solid V1.5", 
+  "description":            "Geometric region defined as a right parallelepiped, sphere or cylinder.",
+  "type":                   "object", 
+  "additionalProperties":   false, 
+  "required":               ["Type"], 
+  "properties": {
+
+    "Header":               { "type": "string", "const": "OSD-GMS-V1.5" },
+    "MInstanceID":          { "type": "string", "description": "Identifier of the M-Instance (Virtual Space) where Geometric Solid is present." },
+    "UEnvironmentID":       { "type": "string", "description": "Identifier of the U-Environment (Real Space) where Geometric Solid is present." },
+    "GeometricSolidID":     { "type": "string", "description": "Unique identifier of this Geometric Solid." },
+    "AnnotationTime":       { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json", "description": "Time this Hepmetric Solid instance was produced." },  
+    "Type":                 { "type": "string", "enum": [ "RightParallelepiped", "Sphere", "Cylinder" ] },
+
+    "RightParallelepiped":    { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/RightParallelepiped.json" },
+
+    "Sphere":                 { "type": "object", "additionalProperties": false, "required": ["Center", "Radius"], "properties": {
+      "Center":               { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Position.json" },
+      "Radius":               { "type": "number", "minimum": 0 } } },
+
+    "Cylinder":               { "type": "object", "additionalProperties": false, "required": ["Center", "Radius", "Height"], "properties": {
+      "Center":               { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Position.json" },
+      "Radius":               { "type": "number", "minimum": 0 },
+      "Height":               { "type": "number", "minimum": 0 } } },
+
+      "DataXMData":           { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+      "DescrMetadata":        { "type": "string", "maxLength": 2048 } } }

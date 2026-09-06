@@ -1,0 +1,32 @@
+{ "$schema":              "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/VisualInstanceIdentification.json",
+  "title":                "Visual Instance Identification V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-VII-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM receives a Target Visual Object and produces its Visual Instance Identifier: the identity of the Visual Object against a taxonomy.",
+
+  "ExternalPorts":        [{"Name": "TargetVisualObject",     "Direction": "Input",  "DataType": "OSD-BVO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualInstanceID",       "Direction": "Output", "DataType": "OSD-IID-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [{"ImplementationURI": "/* URI storing Implementation */",
+                            "BinaryName":       "/* BinaryName */",
+                            "Architecture":     "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+                            "OperatingSystem":  "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | RTOS | Oniro | iOS */",
+                            "Version":          "/* Version */",
+                            "Source":           "/* AIMStorage | MPAIStore | AIMURL */",
+                            "Destination":      "/* Destination URI */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",               "Minimum": "/* number GB, e.g. 8 GB */",              "Maximum": "/* number GB, e.g. 8 GB */",              "Request": "/* number GB, e.g. 8 GB */"             },
+                           {"Name": "CPU:Number",           "Minimum": "/* integer, 0=all */",                    "Maximum": "/* integer, 0=all */",                    "Request": "/* integer, 0=all */"                   },
+                           {"Name": "CPU:Class",            "Minimum": "/* Low | Medium | High */",               "Maximum": "/* Low | Medium | High */",               "Request": "/* Low | Medium | High */"              },
+                           {"Name": "GPU:Number",           "Minimum": "/* integer, 0=all */",                    "Maximum": "/* integer, 0=all */",                    "Request": "/* integer, 0=all */"                   }],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

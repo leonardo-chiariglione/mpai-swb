@@ -1,0 +1,36 @@
+{ "$schema":                            "https://json-schema.org/draft/2020-12/schema",
+  "$id":                                "https://schemas.mpai.community/OSD/V1.5/data/AudioSceneGeometry.json",
+  "title":                              "AudioSceneGeometry V1.5",
+  "type":                               "object",
+  "required":                           ["Header", "AudioSceneGeometryID", "AudioSceneGeometrySpaceTime"],
+  "additionalProperties": false,
+  "properties":                         {
+
+    "Header":                           { "type": "string", "const": "OSD-ASG-V1.5" },
+    "MInstanceID":                      { "type": "string" },
+    "AudioSceneGeometryID":             { "type": "string" },
+
+    "AudioSceneGeometrySpaceTime":      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "AudioObjectCount":                 { "type": "integer", "minimum": 0 },
+
+    "AudioSceneGeometryObjects":        { "type": "array", "items": { "type": "object", "required": ["AudioID"], "additionalProperties": false, "properties": {
+      "SpaceTime":                      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "AudioObjectID":                  { "type": "array", "minItems": 1, "items": { "oneOf": [
+                                        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/AudioObject.json" },
+                                        { "type": "string" } ] } } } } },
+
+    "AudioSubSceneCount":               { "type": "integer", "minimum": 0 },
+
+    "AudioSceneGeometrySubScenes":      { "type": "array", "items": { "type": "object", "required": ["SubASceneIDOrSubAScene"], "additionalProperties": false, "properties": {
+      "SpaceTime":                      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+      "SubASceneIDOrSubAScene":         { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/AudioSceneGeometry.json" },
+                                        { "type": "string" } ] } } } } },
+
+    "BasicAudioSceneOrAudioScene":      { "type": "array", "oneOf": [
+                                        { "type": "array", "items": { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/BasicAudioSceneGeometry.json" } },
+                                        { "type": "array", "items": { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/AudioSceneGeometry.json#/properties/BasicAudioSceneOrAudioScene" } } ] },
+
+    "DataXMData":                       { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                    { "type": "string", "maxLength": 2048 } } }

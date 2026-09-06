@@ -1,0 +1,53 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$id":                  "https://schemas.mpai.community/MMC/V2.5/data/Personality.json",
+  "title":                "Personality V2.5",
+  "description":          "Structured semantic data type encapsulating the expressive configuration of the A-User following Personality Alignment.",
+  "$comment":             "Definition: Encodes modulated tone, style, pacing, narrative framing, and optional persona traits derived by PAL from PA-Input and User State.\nConsumption: Directly consumable by A-User Rendering (text/voice/avatar).\nSource: PGM-AUA Personality data-type page.",
+  "type":                 "object",
+  "additionalProperties": false,
+
+  "$defs":                {
+
+    "ExpressiveConfig":   { "$comment": "Final expressive configuration produced by PAL (Tone, Style, Pacing, NarrativeGoal, PersonaTrait).",
+                            "type": "object", "properties": {
+      "Tone":             { "type": "string", "enum": [ "empathetic","assertive","playful","formal","neutral" ], "$comment": "Final tone." },
+      "Style":            { "type": "string", "enum": [ "concise","elaborate","technical","casual" ], "$comment": "Final style." },
+      "Pacing":           { "type": "string", "enum": [ "slow","steady","fast" ], "$comment": "Final pacing." },
+      "NarrativeGoal":    { "type": "string", "$comment": "Goal (clarify, deepen, contrast, inspire, Ã¢â‚¬Â¦)." },
+      "PersonaTrait":     { "type": "string", "$comment": "Optional persona framing (e.g., empathetic mentor)." } },
+                                "required": [ "Tone","Style","Pacing" ], "additionalProperties": false },
+
+    "ContentReference":   { "$comment": "Linkage to enriched BK response for rendering coherence.",
+                            "type": "object", "required": [ "EnhancedResponse" ], "additionalProperties": false }, "properties": {
+      "BKFragmentID":     { "type": "string" },
+      "EnhancedResponse": { "type": "string" } },
+
+    "InteractionFocus":   { "$comment": "Current focus of interaction.",
+                            "type": "object", "additionalProperties": false, "properties": {
+      "ItemID":           { "type": "string" },
+      "ItemType":         { "type": "string" },
+      "Description":      { "type": "string" } } },
+
+    "UserState":          { "$comment": "User state context for traceability.",
+                            "type": "object", "additionalProperties": false, "properties": {
+      "EngagementLevel":  { "type": "string" },
+      "AffectiveTone":    { "type": "string" },
+      "Disposition":      { "type": "string" } } } },
+
+  "properties": {
+
+    "Header":                 { "type": "string", "const": "MMC-PRS-V2.5" },
+
+    "PersonalityID":          { "type": "string", "$comment": "Unique identifier for this Personality instance." },
+    "MInstanceID":            { "type": "string" },
+    "MEnvironmentID":         { "type": "string" },
+
+    "ExpressiveConfig":       { "$ref": "#/$defs/ExpressiveConfig" },
+    "ContentReference":       { "$ref": "#/$defs/ContentReference" },
+    "InteractionFocus":       { "$ref": "#/$defs/InteractionFocus" },
+    "UserState":              { "$ref": "#/$defs/UserState" },
+
+    "DataXMData":             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":          { "type": "string", "maxLength": 2048 } },
+
+  "required":                 [ "ExpressiveConfig","ContentReference" ] }

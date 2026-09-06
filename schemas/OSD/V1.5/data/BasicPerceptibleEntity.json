@@ -1,0 +1,19 @@
+{ "$schema":                        "https://json-schema.org/draft/2020-12/schema",
+  "$id":                            "https://schemas.mpai.community/OSD/V1.5/data/BasicPerceptibleEntity.json",
+  "title":                          "Basic Perceptible Entity V1.5",
+  "type":                           "object",
+  "properties":                     {
+
+    "Header":                       { "type": "string", "const": "OSD-BPE-V1.5" },
+    "MInstanceID":                  { "type": "string" },
+    "UEnvironmentID":               { "type": "string" },
+    "BasicPerceptibleEntity":       { "type": "string" },
+
+    "BasicObject":                  { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/BasicObject.json" },
+
+    "BasicSceneDescriptors":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/BasicSceneDescriptors.json" },
+
+    "BasicEventDescriptors":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/BasicEventDescriptors.json" },
+
+    "DataXMData":                   { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                { "type": "string", "maxLength": 2048 } } }

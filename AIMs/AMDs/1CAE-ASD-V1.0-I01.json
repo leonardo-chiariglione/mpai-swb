@@ -1,0 +1,25 @@
+{ "Identifier":       { "ImplementerID": "1", "ImplementationID": "CAE-ASD-V1.0-I01", "AIMName": "CAE-ASD-V1.0" },
+
+  "APIProfile":       "Basic",
+  "Description":      "Audio Scene Delivery: renders an Audio Scene of either kind to a device. Its output is Hardware and its consumer is the listener; the Descriptors reach the User Agent from CAE-ASE without crossing this AIM. That difference of consumer, more than the device, is why acquisition and delivery are SubAIMs of CAE-ASM and User Agent modules in MMC-AMQ and MMC-TST.",
+
+  "ExternalPorts":    [{"Name": "UserCommand",           "Direction": "Input",  "DataType": "CAE-UCM-V1.0",                    "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                       {"Name": "AudioSceneDescriptors", "Direction": "Input",  "DataType": ["OSD-BAS-V1.5", "OSD-ASD-V1.5"], "IsOptional": true, "Technology": "Software", "Protocol": "", "IsRemote": false},
+                       {"Name": "AudioDestination",      "Direction": "Output", "DataType": "OSD-AUO-V1.5",                                       "Technology": "Hardware", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":          [],
+  "Topology":         [],
+
+"Implementations":  [{"ImplementationURI": "file:///D:/AI/AIMs/CAE-ASD-V1.0-I01",
+                       "MASPort":           443,
+                       "BinaryName":        "Mpai.Cae.Asd",
+                       "Architecture":      "x86-64",
+                       "OperatingSystem":   "Windows",
+                       "Version":           "1.0",
+                       "Source":            "AIMStorage"}],
+
+  "ResourcePolicies": [{"Name": "Memory", "Minimum": "0.25 GB", "Request": "0.5 GB", "Maximum": "1 GB"}],
+
+  "DataXMData":       { },
+
+  "Documentation":    [{"Type": "Specification", "URI": "https://mpai.community/standards/mpai-cae/"}]}

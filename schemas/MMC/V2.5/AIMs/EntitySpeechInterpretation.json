@@ -1,0 +1,29 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/MMC/V2.5/AIMs/EntitySpeechInterpretation.json",
+  "title":                "Entity Speech Interpretation V2.5",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "MMC-ESI-V2.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM extracts the Speech Personal Status from a Basic Speech Object: a value for each Personal Status Factor (Cognitive State, Emotion, Social Attitude) carried by the speech.",
+
+  "ExternalPorts":        [{"Name": "SpeechObject",  "Direction": "Input",  "DataType": "OSD-BSO-V1.5",  "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpeechPersonalStatus", "Direction": "Output", "DataType": "MMC-SPS-V2.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+  "Topology":             [ ],
+
+  "Implementations":      [{"ImplementationURI": "/* URI storing Implementation */",
+                            "BinaryName":       "/* BinaryName */",
+                            "Architecture":     "/* x86 | x86-64 | ARM | ARM64 | MIPS | RISC-V */",
+                            "OperatingSystem":  "/* Windows | Linux | MacOS | Debian | Ubuntu | RedHat | Android | Zephyr | RTOS | Oniro | iOS */",
+                            "Version":          "/* Version */",
+                            "Source":           "/* AIMStorage | MPAIStore | AIMURL */",
+                            "Destination":      "/* Destination URI */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",    "Minimum": "/* number GB */", "Maximum": "/* number GB */", "Request": "/* number GB */"},
+                           {"Name": "CPU:Class", "Minimum": "/* Low | Medium | High */", "Maximum": "/* Low | Medium | High */", "Request": "/* Low | Medium | High */"}],
+
+  "DataXMData":           { },
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-mmc/v2-5/"}]}

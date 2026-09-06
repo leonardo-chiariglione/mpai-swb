@@ -1,0 +1,41 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/OSD/V1.5/AIMs/AudioVisualSceneDemultiplexing.json",
+  "title":                "Audio-Visual Scene Demultiplexing V1.5",
+
+  "Identifier":           {"ImplementerID": "/* String from IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "OSD-SDX-V1.5"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM demultiplexes Audio-Visual Scene Descriptors and produces the Speech, Audio, and Visual Objects and the corresponding Scene Geometries.",
+
+  "ExternalPorts":        [{"Name": "AVSceneDescriptors",  "Direction": "Input",  "DataType": "OSD-MSD-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpaceTime",           "Direction": "Output", "DataType": "OSD-SPT-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpeechObject",        "Direction": "Output", "DataType": "OSD-SPO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioObject",         "Direction": "Output", "DataType": "OSD-AUO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualObject",        "Direction": "Output", "DataType": "OSD-VIO-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "SpeechSceneGeometry", "Direction": "Output", "DataType": "OSD-SSG-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "AudioSceneGeometry",  "Direction": "Output", "DataType": "OSD-ASG-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VisualSceneGeometry", "Direction": "Output", "DataType": "OSD-VSG-V1.5", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [{"BinaryName":      "/* provided by implementer */",
+                            "Architecture":    "/* x86-64 | ARM64 */",
+                            "OperatingSystem": "/* Windows | Linux | MacOS */",
+                            "Version":         "/* implementer version */",
+                            "Source":          "/* AIMStorage | MPAIStore */",
+                            "Destination":     "/* provided by implementer */"}],
+
+  "ResourcePolicies":     [{"Name": "Memory",               "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */"},
+                           {"Name": "CPU:Number",           "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */"},
+                           {"Name": "CPU:Class",            "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */"},
+                           {"Name": "GPU:Number",           "Minimum": "/* integer, 0=all */", "Maximum": "/* integer, 0=all */", "Request": "/* integer */"},
+                           {"Name": "GPU:CUDA:Class",       "Minimum": "/* string */",         "Maximum": "/* string */",         "Request": "/* string */"},
+                           {"Name": "GPU:CUDA:FrameBuffer", "Minimum": "/* GB */",             "Maximum": "/* GB */",             "Request": "/* GB */"},
+                           {"Name": "GPU:CUDA:MemorySpeed", "Minimum": "/* GB/s */",           "Maximum": "/* GB/s */",           "Request": "/* GB/s */"}],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-osd/v1-5/"}]}

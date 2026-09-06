@@ -1,0 +1,133 @@
+{ "$schema":                  "https://json-schema.org/draft/2020-12/schema",
+  "$id":                      "https://schemas.mpai.community/OSD/V1.5/data/ObjectAffordance.json",
+  "title":                    "Object Affordance V1.5",
+  "description":              "Affordance data for objects/zones/global scope with roles, events, constraints, hints.",
+  "type":                     "object",
+  "required":                 ["Header", "MInstanceID", "SceneEnhancerData"],
+  "additionalProperties":     false,
+  "properties":               {
+
+    "Header":                 { "type": "string", "const": "OSD-OAF-V1.5" },
+    "MInstanceID":            { "type": "string" },
+    "UEnvironment":           { "type": "string" },
+    "ObjectAffordanceID":     { "type": "string" },
+    "ObjectAffordanceTime":   { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SimpleTime.json" },
+
+    "BaseDescriptors":        { "type": "object", "additionalProperties": false, "properties": {
+      "EnhancersTime":        { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/TimeExpression.json" } } },
+
+    "SceneEnhancerData":      { "type": "object", "required": ["Scope", "EVDID"], "additionalProperties": false, "properties": {
+      "Scope":                { "type": "string", "enum": ["global", "object", "zone"] },
+      "ObjectID":             { "type": "string" },
+      "EVDID":                { "type": "string" },
+      "LCOIDOrLCO":           { "$ref": "#/$defs/LCOIDOrLCO" },
+      "Roles":                { "type": "array", "items": { "$ref": "#/$defs/RoleItem" } },
+      "Rights":               { "$ref": "https://schemas.mpai.community/MMM4/V2.2/data/Rights.json" },
+      "Rule":                 { "$ref": "https://schemas.mpai.community/MMM4/V2.2/data/Rules.json" },
+      "ComplianceStatus":     { "type": "string", "enum": ["compliant", "violating", "unknown"] },
+      "RequiredDelegation":   { "type": "boolean" },
+      "Events":               { "type": "array", "items": { "$ref": "#/$defs/EventItem" } },
+      "DomainContext":        { "$ref": "#/$defs/DomainContext" },
+      "Constraints":          { "$ref": "#/$defs/ConstraintSet" },
+      "ResolutionHints":      { "type": "array", "items": { "$ref": "#/$defs/ResolutionHintItem" } },
+      "VisualAffordances":    { "type": "array", "items": { "$ref": "#/$defs/VisualAffordanceItem" } },
+      "3DModelAffordances":   { "type": "array", "items": { "$ref": "#/$defs/Model3DAffordanceItem" } },
+      "AudioAffordances":     { "type": "array", "items": { "$ref": "#/$defs/AudioAffordanceItem" } },
+      "HapticAffordances":    { "type": "array", "items": { "$ref": "#/$defs/HapticAffordanceItem" } },
+      "Confidence":           { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+      "Justifications":       { "type": "array", "items": { "type": "string", "format": "uri" } } } },
+
+    "DataXMData":             { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":          { "type": "string", "maxLength": 2048 } },
+
+  "$defs":                    {
+    "LCOIDOrLCO":             { "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                              { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/LocationObject.json" },
+                              { "type": "string" } ] } },
+
+    "RoleItem":              { "type": "object", "required": ["VisualRole"], "additionalProperties": false, "properties": {
+      "VisualRole":          { "type": "string", "enum": [
+                                "system","service","narrator","player","spectator","staff",
+                                "vendor","security","npc","A-User","H-User","bot","moderator","unknown"
+                              ] },
+      "AudioRole":           { "type": "string", "enum": [
+                                "voice","narration","announcement","music","effects",
+                                "ambient","beacon","system","unknown"
+                              ] },
+      "AuthorityLevel":      { "type": "string" },
+      "Affiliation":         { "type": "string" },
+      "RoleConfidence":      { "type": "number", "minimum": 0.0, "maximum": 1.0 } } },
+
+    "ConstraintSet":         { "type": "array", "items": { "$ref": "#/$defs/ConstraintItem" } },
+
+    "ConstraintItem":        { "type": "object", "required": ["Reason"], "additionalProperties": false, "properties": {
+      "Reason":              { "type": "string", "enum": [
+                                "locked","occluded","out_of_reach","safety_violation",
+                                "domain_rule","muted","out_of_range","disabled"
+                              ] },
+      "Severity":            { "type": "string", "enum": ["info", "warning", "error"] } } },
+
+    "ResolutionHintItem":    { "type": "object", "required": ["HintType"], "additionalProperties": false, "properties": {
+      "HintType":            { "type": "string", "enum": [
+                                "prioritise_gaze","prioritise_proximity",
+                                "prefer_affordance","exclude_background" ] },
+      "HintValue":           { "type": "string" } } },
+
+    "EventItem":             { "type": "object", "required": ["EventType"], "additionalProperties": false, "properties": {
+      "EventType":           { "type": "string", "enum": [ "gesture","display_change","notification","alarm","animation", "object_motion",
+                                                           "occlusion_change","lighting_change","countdown" ] },
+      "EventSubType":        { "type": "string" },
+      "Urgency":             { "type": "string", "enum": ["low", "medium", "high"] },
+      "Channel":             { "type": "string" },
+      "Intensity":           { "type": "number", "minimum": 0.0, "maximum": 1.0 } } },
+
+    "DomainContext":         { "type": "object", "additionalProperties": false, "properties": {
+      "LocationSemantic":    { "type": "string" },
+      "ActivityPhase":       { "type": "string", "enum": [ "lobby","warm-up","match","quest","intermission", "ceremony","marketplace","maintenance" ] },
+      "ZoneID":              { "type": "string" } } },
+
+    "VisualAffordanceItem":  { "type": "object", "required": ["Tag", "Feasible", "Confidence"], "additionalProperties": false, "properties": {
+      "Tag":                 { "type": "string", "enum": [ "Graspable","Pushable","Openable","Rotatable", "Liftable","Insertable","Selectable" ] },
+      "Feasible":            { "type": "boolean" },
+      "Constraints":         { "type": "array", "items": { "$ref": "#/$defs/ConstraintItem" } },
+      "Referent":            { "type": "string" },
+      "Confidence":          { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+      "Compliance":          { "type": "string", "enum": ["compliant", "violating", "unknown"] },
+      "FallbackApplied":     { "type": "boolean" },
+      "FallbackTag":         { "type": "string", "enum": ["Selectable"] } } },
+
+    "Model3DAffordanceItem": { "type": "object", "required": ["Tag", "Feasible", "Confidence"], "additionalProperties": false, "properties": {
+      "Tag":                 { "type": "string", "enum": [ "Graspable3D","Pushable3D","Openable3D","Rotatable3D", "Liftable3D","Insertable3D",
+                                                           "Selectable3D","Transformable3D", "Attachable3D","Detachable3D", "WalkableSurface",
+                                                           "ClimbableSurface", "Portal","Occluder","CollisionObject" ] },
+      "Feasible":            { "type": "boolean" },
+      "Constraints":         { "type": "array", "items": { "$ref": "#/$defs/ConstraintItem" } },
+      "Referent3D":          { "type": "string" },
+      "Confidence":          { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+      "Compliance":          { "type": "string", "enum": ["compliant", "violating", "unknown"] },
+      "FallbackApplied":     { "type": "boolean" },
+      "FallbackTag":         { "type": "string", "enum": ["Selectable3D", "Transformable3D"] } } },
+
+    "AudioAffordanceItem":   { "type": "object", "required": ["Tag", "Feasible", "Confidence"], "additionalProperties": false, "properties": {
+      "Tag":                 { "type": "string", "enum": ["AttentionCue","Notification","UrgencySignal","InteractionPrompt"] },
+      "Feasible":            { "type": "boolean" },
+      "Constraints":         { "type": "array", "items": { "$ref": "#/$defs/ConstraintItem" } },
+      "Referent":            { "type": "string" },
+      "AudioReferent":       { "type": "object", "additionalProperties": false, "properties": {
+                                "AudioObjectID":      { "type": "string" },
+                                "SceneDescriptorsID": { "type": "string" } } },
+      "ChannelPolicy":       { "type": "string", "enum": ["all","music_only","voice_only","effects_only","selected_channels"] },
+      "Confidence":          { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+      "Compliance":          { "type": "string", "enum": ["compliant", "violating", "unknown"] },
+      "FallbackApplied":     { "type": "boolean" },
+      "FallbackTag":         { "type": "string", "enum": ["Notification"] } } },
+
+    "HapticAffordanceItem":  { "type": "object", "required": ["Tag", "Feasible", "Confidence"], "additionalProperties": false, "properties": {
+      "Tag":                 { "type": "string", "enum": ["Touchable","Tappable","Draggable","PressureSensitive","VibratoryCue"] },
+      "Feasible":            { "type": "boolean" },
+      "Constraints":         { "type": "array", "items": { "$ref": "#/$defs/ConstraintItem" } },
+      "Referent":            { "type": "string" },
+      "Confidence":          { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+      "Compliance":          { "type": "string", "enum": ["compliant", "violating", "unknown"] },
+      "FallbackApplied":     { "type": "boolean" },
+      "FallbackTag":         { "type": "string", "enum": ["Touchable"] } } } } }

@@ -1,0 +1,37 @@
+{ "$schema":              "https://json-schema.org/draft/2020-12/schema",
+  "$comment":             "https://schemas.mpai.community/AIF/V3.0/data/AIMMetadata.json",
+  "$id":                  "https://schemas.mpai.community/XRV1/V1.0/AIMs/EnvironmentDescription.json",
+  "title":                "Environment Description V1.0",
+
+  "Identifier":           {"ImplementerID": "/* String assigned by IIDRA */", "ImplementationID": "/* String from Implementer */", "AIMName": "XRV-END-V1.0"},
+
+  "APIProfile":           "Basic",
+  "Description":          "This AIM receives the Real and Virtual Environment Data In and Venue Specifications and provides the Performance, Participant, and Operator Descriptors of both Environments and the Show Descriptors.",
+
+  "ExternalPorts":        [{"Name": "REDataIn",                 "Direction": "Input",  "DataType": "XRV-RDI-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REVenueSpecification",     "Direction": "Input",  "DataType": "XRV-RVS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEDataIn",                 "Direction": "Input",  "DataType": "XRV-VDI-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEVenueSpecification",     "Direction": "Input",  "DataType": "XRV-VVS-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "Script",                   "Direction": "Input",  "DataType": "XRV-SPT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ActionTable",              "Direction": "Input",  "DataType": "XRV-ACT-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ScriptVenueAssociations",  "Direction": "Input",  "DataType": "XRV-SVA-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ParticipantData",          "Direction": "Input",  "DataType": "XRV-PTD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REPerformanceDescriptors", "Direction": "Output", "DataType": "XRV-RFD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEPerformanceDescriptors", "Direction": "Output", "DataType": "XRV-VFD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REParticipantDescriptors", "Direction": "Output", "DataType": "XRV-RTD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEParticipantDescriptors", "Direction": "Output", "DataType": "XRV-VTD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "REOperatorDescriptors",    "Direction": "Output", "DataType": "XRV-ROD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "VEOperatorDescriptors",    "Direction": "Output", "DataType": "XRV-VOD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false},
+                           {"Name": "ShowDescriptors",          "Direction": "Output", "DataType": "XRV-SHD-V1.0", "Technology": "Software", "Protocol": "", "IsRemote": false}],
+
+  "SubAIMs":              [ ],
+
+  "Topology":             [ ],
+
+  "Implementations":      [ ],
+
+  "ResourcePolicies":     [ ],
+
+  "DataXMData":           { },
+
+  "Documentation":        [{"Type": "Tutorial", "URI": "https://mpai.community/standards/mpai-xrv/ltp/v1-0/"}]}

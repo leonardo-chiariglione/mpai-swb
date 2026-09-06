@@ -1,0 +1,63 @@
+{ "$id":                              "https://schemas.mpai.community/OSD/V1.5/data/ExtendedVisualSceneDescriptors.json",
+  "$schema":                          "https://json-schema.org/draft/2020-12/schema",
+  "title":                            "Extended Visual Scene Descriptors V1.5", "description": "Extended visual scene descriptor set.",
+  "type":                             "object",
+  "required":                         [ "Header", "MInstanceID", "BasicVisualSceneDescriptorsID", "BasicVisualSceneDescriptorsSpaceTime", "VisualObjectCount", "BasicVisualSceneDescriptors" ],
+  "additionalProperties":             false,
+  "properties":                       {
+
+    "Header":                         { "type": "string", "const": "OSD-VSE-V1.5" },
+    "MInstanceID":                    { "description": "Unique identifier for the M-Instance", "type": "string" },
+    "UEnvironmentID":                 { "description": "Unique identifier for a real environment", "type": "string" },
+    "ExtendedVisualSceneDescriptorsID": { "description": "Unique identifier for this descriptor set", "type": "string" },
+
+    "GravityValue":                   { "description": "Scene gravity constant in m/sÂ²", "type": "number" },
+
+    "ExtendedVisualSceneDescriptorsSpaceTime": { "description": "Spatiotemporal context of the scene",
+                                                "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+    "VisualObjectCount":              { "description": "Total number of objects described", "type": "integer", "minimum": 0 },
+
+    "ExtendedVisualSceneDescriptors": { "description": "Object list", "type": "array", "items": { "type": "object",
+                                        "additionalProperties": false, "required": [ "ObjectIDOrObject", "PointOfView" ], "properties": {
+
+      "ObjectSpaceTime":              { "description": "Spatiotemporal context of the object",
+                                        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SpaceTime.json" },
+
+      "ObjectIDOrObject":             { "$ref": "#/$defs/ObjectIDOrObject" },
+
+      "AIMID":                        { "description": "Identifier of the AIM that performed the enrichment",
+                                        "$ref": "https://schemas.mpai.community/AIF/V3.0/data/AIMInstance.json" },
+
+      "EnrichmentTime":               { "description": "Timestamp when enrichment was performed",
+                                        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Time.json" },
+
+      "VisualSceneEnrichment":        { "description": "VSD enhancement", "type": "array", "items": { "$ref": "#/$defs/VisualSceneEnrichmentItem" } },
+
+      "PointOfView":                  { "description": "PoV of User/Device viewing/capturing scene",
+                                        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/PointOfView.json" } } } },
+
+    "DataXMData":                     { "$ref": "https://schemas.mpai.community/PTF/V1.0/data/DataExchangeMetadata.json" },
+    "DescrMetadata":                  { "type": "string", "maxLength": 2048 } },
+
+  "$defs": {
+    "ObjectIDOrObject":               { "description": "Either a VisualObject or its ID.", "type": "array", "minItems": 1, "maxItems": 1, "items": { "oneOf": [
+                                      { "$ref": "https://schemas.mpai.community/OSD/V1.5/data/VisualObject.json" },
+                                      { "type": "string" } ] } },
+
+    "VisualSceneEnrichmentItem":      { "type": "object", "additionalProperties": false, "properties": {
+
+        "Depth":                      { "description": "Estimated object distance from PoV",
+                                        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/Depth.json" },
+
+        "OcclusionFlag":              { "description": "Object visibility status from the PointOfView",
+                                        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/OcclusionFlag.json" },
+
+        "Affordance":                 { "description": "Interaction affordances",
+                                        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/ObjectAffordance.json" },
+
+        "InteractionPotential":       { "description": "Degree/nature of an interaction.",
+                                        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/InteractionPotential.json" },
+
+        "SalienceScore":              { "description": "Score (0â€“1) of visual prominence",
+                                        "$ref": "https://schemas.mpai.community/OSD/V1.5/data/SalienceScore.json" } } } } }
