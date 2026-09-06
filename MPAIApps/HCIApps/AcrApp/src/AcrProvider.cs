@@ -11,13 +11,13 @@ using Mpai.Aims.Asr;   // AsrAimProcessor, AsrFactory
 
 namespace AcrApp;
 
-// Composition root for HCI-ACR (Access Control Registration). ACR runs two AIWs
+// Composition root for HCI-ACR (Access Control Registration). ACR runs two Modules
 // through the Controller:
 //   PAF-RSR-V1.6  - spoken prompts (Response and Scene Rendering: PSD + TTS + GFD)
 //   MMC-ASR-V2.5  - recognise the spoken NAME (speech -> text)
 // The face/voice DESCRIPTORS are computed directly by the UA (ArcFace + ECAPA via
 // the embedder classes) and enrolled into Shared Storage - that is a UA-side write,
-// not an AIW - so this provider supplies only the prompt + ASR leaves.
+// not an Module - so this provider supplies only the prompt + ASR leaves.
 internal sealed class AcrProvider : IAimProvider, IDisposable
 {
     private readonly AmdStore _store;

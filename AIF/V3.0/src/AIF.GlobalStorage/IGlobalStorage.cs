@@ -16,11 +16,11 @@ public sealed class KeyInfo
 // instances, versioning, references - see the proposal's Section 4) is a
 // convention built using these six, not a separate facility.
 //
-// This interface deliberately omits the AIW_ID/AIM_ID parameter that
+// This interface deliberately omits the MODULE_ID/AIM_ID parameter that
 // appears in the C-style proposal's function signatures: one
-// IGlobalStorage instance represents one storage scope (one AIW's Shared
+// IGlobalStorage instance represents one storage scope (one Module's Shared
 // Storage, or one AIM's private Storage), matching CAE-ASM's own
-// single-AIW usage. A multi-AIW host would construct one instance per AIW.
+// single-Module usage. A multi-Module host would construct one instance per Module.
 public interface IGlobalStorage
 {
     // Stores data at key, overwriting any existing value. The framework

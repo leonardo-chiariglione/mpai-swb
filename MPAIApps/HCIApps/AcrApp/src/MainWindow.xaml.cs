@@ -237,7 +237,7 @@ public partial class MainWindow : Window
         if (e.Key == Key.Enter) { e.Handled = true; CompleteTypedName(); }
     }
 
-    // Recognise the spoken name: feed the SpeechObject to the ASR AIW and read the
+    // Recognise the spoken name: feed the SpeechObject to the ASR Module and read the
     // Text result BY TYPE (BasicTextObject first, then any text-like field) - the
     // port name is incidental; the SpeechObject-in / Text-out data types are what
     // matter.
@@ -325,20 +325,20 @@ public partial class MainWindow : Window
         }
     };
 
-    private AIF.Controller.Message? RunAim(string aiwName, Dictionary<string, string> boundary)
+    private AIF.Controller.Message? RunAim(string moduleName, Dictionary<string, string> boundary)
     {
         if (_ua is null) return null;
         lock (_uaLock)
         {
-            var startErr = _ua.MPAI_AIFU_AIW_Start(aiwName, _provider!, _settings!, out var aiwId);
+            var startErr = _ua.MPAI_AIFU_MODULE_Start(moduleName, _provider!, _settings!, out var moduleId);
             if (startErr != AifError.OK) return null;
             try
             {
-                var (error, outcome) = _ua.RunAsync(aiwId, boundary).GetAwaiter().GetResult();
+                var (error, outcome) = _ua.RunAsync(moduleId, boundary).GetAwaiter().GetResult();
                 if (error != AifError.OK || outcome?.Completed is null || outcome.Completed.IsError) return null;
                 return outcome.Completed;
             }
-            finally { _ua.MPAI_AIFU_AIW_Stop(aiwId); }
+            finally { _ua.MPAI_AIFU_MODULE_Stop(moduleId); }
         }
     }
 

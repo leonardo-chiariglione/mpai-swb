@@ -6,7 +6,7 @@ using Mpai.Core;
 
 namespace Mpai.Aims.Speech;
 
-// MMC-SOA-V2.5 Ã¢â‚¬â€ Speech Object Acquisition. Self-contained IAimProcessor.
+// MMC-SOA-V2.5 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Speech Object Acquisition. Self-contained IAimProcessor.
 // Reads its own port names from 1MMC-SOA-V2.5-I01.json at startup.
 //
 // The physical acquisition is identical to AOA (capturing sound waves is
@@ -130,7 +130,7 @@ public sealed class SoaAimProcessor : IAimProcessor
             };
         }
 
-        // No input delivered Ã¢â‚¬â€ acquire fresh from the device (same as AOA).
+        // No input delivered ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â acquire fresh from the device (same as AOA).
         var context = message.Context;
         BasicAudioObject audio;
 
@@ -152,10 +152,10 @@ public sealed class SoaAimProcessor : IAimProcessor
         // UA-to-AIM signal that does not exist yet.
         // Press-to-stop, driven by PAUSE rather than by Stop.
         //
-        // Stop is the wrong signal: it ends the AIW, so the recording would be
+        // Stop is the wrong signal: it ends the Module, so the recording would be
         // captured and then thrown away with the run. Pause is the right one -
         // the User Agent says "that is enough" and the pipeline carries on - and
-        // it is what MPAI_AIFU_AIW_Pause and _Resume are for.
+        // it is what MPAI_AIFU_MODULE_Pause and _Resume are for.
         //
         // The PauseRequests COUNT is watched, not the gate: a Pause followed
         // promptly by a Resume can open and shut the gate between two polls,
@@ -205,7 +205,7 @@ public sealed class SoaAimProcessor : IAimProcessor
                 $"[MMC-SOA-V2.5] captured {audio.Data.Length:N0} bytes");
 
             // Honour the pause itself: if the User Agent has not resumed yet,
-            // wait here rather than running on while the AIW is paused.
+            // wait here rather than running on while the Module is paused.
             await context.CheckAsync();
         }
         else

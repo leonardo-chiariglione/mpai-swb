@@ -9,9 +9,9 @@ using Mpai.Core.OSD;
 
 namespace Mpai.Hci.Api;
 
-// The HCI API (MPAI-HCI middleware API). A thin faÃƒÆ’Ã‚Â§ade the User Agent (UAD-MAD)
+// The HCI API (MPAI-HCI middleware API). A thin faÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ade the User Agent (UAD-MAD)
 // uses to drive the MMC-MAD Middleware Module across the north API. MMC-MAD is ONE
-// AIW (ASR -> EDP -> RSR). The Module is started ONCE and kept alive across turns:
+// Module (ASR -> EDP -> RSR). The Module is started ONCE and kept alive across turns:
 // each turn is one RunAsync on the same instance, so the AIM tree is instantiated
 // once (speed) and the running dialogue Summary threads from each turn's
 // EditedSummary into the next turn's Summary (context - the dialogue remembers).
@@ -30,9 +30,9 @@ public sealed class HciApi : IDisposable
     private readonly HciProvider  _provider;
     private readonly AimSettings  _settings;
 
-    private int?    _aiwId;         // the started MMC-MAD instance, kept alive across turns
-    private int?    _matAiwId;      // the started MMC-MAT instance, kept alive across turns
-    private int?    _mpdAiwId;      // the started MMC-MPD instance, kept alive across turns
+    private int?    _moduleId;         // the started MMC-MAD instance, kept alive across turns
+    private int?    _matModuleId;      // the started MMC-MAT instance, kept alive across turns
+    private int?    _mpdModuleId;      // the started MMC-MPD instance, kept alive across turns
     private string? _lastSummaryMpd;
     private string? _lastSummary;   // the running dialogue Summary (threaded turn to turn)
 
@@ -49,10 +49,10 @@ public sealed class HciApi : IDisposable
     // Start MMC-MAD once and keep it alive; subsequent turns reuse the instance.
     private bool EnsureStarted()
     {
-        if (_aiwId is not null) return true;
-        if (_ua.MPAI_AIFU_AIW_Start(MadModule, _provider, _settings, out var id) != AifError.OK)
+        if (_moduleId is not null) return true;
+        if (_ua.MPAI_AIFU_MODULE_Start(MadModule, _provider, _settings, out var id) != AifError.OK)
             return false;
-        _aiwId = id;
+        _moduleId = id;
         return true;
     }
 
@@ -71,7 +71,7 @@ public sealed class HciApi : IDisposable
         if (!string.IsNullOrWhiteSpace(_lastSummary))
             boundary["Summary"] = _lastSummary;
 
-        var (err, outcome) = _ua.RunAsync(_aiwId!.Value, boundary).GetAwaiter().GetResult();
+        var (err, outcome) = _ua.RunAsync(_moduleId!.Value, boundary).GetAwaiter().GetResult();
         if (err != AifError.OK || outcome?.Completed is null || outcome.Completed.IsError)
             return new SpeakingAvatar(Array.Empty<byte>(), null);
 
@@ -94,11 +94,11 @@ public sealed class HciApi : IDisposable
     // replies aware of both. The running Summary threads context across turns.
     public SpeakingAvatar ConverseMpd(BasicSpeechObject speech)
     {
-        if (_mpdAiwId is null)
+        if (_mpdModuleId is null)
         {
-            if (_ua.MPAI_AIFU_AIW_Start(MpdModule, _provider, _settings, out var id) != AifError.OK)
+            if (_ua.MPAI_AIFU_MODULE_Start(MpdModule, _provider, _settings, out var id) != AifError.OK)
                 return new SpeakingAvatar(Array.Empty<byte>(), null);
-            _mpdAiwId = id;
+            _mpdModuleId = id;
         }
 
         var boundary = new Dictionary<string, string>
@@ -108,7 +108,7 @@ public sealed class HciApi : IDisposable
         if (!string.IsNullOrWhiteSpace(_lastSummaryMpd))
             boundary["Summary"] = _lastSummaryMpd;
 
-        var (err, outcome) = _ua.RunAsync(_mpdAiwId!.Value, boundary).GetAwaiter().GetResult();
+        var (err, outcome) = _ua.RunAsync(_mpdModuleId!.Value, boundary).GetAwaiter().GetResult();
         if (err != AifError.OK || outcome?.Completed is null || outcome.Completed.IsError)
             return new SpeakingAvatar(Array.Empty<byte>(), null);
 
@@ -128,7 +128,7 @@ public sealed class HciApi : IDisposable
     // Speech Recognition once.
     public string? Recognise(BasicSpeechObject speech)
     {
-        var startErr = _ua.MPAI_AIFU_AIW_Start(AsrModule, _provider, _settings, out var id);
+        var startErr = _ua.MPAI_AIFU_MODULE_Start(AsrModule, _provider, _settings, out var id);
         if (startErr != AifError.OK) return null;
         try
         {
@@ -155,7 +155,7 @@ public sealed class HciApi : IDisposable
             }
             return null;
         }
-        finally { _ua.MPAI_AIFU_AIW_Stop(id); }
+        finally { _ua.MPAI_AIFU_MODULE_Stop(id); }
     }
 
 
@@ -166,11 +166,11 @@ public sealed class HciApi : IDisposable
     // the target voice.
     public SpeakingAvatar Translate(BasicSpeechObject speech, string? fromLang, string toLang)
     {
-        if (_matAiwId is null)
+        if (_matModuleId is null)
         {
-            if (_ua.MPAI_AIFU_AIW_Start(MatModule, _provider, _settings, out var mid) != AifError.OK)
+            if (_ua.MPAI_AIFU_MODULE_Start(MatModule, _provider, _settings, out var mid) != AifError.OK)
                 return new SpeakingAvatar(Array.Empty<byte>(), null);
-            _matAiwId = mid;
+            _matModuleId = mid;
         }
 
         // Tag the speech with the input language so ASR recognises it in that language.
@@ -183,7 +183,7 @@ public sealed class HciApi : IDisposable
             ["LanguageSelector"] = MpaiJson.ToJson(selector)
         };
 
-        var (err, outcome) = _ua.RunAsync(_matAiwId!.Value, boundary).GetAwaiter().GetResult();
+        var (err, outcome) = _ua.RunAsync(_matModuleId!.Value, boundary).GetAwaiter().GetResult();
         if (err != AifError.OK || outcome?.Completed is null || outcome.Completed.IsError)
             return new SpeakingAvatar(Array.Empty<byte>(), null);
 
@@ -235,7 +235,7 @@ public sealed class HciApi : IDisposable
         // Start-run-STOP per call (no keep-alive): each announcement is a fresh RSR
         // run, so no suspend/resume state is carried between prompts. (A kept-alive
         // instance dropped every second prompt - the classic carried-state trap.)
-        if (_ua.MPAI_AIFU_AIW_Start(RsrModule, _provider, _settings, out var rid) != AifError.OK)
+        if (_ua.MPAI_AIFU_MODULE_Start(RsrModule, _provider, _settings, out var rid) != AifError.OK)
             return new SpeakingAvatar(Array.Empty<byte>(), null);
 
         // The Personal Status here is the MACHINE'S OWN - the expression the avatar
@@ -264,7 +264,7 @@ public sealed class HciApi : IDisposable
                 fdo = MpaiJson.FromJson<FaceDescriptorsObject>(fj);
             return new SpeakingAvatar(wav, fdo);
         }
-        finally { _ua.MPAI_AIFU_AIW_Stop(rid); }
+        finally { _ua.MPAI_AIFU_MODULE_Stop(rid); }
     }
 
     // Build the machine's Personal Status (its OWN expression) from an emotion and an
@@ -309,7 +309,7 @@ public sealed class HciApi : IDisposable
     // User ID means access is granted. Start-run-STOP per call (no kept-alive state).
     public AccessResult RunAccessControl(BasicVisualObject? face, BasicSpeechObject? speech)
     {
-        if (_ua.MPAI_AIFU_AIW_Start(MacModule, _provider, _settings, out var id) != AifError.OK)
+        if (_ua.MPAI_AIFU_MODULE_Start(MacModule, _provider, _settings, out var id) != AifError.OK)
             return new AccessResult(false, null, new SpeakingAvatar(Array.Empty<byte>(), null));
         try
         {
@@ -340,16 +340,16 @@ public sealed class HciApi : IDisposable
 
             return new AccessResult(userId is not null, userId, new SpeakingAvatar(wav, fdo));
         }
-        finally { _ua.MPAI_AIFU_AIW_Stop(id); }
+        finally { _ua.MPAI_AIFU_MODULE_Stop(id); }
     }
 
     public void ResetConversation() => _lastSummary = null;
 
     public void Dispose()
     {
-        if (_aiwId is not null) { _ua.MPAI_AIFU_AIW_Stop(_aiwId.Value); _aiwId = null; }
-        if (_matAiwId is not null) { _ua.MPAI_AIFU_AIW_Stop(_matAiwId.Value); _matAiwId = null; }
-        if (_mpdAiwId is not null) { _ua.MPAI_AIFU_AIW_Stop(_mpdAiwId.Value); _mpdAiwId = null; }
+        if (_moduleId is not null) { _ua.MPAI_AIFU_MODULE_Stop(_moduleId.Value); _moduleId = null; }
+        if (_matModuleId is not null) { _ua.MPAI_AIFU_MODULE_Stop(_matModuleId.Value); _matModuleId = null; }
+        if (_mpdModuleId is not null) { _ua.MPAI_AIFU_MODULE_Stop(_mpdModuleId.Value); _mpdModuleId = null; }
         _provider.Dispose();
     }
 }

@@ -64,7 +64,7 @@ public sealed record PiperVoice(
 //  The output Speech Qualifier is built by the three-part transform:
 //    inherit   : Language carries over from the input Text Qualifier
 //    determine : Format (WAV + PCM), Source = Synthetic, SpeakerType = Agent
-//                â€” facts only this (Piper) AIM knows, from what it builds
+//                Ã¢â‚¬â€ facts only this (Piper) AIM knows, from what it builds
 //    provenance: the spoken text is embedded as ContentDescription.TextObject
 //
 //  The Language it inherits also CHOOSES THE VOICE when more than one is
@@ -104,8 +104,8 @@ public sealed class PiperTtsAim : ITtsAim
 
         // A voice can fail where the translation succeeded - an installed piper
         // binary too old for a voice's phoneme map, for one, which is what
-        // "aÉª is not a single codepoint" means. Letting that throw discards the
-        // TRANSLATION as well, which is the primary result: the whole AIW returns
+        // "aÃ‰Âª is not a single codepoint" means. Letting that throw discards the
+        // TRANSLATION as well, which is the primary result: the whole Module returns
         // an error and the text nobody can now hear is also text nobody can read.
         //
         // So: try the chosen voice, fall back to the default, and if that fails

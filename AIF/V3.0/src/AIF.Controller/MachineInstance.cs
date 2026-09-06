@@ -8,7 +8,7 @@ public sealed class MachineInstance
     public string AIMName { get; init; } =
         string.Empty;
 
-    // The AIW description from which this runtime
+    // The Module description from which this runtime
     // instance was instantiated.
     public DescriptorGraph DescriptorGraph { get; init; } =
         new();

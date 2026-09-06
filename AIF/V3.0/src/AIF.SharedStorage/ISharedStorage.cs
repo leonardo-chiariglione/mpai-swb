@@ -29,7 +29,7 @@ public sealed class KeyInfo
 // draft's per-call offset is removed; ranged access is a reserved extension,
 // Section 4.10.7). This interface represents ONE storage scope - one Module
 // instance's Shared Storage, or one AIM's Private Storage; a multi-Module host
-// constructs one instance per scope, so no AIW/AIM identifier is passed per call.
+// constructs one instance per scope, so no Module/AIM identifier is passed per call.
 public interface ISharedStorage
 {
     // Stores data as the whole value at key, replacing any existing value. The
