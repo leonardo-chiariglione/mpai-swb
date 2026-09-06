@@ -22,7 +22,7 @@ namespace CavMac;
 // Personal Status, and the rendering. The UA does no recognition and no decision.
 //
 // Flow (hands-free after Start):
-//   Start -> avatar: "Welcome. Please look at the camera."  (serious, ~3s; the
+//   Start -> avatar: "Welcome to the CAV Multimodal Access Control Service. Please look at the camera."  (serious, ~3s; the
 //            webcam frame is taken meanwhile - the prompt does not wait for
 //            recognition)
 //         -> avatar: "Please speak your passphrase."         (serious; then the
@@ -96,8 +96,8 @@ public partial class MainWindow : Window
     {
         // 1) Greet + guide, seriously. The prompt runs ~3s; the webcam frame is
         //    taken meanwhile - it does not wait for any recognition.
-        InstructionText.Text = "Welcome. Please look at the camera.";
-        var speakLook = RenderPromptAsync("Welcome. Please look at the camera.");
+        InstructionText.Text = "Welcome to the CAV Multimodal Access Control Service. Please look at the camera.";
+        var speakLook = RenderPromptAsync("Welcome to the CAV Multimodal Access Control Service. Please look at the camera.");
         BasicVisualObject? faceObject = null;
         try
         {
