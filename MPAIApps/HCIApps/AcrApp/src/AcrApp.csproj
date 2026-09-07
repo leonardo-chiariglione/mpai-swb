@@ -32,8 +32,6 @@
     <!-- Recognition AIMs (CAV-MAC leaves) -->
     <ProjectReference Include="..\..\..\..\AIMs\PAF\V1.6\FIR\Mpai.Paf.Fir.csproj" />
     <ProjectReference Include="..\..\..\..\AIMs\MMC\V2.5\SIR\Mpai.Mmc.Sir.csproj" />
-    <!-- ASR (Whisper) - recognise the spoken name -->
-    <ProjectReference Include="..\..\..\..\AIMs\MMC\V2.5\ASR\Mpai.Mmc.Asr.csproj" />
     <ProjectReference Include="..\..\..\..\AIMs\OSD\V1.5\VisualScene\Mpai.Osd.VisualScene.csproj" />
     <!-- Response and Scene Rendering leaves (PAF-RSR = PSD + TTS + GFD) -->
     <ProjectReference Include="..\..\..\..\AIMs\PAF\V1.6\PSD\Mpai.Paf.Psd.csproj" />
