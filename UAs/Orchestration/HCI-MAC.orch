@@ -1,5 +1,5 @@
 # =============================================================================
-#  HCI-MAC-UA.orch  -  User-Agent orchestration for the HCI-MAC Module
+#  HCI-MAC.orch  -  User-Agent orchestration for the MMC-MAC Module
 #
 #  Workflow Description (WDL v0.1). Describes ONLY what the User Agent does:
 #  real-world I/O (prompt/present/capture), timing (wait), and the boundary
@@ -9,13 +9,13 @@
 #  Controller (Start/Stop the Module, write boundary inputs, read boundary
 #  outputs); it never touches a Module's AIMs. The Controller runs the Module's
 #  AIMs and routes data among them BY DATA TYPE per the Module's L3
-#  (1HCI-MAC-V2.5-I01.json). Chain of command: User <-> UserAgent -> Controller
+#  (1MMC-MAC-V2.5-I01.json). Chain of command: User <-> UserAgent -> Controller
 #  -> AIMs -> Controller. This file names no AIM and no internal routing.
 # =============================================================================
 
-workflow HCI-MAC-UA  over module HCI-MAC-V2.5
+workflow HCI-MAC  over module MMC-MAC-V2.5
 {
-    start module HCI-MAC-V2.5
+    start module MMC-MAC-V2.5
 
     prompt  "Welcome to the HCI Multimodal Access Control Service. Look at the camera."
     wait    1s
