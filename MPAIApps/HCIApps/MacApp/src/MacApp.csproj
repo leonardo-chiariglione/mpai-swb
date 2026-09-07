@@ -20,7 +20,7 @@
     <ProjectReference Include="..\..\..\..\AIMs\Core\Mpai.Core.csproj" />
     <ProjectReference Include="..\..\..\..\AIMs\Gallery\Mpai.Gallery.csproj" />
     <!-- The Human-CAV Interaction avatar surface (WebView renderer + present) -->
-    <ProjectReference Include="..\..\..\..\Lib\UaKit\Mpai.UaKit.csproj" />
+    <ProjectReference Include="..\..\..\..\UAs\Lib\UaKit\Mpai.UaKit.csproj" />
     <!-- The HCI API -->
     <ProjectReference Include="..\..\..\..\MW\HciApi\Mpai.Hci.Api.csproj" />
     <!-- Description AIMs (kept) -->

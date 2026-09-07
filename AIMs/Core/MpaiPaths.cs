@@ -27,7 +27,7 @@ public static class MpaiPaths
     public static string Gallery       => System.IO.Path.Combine(Root, "TestData", "gallery.json");
     public static string Amds          => System.IO.Path.Combine(Root, "AIMs", "AMDs");
     public static string Settings      => System.IO.Path.Combine(Root, "AIMs", "aim-settings.json");
-    public static string Assets        => System.IO.Path.Combine(Root, "Lib", "Assets");
+    public static string Assets        => System.IO.Path.Combine(Root, "UAs", "Assets");
     // The governed Shared Storage area (AIF Shared Storage backing folder).
     public static string SharedStorage => System.IO.Path.Combine(Root, "SharedStorage");
 }
