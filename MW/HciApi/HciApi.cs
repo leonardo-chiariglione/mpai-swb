@@ -9,7 +9,7 @@ using Mpai.Core.OSD;
 
 namespace Mpai.Hci.Api;
 
-// The HCI API (MPAI-HCI middleware API). A thin faÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ade the User Agent (UAD-MAD)
+// The HCI API (MPAI-HCI middleware API). A thin faÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ade the User Agent (UAD-MAD)
 // uses to drive the MMC-MAD Middleware Module across the north API. MMC-MAD is ONE
 // Module (ASR -> EDP -> RSR). The Module is started ONCE and kept alive across turns:
 // each turn is one RunAsync on the same instance, so the AIM tree is instantiated
@@ -21,10 +21,10 @@ public sealed class HciApi : IDisposable
 {
     private const string MadModule = "MMC-MAD-V2.5";   // Multimodal Anonymous Dialogue
     private const string MatModule = "MMC-MAT-V2.5";   // Multimodal Anonymous Translation
-    private const string RsrModule = "UAG-RSR-V1.0";   // Response and Scene Rendering (say-as-avatar)
+    private const string RsrModule = "PAF-RSR-V1.6";   // Response and Scene Rendering (say-as-avatar)
     private const string MpdModule = "MMC-MPD-V2.5";   // Multimodal Personal Status-based Dialogue
     private const string AsrModule = "MMC-ASR-V2.5";   // Automatic Speech Recognition (for intent)
-    private const string MacModule = "CAV-MAC-V2.0";   // Multimodal Access Control (identify + verdict)
+    private const string MacModule = "MMC-MAC-V2.5";   // Multimodal Access Control (identify + verdict)
 
     private readonly UserAgent    _ua;
     private readonly HciProvider  _provider;
