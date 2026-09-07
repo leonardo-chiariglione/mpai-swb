@@ -48,7 +48,8 @@ public sealed class SubjectGallery
 
     // Enrol / update a subject from already-computed embeddings. Either may be
     // null (partial enrolment: face-only or voice-only).
-    public void EnrolEmbeddings(string subjectId, float[]? face = null, float[]? voice = null)
+    public void EnrolEmbeddings(string subjectId, float[]? face = null, float[]? voice = null,
+                                string? faceTime = null, string? speechTime = null)
     {
         if (string.IsNullOrWhiteSpace(subjectId))
             throw new ArgumentException("subjectId required", nameof(subjectId));
@@ -59,6 +60,8 @@ public sealed class SubjectGallery
         }
         if (face is not null) s.FaceEmbedding = face;
         if (voice is not null) s.VoiceEmbedding = voice;
+        if (faceTime is not null) s.FaceTime = faceTime;
+        if (speechTime is not null) s.SpeechTime = speechTime;
     }
 
     public bool Remove(string subjectId) => _subjects.Remove(subjectId);
@@ -131,7 +134,7 @@ public sealed class SubjectGallery
         {
             Subjects = _subjects.Values.Select(s => new SubjectDto
             {
-                SubjectId = s.SubjectId, FaceEmbedding = s.FaceEmbedding, VoiceEmbedding = s.VoiceEmbedding
+                SubjectId = s.SubjectId, FaceEmbedding = s.FaceEmbedding, VoiceEmbedding = s.VoiceEmbedding, FaceTime = s.FaceTime, SpeechTime = s.SpeechTime
             }).ToList()
         };
         File.WriteAllText(path, JsonSerializer.Serialize(dto, JsonOpts));
@@ -144,7 +147,7 @@ public sealed class SubjectGallery
         var dto = JsonSerializer.Deserialize<GalleryDto>(File.ReadAllText(path), JsonOpts);
         if (dto?.Subjects is null) return g;
         foreach (var s in dto.Subjects)
-            g._subjects[s.SubjectId] = new Subject { SubjectId = s.SubjectId, FaceEmbedding = s.FaceEmbedding, VoiceEmbedding = s.VoiceEmbedding };
+            g._subjects[s.SubjectId] = new Subject { SubjectId = s.SubjectId, FaceEmbedding = s.FaceEmbedding, VoiceEmbedding = s.VoiceEmbedding, FaceTime = s.FaceTime, SpeechTime = s.SpeechTime };
         return g;
     }
 
@@ -159,7 +162,7 @@ public sealed class SubjectGallery
     {
         foreach (var s in _subjects.Values)
         {
-            var dto = new SubjectDto { SubjectId = s.SubjectId, FaceEmbedding = s.FaceEmbedding, VoiceEmbedding = s.VoiceEmbedding };
+            var dto = new SubjectDto { SubjectId = s.SubjectId, FaceEmbedding = s.FaceEmbedding, VoiceEmbedding = s.VoiceEmbedding, FaceTime = s.FaceTime, SpeechTime = s.SpeechTime };
             store.Put(SubjectKeyPrefix + s.SubjectId,
                 System.Text.Encoding.UTF8.GetBytes(JsonSerializer.Serialize(dto, JsonOpts)));
         }
@@ -176,7 +179,8 @@ public sealed class SubjectGallery
             if (dto is null) continue;
             g._subjects[dto.SubjectId] = new Subject
             {
-                SubjectId = dto.SubjectId, FaceEmbedding = dto.FaceEmbedding, VoiceEmbedding = dto.VoiceEmbedding
+                SubjectId = dto.SubjectId, FaceEmbedding = dto.FaceEmbedding, VoiceEmbedding = dto.VoiceEmbedding,
+                FaceTime = dto.FaceTime, SpeechTime = dto.SpeechTime
             };
         }
         return g;
@@ -189,6 +193,8 @@ public sealed class SubjectGallery
         public string SubjectId { get; init; } = "";
         public float[]? FaceEmbedding { get; set; }
         public float[]? VoiceEmbedding { get; set; }
+        public string? FaceTime { get; set; }     // OSD-STM (JSON), acquisition time - recorded by ACR, ignored by MAC
+        public string? SpeechTime { get; set; }
     }
     private sealed class GalleryDto { public List<SubjectDto> Subjects { get; set; } = new(); }
     private sealed class SubjectDto
@@ -196,6 +202,8 @@ public sealed class SubjectGallery
         public string SubjectId { get; set; } = "";
         public float[]? FaceEmbedding { get; set; }
         public float[]? VoiceEmbedding { get; set; }
+        public string? FaceTime { get; set; }
+        public string? SpeechTime { get; set; }
     }
 }
 

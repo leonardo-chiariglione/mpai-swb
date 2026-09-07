@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -10,32 +9,29 @@ using AIF.Store;
 
 using Mpai.Core;
 using Mpai.Core.OSD;
-using Mpai.Aims.Visual;    // WebcamVisualAcquisition, VisualAcquisitionRequest
-using Mpai.UaKit;          // AvatarUaHost
-using Mpai.Hci.Api;        // SpeakingAvatar
-
-using Mpai.Paf.Fir;        // ArcFaceRecogniser
-using Mpai.Mmc.Sir;        // SpeakerEmbedder
-using Mpai.Osd.VisualScene;// ScrfdFaceDetector
-using Mpai.Hci.Idr;        // SubjectEnrolment
+using Mpai.Aims.Visual;   // WebcamVisualAcquisition, VisualAcquisitionRequest
+using Mpai.UaKit;         // AvatarUaHost
+using Mpai.Hci.Api;       // SpeakingAvatar
 
 namespace AcrApp;
 
-// HCI-ACR - Access Control Registration. Same architecture and UI as CAV-MAC, but
-// after capturing face/speech it COMPUTES the Face/Speech Descriptors and ENROLS
-// the person into the shared gallery (AIF Shared Storage) that CAV-MAC later reads.
-//
-// Flow (hands-free after Register):
-//   "Welcome to the CAV Access Control Registration Service. What is your name?"
-//   -> capture speech -> ASR -> name
-//   "Thank you, I will register you as {name}."
-//   -> capture face  (ArcFace descriptor) + voice (ECAPA descriptor)
-//   -> enrol {name} into Shared Storage
-//   "{name}, thank you for joining the CAV Access Control Registration Service."
+// ACR User Agent. It DRIVES the MMC-ACR-V2.5 Module through the Controller,
+// exactly as UAs\Orchestration\HCI-ACR.orch prescribes. The UA does only
+// real-world I/O (render avatar, capture camera+microphone, TYPE the name),
+// timing, and persistence to Shared Storage; it never runs an AIM.
+//   Start -> type name -> "look at camera" (+1s) -> supply FaceObject/FaceTime
+//         -> "speak a sentence" -> supply SpeechObject/SpeechTime + the fixed
+//            confirmation Response + a light-smile Personal Status
+//         -> the Controller runs EFD, ESD and RSR (by data type per the L3)
+//         -> UA reads the Face/Speech Descriptors (with their stamped times)
+//         -> UA writes {name -> descriptors, times} to Shared Storage (the same
+//            gallery MMC-MAC reads) -> present the confirmation -> Stop.
+// The name is TYPED (ASR is unreliable for bare names).
 public partial class MainWindow : Window
 {
-    private const string RsrModule = "PAF-RSR-V1.6";   // spoken prompts
-    private const string AsrModule = "MMC-ASR-V2.5";   // name recognition (speech -> text)
+    private const string AcrModule = "MMC-ACR-V2.5";
+    private const string RsrModule = "PAF-RSR-V1.6";        // renders the guidance prompts
+    private const string GalleryScope = "MMC-MAC-V2.5";     // SAME Shared-Storage scope MMC-MAC reads
 
     private static readonly string AmdDir      = Mpai.Core.MpaiPaths.Amds;
     private static readonly string SettingsPath= Mpai.Core.MpaiPaths.Settings;
@@ -47,15 +43,8 @@ public partial class MainWindow : Window
     private AvatarUaHost? _avatar;
     private readonly object _uaLock = new();
 
-    // Set while the typed-name fallback is showing; completed by Confirm or Enter.
     private TaskCompletionSource<string>? _typedName;
-
-    // Enrolment tools (UA-side; same embedder classes CAV-MAC uses to recognise).
-    private AIF.SharedStorage.FileSharedStorage? _store;
-    private SubjectGallery?    _gallery;
-    private ArcFaceRecogniser? _arcFace;
-    private SpeakerEmbedder?   _ecapa;
-    private ScrfdFaceDetector? _scrfd;
+    private int _acrId = -1;
 
     public MainWindow()
     {
@@ -78,15 +67,6 @@ public partial class MainWindow : Window
                 _provider = new AcrProvider(store);
                 _ua       = new UserAgent(store);
                 _ua.MPAI_AIFU_Controller_Initialize();
-
-                // The gallery lives in governed Shared Storage - the same store
-                // CAV-MAC reads. ACR is the writer; CAV-MAC is the reader.
-                _store   = new AIF.SharedStorage.FileSharedStorage(
-                               Mpai.Core.MpaiPaths.SharedStorage, "HCI-ACR-V1.0", "local");
-                _gallery = SubjectGallery.Load(_store);
-                _arcFace = new ArcFaceRecogniser(Mpai.Core.MpaiPaths.Model("glintr100.onnx"));
-                _ecapa   = new SpeakerEmbedder(Mpai.Core.MpaiPaths.Model("ecapa-tdnn.onnx"));
-                _scrfd   = new ScrfdFaceDetector(Mpai.Core.MpaiPaths.Model("scrfd_10g_bnkps.onnx"));
             });
 
             SetStatus("Ready. Press Register to begin.");
@@ -108,120 +88,147 @@ public partial class MainWindow : Window
         catch (Exception ex) { Program.Record("flow", ex); SetStatus("error: " + ex.Message); }
         finally
         {
-            InstructionText.Text = "Press Register to register another person.";
+            InstructionText.Text = "Press Register to enrol another person.";
             StartButton.IsEnabled = true;
         }
     }
 
     private async Task RunFlowAsync()
     {
-        // 1) Welcome + ask the name, using a carrier phrase ("my name is ...") so the
-        //    ASR language model has context - a bare name is very hard to recognise.
-        InstructionText.Text = "Welcome. Please say: my name is ...";
-        await RenderPromptAsync("Welcome to the CAV Access Control Registration Service. Please say: my name is ...");
+        var started = await Task.Run(() => _ua!.MPAI_AIFU_MODULE_Start(AcrModule, _provider!, _settings!, out _acrId));
+        if (started != AifError.OK) { SetStatus("could not start MMC-ACR-V2.5"); return; }
 
-        // 2) Capture the spoken phrase -> ASR (SpeechObject in, Text out, read by
-        //    type), then strip the "my name is" carrier to leave the name.
-        InstructionText.Text = "Please say: my name is ...";
-        string name = "";
+        try
+        {
+            // 1) Name - typed characters (no ASR).
+            InstructionText.Text = "Please type your name.";
+            await RenderPromptAsync("Welcome to the CAV Access Control Registration Service. Please type your name.");
+            var userName = (await PromptTypedNameAsync()).Trim();
+            if (string.IsNullOrWhiteSpace(userName)) { SetStatus("no name given"); return; }
+
+            // 2) Face - prompt, ~1s to turn, capture; time from the UA clock.
+            InstructionText.Text = "Look at the camera.";
+            var speakLook = RenderPromptAsync("Look at the camera.");
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            var face = await CaptureFaceAsync();
+            await speakLook;
+
+            var faceBoundary = new Dictionary<string, string>();
+            if (face is not null) faceBoundary["FaceObject"] = MpaiJson.ToJson(face);
+            faceBoundary["FaceTime"] = MpaiJson.ToJson(NowSimpleTime());
+
+            var (e1, out1) = await Task.Run(() => _ua!.RunAsync(_acrId, faceBoundary).GetAwaiter().GetResult());
+            if (e1 != AifError.OK || out1 is null) { SetStatus("run error"); return; }
+
+            // 3) Speech - prompt, capture; supply speech+time + the confirmation
+            //    Response and a light-smile Personal Status for the RSR utterance.
+            var outcome = out1;
+            if (outcome.Suspended)
+            {
+                InstructionText.Text = "Please speak a short sentence so I can learn your voice.";
+                await RenderPromptAsync("Please speak a short sentence so I can learn your voice.");
+                var speech = await CaptureSpeechAsync();
+
+                var thankYou = $"{userName}, thank you for joining the CAV Access Control Registration Service. You should speak your passphrase when you enter the service.";
+                var resume = new Dictionary<string, string>();
+                if (speech is not null) resume["SpeechObject"] = MpaiJson.ToJson(speech);
+                resume["SpeechTime"]     = MpaiJson.ToJson(NowSimpleTime());
+                resume["Response"]       = MpaiJson.ToJson(BasicTextObject.FromText(thankYou));
+                resume["PersonalStatus"] = MpaiJson.ToJson(LightSmileStatus());
+
+                var (e2, out2) = await Task.Run(() => _ua!.ResumeAsync(_acrId, resume).GetAwaiter().GetResult());
+                if (e2 != AifError.OK || out2 is null) { SetStatus("resume error"); return; }
+                outcome = out2;
+            }
+
+            var completed = outcome.Completed;
+            if (completed is null) { SetStatus("the Module did not complete"); return; }
+
+            // 4) Read the Face/Speech Descriptors (they carry their stamped times).
+            FaceDescriptorsObject?   fdo = null;
+            SpeechDescriptorsObject? sdo = null;
+            if (completed.Ports.TryGetValue("FaceDescriptors", out var fj) && !string.IsNullOrWhiteSpace(fj))
+                fdo = MpaiJson.FromJson<FaceDescriptorsObject>(fj);
+            if (completed.Ports.TryGetValue("SpeechDescriptors", out var sj2) && !string.IsNullOrWhiteSpace(sj2))
+                sdo = MpaiJson.FromJson<SpeechDescriptorsObject>(sj2);
+
+            // 5) UA limb: write {name -> descriptors, times} to Shared Storage - the
+            //    SAME gallery scope MMC-MAC reads. Content is the descriptors' data;
+            //    times come from the descriptor objects (their stamped Object Time).
+            InstructionText.Text = "Registering...";
+            var faceVec  = fdo?.Embedding();
+            var voiceVec = sdo?.Embedding();
+            string? faceTimeJson   = fdo?.FaceDescriptorsObjectTime   is null ? null : MpaiJson.ToJson(fdo.FaceDescriptorsObjectTime);
+            string? speechTimeJson = sdo?.SpeechDescriptorsObjectTime is null ? null : MpaiJson.ToJson(sdo.SpeechDescriptorsObjectTime);
+
+            await Task.Run(() =>
+            {
+                var shared = new AIF.SharedStorage.FileSharedStorage(Mpai.Core.MpaiPaths.SharedStorage, GalleryScope, "local");
+                var gallery = SubjectGallery.Load(shared);
+                gallery.EnrolEmbeddings(userName, faceVec, voiceVec, faceTimeJson, speechTimeJson);
+                gallery.Save(shared);
+            });
+
+            // 6) Present the confirmation (the Module's RSR spoke it, light smile).
+            byte[] wav = Array.Empty<byte>(); FaceDescriptorsObject? avatarFace = null;
+            if (completed.Ports.TryGetValue("VocalResponse", out var vj) && !string.IsNullOrWhiteSpace(vj))
+                wav = MpaiJson.FromJson<BasicSpeechObject>(vj)?.Data ?? Array.Empty<byte>();
+            if (completed.Ports.TryGetValue("MachineFaceDescriptors", out var mfj) && !string.IsNullOrWhiteSpace(mfj))
+                avatarFace = MpaiJson.FromJson<FaceDescriptorsObject>(mfj);
+
+            await _avatar!.PresentAsync(new SpeakingAvatar(wav, avatarFace));
+            await Task.Delay(TimeSpan.FromSeconds(AvatarUaHost.WavDurationSeconds(wav) + 0.4));
+            SetStatus($"registered: {userName}");
+        }
+        finally
+        {
+            var id = _acrId; _acrId = -1;
+            await Task.Run(() => _ua!.MPAI_AIFU_MODULE_Stop(id));
+        }
+    }
+
+    private async Task<BasicVisualObject?> CaptureFaceAsync()
+    {
+        try
+        {
+            var frame = await Task.Run(() =>
+                new WebcamVisualAcquisition().AcquireAsync(new VisualAcquisitionRequest())
+                    .GetAwaiter().GetResult().Data);
+            return (frame is { Length: > 0 }) ? BasicVisualObject.FromFile("probe.jpg", frame) : null;
+        }
+        catch { return null; }
+    }
+
+    private async Task<BasicSpeechObject?> CaptureSpeechAsync()
+    {
         try
         {
             var wav = await Task.Run(() => _avatar!.CaptureSpeech()?.Data);
-            if (wav is not null && wav.Length > 0)
-            {
-                var speech = BasicSpeechObject.FromData(wav, null);
-                var heard  = (await Task.Run(() => RecogniseName(speech)) ?? "").Trim();
-                name = StripCarrier(heard);
-            }
+            return (wav is { Length: > 0 }) ? BasicSpeechObject.FromData(wav, null) : null;
         }
-        catch { }
-
-        // 3) If ASR did not yield a name, fall back to typing it (Enter or Confirm).
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            await RenderPromptAsync("Sorry, I did not get your name. Please type your name.");
-            InstructionText.Text = "Please type your name, then press Enter or Confirm.";
-            name = (await PromptTypedNameAsync()).Trim();
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                SetStatus("no name given");
-                return;
-            }
-        }
-
-        // 3) Confirm the name.
-        InstructionText.Text = $"Registering {name}.";
-        await RenderPromptAsync($"Thank you, I will register you as {name}.");
-
-        // 4) Face: SPEAK "please look at the camera" and capture the frame meanwhile
-        //    (the webcam warm-up gives the user time to look, as in CAV-MAC - the
-        //    prompt does not wait for the capture).
-        InstructionText.Text = "Please look at the camera.";
-        var speakLook = RenderPromptAsync("Please look at the camera.");
-        byte[]? frame = null;
-        try
-        {
-            frame = await Task.Run(() =>
-                new WebcamVisualAcquisition().AcquireAsync(new VisualAcquisitionRequest())
-                    .GetAwaiter().GetResult().Data);
-        }
-        catch { }
-        await speakLook;   // let the spoken prompt finish
-
-        // 5) Voice: SPEAK the request, then capture a short sample for the ECAPA descriptor.
-        InstructionText.Text = "Please speak a short sentence so I can learn your voice.";
-        await RenderPromptAsync("Please speak a short sentence so I can learn your voice.");
-        byte[]? voiceWav = null;
-        try { voiceWav = await Task.Run(() => _avatar!.CaptureSpeech()?.Data); }
-        catch { }
-
-        // 6) Enrol into Shared Storage (the same gallery CAV-MAC reads).
-        InstructionText.Text = "Registering...";
-        bool ok = await Task.Run(() => Enrol(name, frame, voiceWav));
-
-        // 7) Thank the user by name.
-        if (ok)
-        {
-            await RenderPromptAsync($"{name}, thank you for joining the CAV Access Control Registration Service.");
-            SetStatus($"registered: {name}");
-        }
-        else
-        {
-            await RenderPromptAsync("Registration could not be completed. Please try again.");
-            SetStatus("registration failed");
-        }
+        catch { return null; }
     }
 
-    // Remove a leading "my name is" (or "my name's" / "name is") carrier, case- and
-    // punctuation-insensitive; whatever remains is taken as the name.
-    private static string StripCarrier(string heard)
+    private static SimpleTime NowSimpleTime()
     {
-        if (string.IsNullOrWhiteSpace(heard)) return "";
-        var s = heard.Trim();
-        foreach (var carrier in new[] { "my name is", "my name's", "my names", "name is", "i am", "i'm", "this is", "it's" })
+        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0;
+        return new SimpleTime
         {
-            if (s.StartsWith(carrier, StringComparison.OrdinalIgnoreCase))
+            SimpleTimeID = Guid.NewGuid().ToString("N"),
+            SimpleTimeData = new List<TimeSegment>
             {
-                s = s.Substring(carrier.Length);
-                break;
+                new TimeSegment { FlagsByte = 0, StartTime = now, EndTime = now, AccuracyMode = "single", AccuracyPlusMinus = 0.0, TimeType = true }
             }
-        }
-        return s.Trim().TrimStart(',', '.', ':', ';', ' ').Trim().TrimEnd('.', ',', '!', '?').Trim();
+        };
     }
 
-    // Show the typed-name box and wait for the user to press Enter or Confirm.
+    // --- Typed-name box (Enter or Confirm) ---
     private Task<string> PromptTypedNameAsync()
     {
         _typedName = new TaskCompletionSource<string>();
-        Dispatcher.Invoke(() =>
-        {
-            NamePanel.Visibility = Visibility.Visible;
-            NameBox.Text = "";
-            NameBox.Focus();
-        });
+        Dispatcher.Invoke(() => { NamePanel.Visibility = Visibility.Visible; NameBox.Text = ""; NameBox.Focus(); });
         return _typedName.Task;
     }
-
     private void CompleteTypedName()
     {
         var tcs = _typedName; _typedName = null;
@@ -229,75 +236,10 @@ public partial class MainWindow : Window
         Dispatcher.Invoke(() => NamePanel.Visibility = Visibility.Collapsed);
         tcs.TrySetResult(NameBox.Text ?? "");
     }
-
     private void ConfirmName_Click(object sender, RoutedEventArgs e) => CompleteTypedName();
+    private void NameBox_KeyDown(object sender, KeyEventArgs e) { if (e.Key == Key.Enter) { e.Handled = true; CompleteTypedName(); } }
 
-    private void NameBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter) { e.Handled = true; CompleteTypedName(); }
-    }
-
-    // Recognise the spoken name: feed the SpeechObject to the ASR Module and read the
-    // Text result BY TYPE (BasicTextObject first, then any text-like field) - the
-    // port name is incidental; the SpeechObject-in / Text-out data types are what
-    // matter.
-    private string? RecogniseName(BasicSpeechObject speech)
-    {
-        var msg = RunAim(AsrModule, new Dictionary<string, string> { ["InputSpeech"] = MpaiJson.ToJson(speech) });
-        if (msg is null) return null;
-        foreach (var kv in msg.Ports)
-        {
-            var payload = kv.Value;
-            if (string.IsNullOrWhiteSpace(payload)) continue;
-            try { var t = MpaiJson.FromJson<BasicTextObject>(payload)?.GetText(); if (!string.IsNullOrWhiteSpace(t)) return t; } catch { }
-            try
-            {
-                using var doc = System.Text.Json.JsonDocument.Parse(payload);
-                foreach (var field in new[] { "Text", "text", "TextData", "Content", "Recognised", "RecognisedText" })
-                    if (doc.RootElement.TryGetProperty(field, out var te) && te.ValueKind == System.Text.Json.JsonValueKind.String)
-                    { var t = te.GetString(); if (!string.IsNullOrWhiteSpace(t)) return t; }
-            }
-            catch { }
-        }
-        return null;
-    }
-
-    // Compute the Face + Speech Descriptors from the captured media and enrol the
-    // subject into the shared gallery. Uses the proven SubjectEnrolment path, which
-    // takes file paths, so the in-memory captures are written to temp files.
-    private bool Enrol(string name, byte[]? frame, byte[]? voiceWav)
-    {
-        string? jpg = null, wav = null;
-        try
-        {
-            if (frame is { Length: > 0 })
-            {
-                jpg = Path.Combine(Path.GetTempPath(), $"acr_{Guid.NewGuid():N}.jpg");
-                File.WriteAllBytes(jpg, frame);
-            }
-            if (voiceWav is { Length: > 0 })
-            {
-                wav = Path.Combine(Path.GetTempPath(), $"acr_{Guid.NewGuid():N}.wav");
-                File.WriteAllBytes(wav, voiceWav);
-            }
-            if (jpg is null && wav is null) return false;
-
-            SubjectEnrolment.EnrolSubject(_gallery!, name,
-                faceRecogniser: _arcFace!, faceImagePath: jpg,
-                speakerEmbedder: _ecapa!, voiceClipPath: wav,
-                faceDetector: _scrfd!);
-            _gallery!.Save(_store!);
-            return true;
-        }
-        catch (Exception ex) { Program.Record("enrol", ex); return false; }
-        finally
-        {
-            try { if (jpg != null) File.Delete(jpg); if (wav != null) File.Delete(wav); } catch { }
-        }
-    }
-
-    // Speak a fixed guidance prompt with a SERIOUS Personal Status, by running
-    // Response and Scene Rendering directly (same as CAV-MAC's prompts).
+    // --- Guidance prompts, rendered by a separate PAF-RSR run (serious) ---
     private async Task RenderPromptAsync(string words)
     {
         var boundary = new Dictionary<string, string>
@@ -305,7 +247,7 @@ public partial class MainWindow : Window
             ["TextObject"]     = MpaiJson.ToJson(BasicTextObject.FromText(words)),
             ["PersonalStatus"] = MpaiJson.ToJson(SeriousStatus())
         };
-        var done = await Task.Run(() => RunAim(RsrModule, boundary));
+        var done = await Task.Run(() => RunRsr(boundary));
         if (done is null) return;
         byte[] wav = Array.Empty<byte>(); FaceDescriptorsObject? fdo = null;
         if (done.Ports.TryGetValue("MachineSpeech", out var sj) && !string.IsNullOrWhiteSpace(sj))
@@ -325,20 +267,29 @@ public partial class MainWindow : Window
         }
     };
 
-    private AIF.Controller.Message? RunAim(string moduleName, Dictionary<string, string> boundary)
+    // A light smile for the closing confirmation - low-intensity HAPPINESS, so
+    // GFD renders a gentle smile (demonstrating EPS driving the face).
+    private static EntityPersonalStatus LightSmileStatus() => new()
+    {
+        TextPersonalStatus = new TextPersonalStatus
+        {
+            TextEmotion = Emotion.Of(FactorLabel.Of("HAPPINESS", "light", null, 0.3))
+        }
+    };
+
+    private AIF.Controller.Message? RunRsr(Dictionary<string, string> boundary)
     {
         if (_ua is null) return null;
         lock (_uaLock)
         {
-            var startErr = _ua.MPAI_AIFU_MODULE_Start(moduleName, _provider!, _settings!, out var moduleId);
-            if (startErr != AifError.OK) return null;
+            if (_ua.MPAI_AIFU_MODULE_Start(RsrModule, _provider!, _settings!, out var rid) != AifError.OK) return null;
             try
             {
-                var (error, outcome) = _ua.RunAsync(moduleId, boundary).GetAwaiter().GetResult();
+                var (error, outcome) = _ua.RunAsync(rid, boundary).GetAwaiter().GetResult();
                 if (error != AifError.OK || outcome?.Completed is null || outcome.Completed.IsError) return null;
                 return outcome.Completed;
             }
-            finally { _ua.MPAI_AIFU_MODULE_Stop(moduleId); }
+            finally { _ua.MPAI_AIFU_MODULE_Stop(rid); }
         }
     }
 

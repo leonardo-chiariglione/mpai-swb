@@ -34,6 +34,7 @@ public sealed class EfdAimProcessor : IAimProcessor
 
     private readonly string _inPort;
     private readonly string _outPort;
+    private readonly string _timePort;
 
     public EfdAimProcessor(
         string instanceId,
@@ -46,6 +47,7 @@ public sealed class EfdAimProcessor : IAimProcessor
         _recogniser = recogniser;
         _inPort     = ports.Input("OSD-BVO-V1.5");
         _outPort    = ports.Output("PAF-FDO-V1.6");
+        _timePort   = ports.Input("OSD-STM-V1.5");      // acquisition time (OSD-STM)
     }
 
     public string InstanceId => _instanceId;
@@ -72,6 +74,19 @@ public sealed class EfdAimProcessor : IAimProcessor
         var embedding = _recogniser.Embed(crop);
 
         var fdo = FaceDescriptorsObject.FromEmbedding(embedding, ContentFormat);
+
+        // Stamp the acquisition time (OSD-STM) into the Face Descriptors Object.
+        SimpleTime? faceTime = null;
+        if (message.Ports.TryGetValue(_timePort, out var stmJson) && !string.IsNullOrWhiteSpace(stmJson))
+            faceTime = MpaiJson.FromJson<SimpleTime>(stmJson);
+        if (faceTime is not null)
+            fdo = new FaceDescriptorsObject
+            {
+                FaceDescriptorsObjectID   = fdo.FaceDescriptorsObjectID,
+                FaceDescriptorsObjectTime = faceTime,
+                FaceDescriptorsData       = fdo.FaceDescriptorsData,
+                FaceDescriptorsQualifier  = fdo.FaceDescriptorsQualifier
+            };
 
         return System.Threading.Tasks.Task.FromResult(new Message
         {

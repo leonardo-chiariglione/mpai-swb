@@ -26,6 +26,7 @@ public sealed class EsdAimProcessor : IAimProcessor
 
     private readonly string _inPort;
     private readonly string _outPort;
+    private readonly string _timePort;
 
     public EsdAimProcessor(
         string instanceId,
@@ -36,6 +37,7 @@ public sealed class EsdAimProcessor : IAimProcessor
         _embedder   = embedder;
         _inPort     = ports.Input("OSD-BSO-V1.5");
         _outPort    = ports.Output("MMC-SDO-V2.5");
+        _timePort   = ports.Input("OSD-STM-V1.5");      // acquisition time (OSD-STM)
     }
 
     public string InstanceId => _instanceId;
@@ -56,6 +58,19 @@ public sealed class EsdAimProcessor : IAimProcessor
         var embedding = _embedder.Embed(samples);
 
         var sdo = SpeechDescriptorsObject.FromEmbedding(embedding, ContentFormat);
+
+        // Stamp the acquisition time (OSD-STM) into the Speech Descriptors Object.
+        SimpleTime? speechTime = null;
+        if (message.Ports.TryGetValue(_timePort, out var stmJson) && !string.IsNullOrWhiteSpace(stmJson))
+            speechTime = MpaiJson.FromJson<SimpleTime>(stmJson);
+        if (speechTime is not null)
+            sdo = new SpeechDescriptorsObject
+            {
+                SpeechDescriptorsObjectID   = sdo.SpeechDescriptorsObjectID,
+                SpeechDescriptorsObjectTime = speechTime,
+                SpeechDescriptorsData       = sdo.SpeechDescriptorsData,
+                SpeechDescriptorsQualifier  = sdo.SpeechDescriptorsQualifier
+            };
 
         return System.Threading.Tasks.Task.FromResult(new Message
         {

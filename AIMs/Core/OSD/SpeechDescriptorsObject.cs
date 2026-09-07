@@ -19,6 +19,7 @@ public sealed class SpeechDescriptorsObject
     public string? MInstanceID { get; init; }
     public string? UEnvironmentID { get; init; }
     public string SpeechDescriptorsObjectID { get; init; } = "";
+    public SimpleTime? SpeechDescriptorsObjectTime { get; init; }   // schema: SpeechDescriptorsObjectTime
     public List<SpeechDescriptorsDataItem> SpeechDescriptorsData { get; init; } = new();
     public SpeechDescriptorsQualifier? SpeechDescriptorsQualifier { get; init; }
     public string? DescrMetadata { get; init; }
