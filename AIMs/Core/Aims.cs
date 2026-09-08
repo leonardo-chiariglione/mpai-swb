@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Mpai.Core;
 
 // ---------------------------------------------------------------------------
-//  Every AIM — at any level, standalone or a SubAIM of a composite — carries
+//  Every AIM Ã¢â‚¬â€ at any level, standalone or a SubAIM of a composite Ã¢â‚¬â€ carries
 //  its STANDARD NAME. The name belongs to the role (the interface), not to the
 //  engine that implements it, so it is declared once per role as a default.
 //
@@ -21,7 +21,7 @@ public interface IAim
     string AimIdentifier { get; }
 }
 
-// ---- Audio Object Acquisition (CAE-AOA) — device edge, environment-dependent.
+// ---- Audio Object Acquisition (CAE-AOA) Ã¢â‚¬â€ device edge, environment-dependent.
 //      Acquires a Basic Audio Object from a device (microphone, network, disk).
 public interface IAudioAcquisitionAim : IAim
 {
@@ -40,7 +40,7 @@ public interface IStartStopAcquisition
     Task<BasicAudioObject> StopAcquireAsync();
 }
 
-// ---- Automatic Speech Recognition (MMC-ASR) — environment-independent
+// ---- Automatic Speech Recognition (MMC-ASR) Ã¢â‚¬â€ environment-independent
 public interface IAsrAim : IAim
 {
     string IAim.AimName        => "Automatic Speech Recognition";
@@ -50,7 +50,7 @@ public interface IAsrAim : IAim
     Task<BasicTextObject> ProcessAsync(BasicSpeechObject speech);
 }
 
-// ---- Text and Image Query (MMC-TIQ) — environment-independent
+// ---- Text and Image Query (MMC-TIQ) Ã¢â‚¬â€ environment-independent
 public interface ITiqAim : IAim
 {
     string IAim.AimName        => "Text and Image Query";
@@ -60,8 +60,8 @@ public interface ITiqAim : IAim
     Task<BasicTextObject> ProcessAsync(BasicTextObject question, BasicVisualObject image);
 }
 
-// ---- Text to Speech (MMC-TTS) — environment-independent
-// ---- Text-to-Text Translation (MMC-TTT) — environment-independent
+// ---- Text to Speech (MMC-TTS) Ã¢â‚¬â€ environment-independent
+// ---- Text-to-Text Translation (MMC-TTT) Ã¢â‚¬â€ environment-independent
 //
 // Declared HERE, with the other AIM interfaces, rather than beside its engine.
 // ITtsAim, IAsrAim and IAudioAcquisitionAim all live in Mpai.Core; ITttAim was
@@ -91,7 +91,7 @@ public interface ITtsAim : IAim
     Task<BasicSpeechObject> ProcessAsync(BasicTextObject text);
 }
 
-// ---- Audio Object Delivery (CAE-AOD) — device edge, environment-dependent.
+// ---- Audio Object Delivery (CAE-AOD) Ã¢â‚¬â€ device edge, environment-dependent.
 //      Delivers a Basic Audio Object to a device (loudspeaker, network, disk).
 public interface IAudioDeliveryAim : IAim
 {
@@ -102,7 +102,7 @@ public interface IAudioDeliveryAim : IAim
     Task DeliverAsync(BasicAudioObject audio);
 }
 
-// ---- Visual Object Acquisition (CVE-VOA) — device edge, environment-dependent.
+// ---- Visual Object Acquisition (CVE-VOA) Ã¢â‚¬â€ device edge, environment-dependent.
 //      Acquires a Basic Visual Object from a source (file now; camera later).
 public interface IVisualAcquisitionAim : IAim
 {
@@ -113,7 +113,7 @@ public interface IVisualAcquisitionAim : IAim
     Task<BasicVisualObject> AcquireAsync(VisualAcquisitionRequest request);
 }
 
-// ---- Visual Object Delivery (CVE-VOD) — device edge, environment-dependent.
+// ---- Visual Object Delivery (CVE-VOD) Ã¢â‚¬â€ device edge, environment-dependent.
 //      Delivers a Basic Visual Object to a destination (a window, a display,
 //      a file). The mirror of CVE-VOA, and the visual counterpart of CAE-AOD.
 public interface IVisualDeliveryAim : IAim
@@ -125,7 +125,7 @@ public interface IVisualDeliveryAim : IAim
     Task DeliverAsync(BasicVisualObject visual);
 }
 
-// ---- Answer to Multimodal Question (MMC-AMQ) — the composite AIM.
+// ---- Answer to Multimodal Question (MMC-AMQ) Ã¢â‚¬â€ the composite AIM.
 //      A composite is itself an AIM, so it carries a standard name too.
 public interface IAmqAim : IAim
 {
@@ -144,6 +144,7 @@ public sealed class AcquisitionRequest
 public sealed class VisualAcquisitionRequest
 {
     public string? SourcePath { get; init; }   // file path for the file source
+    public string? VisualObjectType { get; init; }
 }
 
 // Output of the MMC-AMQ composite: the recognised question and the answer

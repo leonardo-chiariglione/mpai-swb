@@ -66,10 +66,74 @@ public sealed class IdReconciliationAim
         string? objectId = null,
         string? mInstanceID = null)
     {
+        // ACCESS-CONTROL POLICY (M3154 "the work is policy"): a User is identified
+        // ONLY when BOTH biometrics concur - the top face subject and the top
+        // speaker subject are the SAME person. One modality alone is not enough,
+        // and disagreement is a refusal, not an arbitration. Anything else yields
+        // the coarse "person" identity, which the verdict AIM treats as "not
+        // identified".
         var faceScores  = ToScores(faceIdentity,  "person");
         var voiceScores = ToScores(voiceIdentity, "speaker");
-        return Reconcile(faceScores, voiceScores, rule, objectId, mInstanceID);
+
+        string? faceTop  = TopSubject(faceScores);
+        string? voiceTop = TopSubject(voiceScores);
+
+        bool agree = faceTop != null && voiceTop != null &&
+                     string.Equals(faceTop, voiceTop, StringComparison.Ordinal);
+
+        if (agree)
+        {
+            // Reconciled identity: the agreed subject, confidence = the lower of
+            // the two modality confidences (a conjunction is only as strong as its
+            // weaker leg).
+            double fc = ConfidenceOf(faceScores,  faceTop!);
+            double vc = ConfidenceOf(voiceScores, voiceTop!);
+            double conf = Math.Min(fc, vc);
+            return OneCandidate(faceTop!, conf, objectId, mInstanceID);
+        }
+
+        // No agreement (disagree, or only one / neither modality) -> coarse person.
+        return OneCandidate("person", 1.0, objectId, mInstanceID);
     }
+
+    private static string? TopSubject(IReadOnlyList<SubjectScore> scores)
+    {
+        if (scores.Count == 0) return null;
+        string? best = null; float bestS = float.NegativeInfinity;
+        foreach (var s in scores)
+            if (s.Score > bestS) { bestS = s.Score; best = s.SubjectId; }
+        return best;
+    }
+
+    private static double ConfidenceOf(IReadOnlyList<SubjectScore> scores, string subject)
+    {
+        foreach (var s in scores)
+            if (string.Equals(s.SubjectId, subject, StringComparison.Ordinal))
+                return Math.Clamp(s.Score, 0.0, 1.0);
+        return 0.0;
+    }
+
+    private InstanceIdentifier OneCandidate(string label, double conf, string? objectId, string? mInstanceID) =>
+        new InstanceIdentifier
+        {
+            MInstanceID = mInstanceID ?? "",
+            InstanceIdentifier_ = Guid.NewGuid().ToString(),
+            ObjectID = objectId,
+            InstanceIdentifierData = new List<InstanceCandidate>
+            {
+                new InstanceCandidate
+                {
+                    InstanceLabel = label,
+                    LabelConfidenceLevel = Math.Clamp(conf, 0.0, 1.0),
+                    Taxonomy = new InstanceTaxonomy
+                    {
+                        TaxonomyLevelIDs = new List<string> { "person" },
+                        TaxonomyDataURI = TaxonomyUri
+                    },
+                    TaxonomyConfidenceLevel = 1.0
+                }
+            }
+        };
 
     // A candidate counts as a subject when its taxonomy reaches the identity layer
     // (person/speaker); coarser candidates (just "face"/"speech") are layer markers,

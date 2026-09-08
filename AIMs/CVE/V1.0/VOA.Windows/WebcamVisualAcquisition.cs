@@ -1,73 +1,93 @@
 using System;
 using System.Threading.Tasks;
 
-using OpenCvSharp;
+using Windows.Media.Capture;
+using Windows.Media.MediaProperties;
+using Windows.Storage.Streams;
 
 using Mpai.Core;
 
 namespace Mpai.Aims.Visual;
 
-// Live camera Visual Object Acquisition. Grabs a single frame from a webcam and
-// returns it as a Basic Visual Object (JPEG), satisfying the same
-// IVisualAcquisitionAim contract as the file-picker acquisition, so it drops
-// straight into the VOA slot in a provider.
+// Live camera Visual Object Acquisition using the NATIVE Windows Media Capture
+// API (Windows.Media.Capture) - no OpenCV. Grabs a single JPEG photo from the
+// default camera and returns it as a Basic Visual Object, satisfying the same
+// IVisualAcquisitionAim contract as the other acquisitions, so it drops straight
+// into the VOA slot in a provider.
 //
-// This is deliberately a simple single-frame grab. More sophisticated
-// acquisition (device selection, multi-frame capture, liveness / anti-spoofing,
-// resolution and quality control) is future work; the interface is unchanged, so
-// those can be added behind it without touching callers.
+// Windows Media Capture initialises the device, lets it settle, and captures one
+// still to a JPEG-encoded in-memory stream via LowLagPhotoCapture. The device is
+// initialised and disposed per capture so back-to-back grabs each start clean.
+//
+// Diagnostics (content trace) are written to the user's Downloads folder, never
+// to the working tree.
 public sealed class WebcamVisualAcquisition : IVisualAcquisitionAim
 {
-    private readonly int _cameraIndex;
-    private readonly int _warmupFrames;
+    private const string DiagLog = @"C:\Users\Leonardo\Downloads\cam-diag.log";
 
-    // cameraIndex selects the device (0 = default). A few warm-up frames are read
-    // and discarded so the sensor's auto-exposure / auto-white-balance settle
-    // before the frame we keep - the first frame off a cold camera is often black
-    // or badly exposed.
-    public WebcamVisualAcquisition(int cameraIndex = 0, int warmupFrames = 5)
+    private readonly int _settleMs;
+
+    // settleMs: time to let the sensor's auto-exposure / auto-white-balance
+    // settle after the device starts, before the still we keep.
+    public WebcamVisualAcquisition(int cameraIndex = 0, int settleMs = 800)
     {
-        _cameraIndex  = cameraIndex;
-        _warmupFrames = Math.Max(0, warmupFrames);
+        _settleMs = Math.Max(0, settleMs);
     }
 
-    public Task<BasicVisualObject> AcquireAsync(VisualAcquisitionRequest request)
-        => Task.Run(() => Capture());
-
-    private BasicVisualObject Capture()
+    private static void Diag(string s)
     {
-        var __t0 = System.DateTime.UtcNow;
-        try { System.IO.File.AppendAllText(@"D:\AI\hci-diag.log", System.DateTime.Now.ToString("HH:mm:ss.fff") + "  " + ("VISUAL capture start: cameraIndex=" + _cameraIndex + " warmup=" + _warmupFrames) + "\n"); } catch {}
-        using var capture = new VideoCapture(_cameraIndex);
-        try { System.IO.File.AppendAllText(@"D:\AI\hci-diag.log", System.DateTime.Now.ToString("HH:mm:ss.fff") + "  " + ("VISUAL VideoCapture.IsOpened=" + capture.IsOpened()) + "\n"); } catch {}
-        if (!capture.IsOpened())
+        try { System.IO.File.AppendAllText(DiagLog, s + System.Environment.NewLine); } catch { }
+    }
+
+    public async Task<BasicVisualObject> AcquireAsync(VisualAcquisitionRequest request)
+    {
+        byte[] jpeg = await CaptureJpegAsync();
+        Diag("cam: jpeg bytes=" + jpeg.Length);
+        AimLog.Write("CVE-VOA-V1.0", $"acquired webcam frame: {jpeg.Length:N0} bytes JPEG (Windows Media Capture)");
+        return BasicVisualObject.FromFile("webcam.jpg", jpeg, request.VisualObjectType);
+    }
+
+    private async Task<byte[]> CaptureJpegAsync()
+    {
+        MediaCapture? capture = null;
+        try
         {
-            try { System.IO.File.AppendAllText(@"D:\AI\hci-diag.log", System.DateTime.Now.ToString("HH:mm:ss.fff") + "  " + ("VISUAL ERROR: could not open camera index " + _cameraIndex) + "\n"); } catch {}
-            throw new InvalidOperationException(
-                $"Could not open camera at index {_cameraIndex}.");
+            capture = new MediaCapture();
+            var settings = new MediaCaptureInitializationSettings
+            {
+                StreamingCaptureMode = StreamingCaptureMode.Video
+            };
+            await capture.InitializeAsync(settings);
+            Diag("cam: MediaCapture initialised");
+
+            // Let auto-exposure / white-balance settle before the still.
+            await Task.Delay(_settleMs);
+
+            var format = ImageEncodingProperties.CreateJpeg();
+            var lowlag = await capture.PrepareLowLagPhotoCaptureAsync(format);
+
+            var photo = await lowlag.CaptureAsync();
+            using (var frame = photo.Frame)   // CapturedFrame : IRandomAccessStreamWithContentType (an IInputStream)
+            {
+                var size = (uint)frame.Size;
+                using var reader = new DataReader(frame);
+                reader.InputStreamOptions = InputStreamOptions.None;
+                await reader.LoadAsync(size);
+                var bytes = new byte[size];
+                reader.ReadBytes(bytes);
+                await lowlag.FinishAsync();
+                Diag("cam: captured frame bytes=" + bytes.Length + " size=" + size);
+                return bytes;
+            }
         }
-
-        using var frame = new Mat();
-
-        // Warm up: read and discard a few frames.
-        for (int i = 0; i < _warmupFrames; i++)
-            capture.Read(frame);
-
-        // The frame we keep.
-        capture.Read(frame);
-        if (frame.Empty())
+        catch (Exception ex)
         {
-            try { System.IO.File.AppendAllText(@"D:\AI\hci-diag.log", System.DateTime.Now.ToString("HH:mm:ss.fff") + "  " + ("VISUAL ERROR: empty frame from camera index " + _cameraIndex) + "\n"); } catch {}
-            throw new InvalidOperationException(
-                $"Camera at index {_cameraIndex} returned an empty frame.");
+            Diag("cam: ERROR " + ex.GetType().Name + " " + ex.Message);
+            throw new InvalidOperationException("Windows Media Capture failed: " + ex.Message, ex);
         }
-
-        Cv2.ImEncode(".jpg", frame, out var jpeg);
-
-        AimLog.Write("CVE-VOA-V1.0",
-            $"acquired webcam frame: {frame.Width}x{frame.Height} ({jpeg.Length:N0} bytes JPEG)");
-        try { System.IO.File.AppendAllText(@"D:\AI\hci-diag.log", System.DateTime.Now.ToString("HH:mm:ss.fff") + "  " + ("VISUAL frame ok: " + frame.Width + "x" + frame.Height + " jpegBytes=" + jpeg.Length + " elapsed=" + (System.DateTime.UtcNow-__t0).TotalSeconds.ToString("F2") + "s") + "\n"); } catch {}
-
-        return BasicVisualObject.FromFile("webcam.jpg", jpeg);
+        finally
+        {
+            capture?.Dispose();
+        }
     }
 }

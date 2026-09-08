@@ -192,7 +192,7 @@ public partial class MainWindow : Window
         try
         {
             var frame = await Task.Run(() =>
-                new WebcamVisualAcquisition().AcquireAsync(new VisualAcquisitionRequest())
+                new WebcamVisualAcquisition().AcquireAsync(new VisualAcquisitionRequest { VisualObjectType = "Face" })
                     .GetAwaiter().GetResult().Data);
             return (frame is { Length: > 0 }) ? BasicVisualObject.FromFile("probe.jpg", frame) : null;
         }

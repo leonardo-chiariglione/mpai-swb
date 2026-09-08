@@ -1,3 +1,3 @@
 using System.Windows;
-namespace CavMac;
+namespace HciMac;
 public partial class App : Application { }

@@ -14,7 +14,7 @@ using Mpai.Paf.Psd;        // PsdAimProcessor
 using Mpai.Paf.Gfd;        // GfdAimProcessor
 using Mpai.Aims.Tts;       // TtsAimProcessor, TtsFactory
 
-namespace CavMac;
+namespace HciMac;
 
 // Leaf provider for the MMC-MAC-V2.5 Module. The Controller builds the MMC-MAC
 // composite from its L3 (1MMC-MAC-V2.5-I01.json); this provider supplies ONLY

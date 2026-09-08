@@ -59,6 +59,7 @@ public sealed class IdrAimProcessor : IAimProcessor
 
         // Reconcile (may be one modality only; degrades gracefully).
         InstanceIdentifier reconciled = _idr.ReconcileIdentifiers(faceId, speakerId);
+        System.IO.File.AppendAllText(@"C:\Users\Leonardo\Downloads\mac-diag.log", "[IDR] faceId=" + (faceId == null || faceId.InstanceIdentifierData == null || faceId.InstanceIdentifierData.Count == 0 ? "nil" : faceId.InstanceIdentifierData[0].InstanceLabel) + " speakerId=" + (speakerId == null || speakerId.InstanceIdentifierData == null || speakerId.InstanceIdentifierData.Count == 0 ? "nil" : speakerId.InstanceIdentifierData[0].InstanceLabel) + System.Environment.NewLine);
 
         // Decide: granted when the reconciled top candidate is a REAL subject -
         // a named identity, not the coarse "person"/"face"/"speech" fallback.

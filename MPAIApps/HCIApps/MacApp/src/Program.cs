@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-namespace CavMac;
+namespace HciMac;
 // Crash-log helper for CAV-MAC. The WPF entry point is generated from App.xaml
 // (StartupUri), so this type no longer defines Main - it just provides the crash
 // log that MainWindow writes to on a startup failure.
