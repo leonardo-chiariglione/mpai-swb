@@ -66,3 +66,24 @@ Face capture is tagged `VisualObjectType = "Face"`; visual acquisition uses
 D:\BI\MPAIApps\HCIApps\AcrApp\AcrAppBuild.bat
 D:\BI\MPAIApps\HCIApps\AcrApp\AcrApp.exe
 ```
+
+## Models & Prerequisites
+
+The application code is in this package; the model files are **not** (they are large
+and separately licensed). Obtain each model below, place it at the indicated relative
+path under `Models\`, or set the corresponding key in `AIMs\aim-settings.json`.
+
+> **Verification:** the SHA-256 values below identify the exact model files used.
+> After downloading, verify each file with `Get-FileHash <file> -Algorithm SHA256`.
+> For the InsightFace and SpeechBrain models the exact download URL/version was not
+> recorded; the SHA-256 is the authoritative identity - confirm your copy matches.
+
+| Model | Settings key (fallback) | File | Size | SHA-256 | Source |
+|---|---|---|---|---|---|
+| SCRFD face detector (InsightFace SCRFD-10G-BNKPS) | `ScrfdModel` -> `Models\scrfd_10g_bnkps.onnx` | `scrfd_10g_bnkps.onnx` | 16.14 MB | `5838F7FE053675B1C7A08B633DF49E7AF5495CEE0493C7DCF6697200B85B5B91` | InsightFace model zoo (verify by SHA-256) |
+| ArcFace recogniser (InsightFace glintr100 / buffalo_l R100) | `ArcFaceModel` -> `Models\glintr100.onnx` | `glintr100.onnx` | 248.62 MB | `A7933EA5330113B01C9B60351D8F4C33003F145D8470AC5F0E52EE2EFFE25C60` | InsightFace model zoo (verify by SHA-256) |
+| ECAPA-TDNN speaker (SpeechBrain spkrec-ecapa-voxceleb, ONNX export) | `EcapaModel` -> `Models\ecapa-tdnn.onnx` | `ecapa-tdnn.onnx` | 79.44 MB | `38FDFC7D2BC9E2925349BAAB9639FCAF4B4C755BE83EE7D616B6E3FBC9D5EAB3` | SpeechBrain (ONNX export; verify by SHA-256) |
+| Piper TTS voice | `VoiceModel` / `Voice:en` | `en_US-amy-medium.onnx` | 60.27 MB | `B3A6E47B57B8C7FBE6A0CE2518161A50F59A9CDD8A50835C02CB02BDD6206C18` | Hugging Face `rhasspy/piper-voices` (en_US-amy-medium) |
+| Piper voice config | `VoiceConfig` / `VoiceConfig:en` | `en_US-amy-medium.onnx.json` | 0.005 MB | `95A23EB4D42909D38DF73BB9AC7F45F597DBFCDE2D1BF9526FDEAF5466977D77` | Hugging Face `rhasspy/piper-voices` |
+
+Install the Piper voice under `Models\Piper\voices\en_US-amy-medium\`. The Piper executable (`PiperExecutable`) is the Piper Windows release (`piper.exe`).

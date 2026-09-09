@@ -78,3 +78,25 @@ D:\BI\MPAIApps\HCIApps\MadApp\MadApp.exe
 ```
 MAD requires **Ollama running** with the configured model; ASR requires the
 Whisper CLI + model at the configured paths.
+
+## Models & Prerequisites
+
+The application code is in this package; the model files are **not** (they are large
+and separately licensed). Obtain each model below, place it at the indicated relative
+path under `Models\`, or set the corresponding key in `AIMs\aim-settings.json`.
+
+> **Verification:** the SHA-256 values below identify the exact model files used.
+> After downloading, verify each file with `Get-FileHash <file> -Algorithm SHA256`.
+> For the InsightFace and SpeechBrain models the exact download URL/version was not
+> recorded; the SHA-256 is the authoritative identity - confirm your copy matches.
+
+| Model | Settings key (fallback) | File | Size | SHA-256 | Source |
+|---|---|---|---|---|---|
+| Whisper CLI (whisper.cpp Windows build) | `MMC-ASR-V2.5.ExecutablePath` | `whisper-cli.exe` | 0.457 MB | `800A0FD754AFA75E109C7248286AD735670FB6B23D92CA5D12604647EF638A65` | whisper.cpp (ggerganov) Windows release |
+| Whisper model | `MMC-ASR-V2.5.ModelPath` | `ggml-small.bin` | 465.01 MB | `1BE3A9B2063867B937E64E2EC7483364A79917E157FA98C5D94B5C1FFFEA987B` | Hugging Face `ggerganov/whisper.cpp` (ggml-small.bin) |
+| Local LLM (dialogue) | `MMC-EDP-V2.5.OllamaModel` | `llama3.2:3b` (Ollama tag) | ~2 GB | (Ollama library) | `ollama pull llama3.2:3b` |
+| Piper TTS voice | `VoiceModel` / `Voice:en` | `en_US-amy-medium.onnx` | 60.27 MB | `B3A6E47B57B8C7FBE6A0CE2518161A50F59A9CDD8A50835C02CB02BDD6206C18` | Hugging Face `rhasspy/piper-voices` (en_US-amy-medium) |
+| Piper voice config | `VoiceConfig` / `VoiceConfig:en` | `en_US-amy-medium.onnx.json` | 0.005 MB | `95A23EB4D42909D38DF73BB9AC7F45F597DBFCDE2D1BF9526FDEAF5466977D77` | Hugging Face `rhasspy/piper-voices` |
+
+MAD additionally requires **Ollama running** (`ollama serve`) with the model pulled,
+reachable at `http://127.0.0.1:11434`, and the Whisper CLI + model at the configured paths.
