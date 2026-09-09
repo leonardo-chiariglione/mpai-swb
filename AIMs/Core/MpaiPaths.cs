@@ -12,6 +12,22 @@ public static class MpaiPaths
 
     private static string FindRoot()
     {
+        // Single-file apps extract to a temp dir, so AppContext.BaseDirectory is
+        // NOT the install folder. Try the real exe location first.
+        foreach (var __start in new[] {
+                     System.IO.Path.GetDirectoryName(System.Environment.ProcessPath ?? ""),
+                     System.AppContext.BaseDirectory })
+        {
+            if (string.IsNullOrEmpty(__start)) continue;
+            var __d = new System.IO.DirectoryInfo(__start);
+            while (__d != null)
+            {
+                if (System.IO.Directory.Exists(System.IO.Path.Combine(__d.FullName, "AIMs")) &&
+                    System.IO.Directory.Exists(System.IO.Path.Combine(__d.FullName, "Models")))
+                    return __d.FullName;
+                __d = __d.Parent;
+            }
+        }
         var d = new System.IO.DirectoryInfo(System.AppContext.BaseDirectory);
         while (d != null)
         {

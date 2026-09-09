@@ -1,7 +1,4 @@
-{
-    "MMC-EDP-V2.5":  {
-                         "OllamaModel":  "llama3.2:3b"
-                     },
+﻿{
     "MMC-SOA-V2.5":  {
                          "DurationSeconds":  "5",
                          "QuestionAudio":  "D:\\AI\\MPAIApps\\AudioIn\\question-spoken.wav"
@@ -16,11 +13,6 @@
     "CAE-AOA-V1.0":  {
                          "DurationSeconds":  "5",
                          "QuestionAudio":  "D:\\AI\\MPAIApps\\AudioIn\\question-spoken.wav"
-                     },
-    "MMC-ASR-V2.5":  {
-                         "ExecutablePath":  "D:\\AI\\Models\\Whisper\\bin\\whisper-cli.exe",
-                         "ModelPath":  "D:\\AI\\Models\\Whisper\\models\\ggml-small.bin",
-                         "LanguageCode":  "en"
                      },
     "MMC-TTT-V2.5":  {
                          "TttEncoderModel":  "D:\\AI\\Models\\Whisper\\M2M100\\encoder_model.onnx",
@@ -66,5 +58,13 @@
                          "ClsModel":  "D:\\AI\\Models\\OCR\\ch_ppocr_mobile_v2.0_cls_infer.onnx",
                          "RecModel":  "D:\\AI\\Models\\OCR\\latin_PP-OCRv5_rec_mobile_infer.onnx",
                          "KeysFile":  "D:\\AI\\Models\\OCR\\ppocrv5_latin_dict.txt"
+                     },
+    "MMC-ASR-V2.5":  {
+                         "ExecutablePath":  "D:\\BI\\Models\\Whisper\\bin\\whisper-cli.exe",
+                         "ModelPath":  "D:\\BI\\Models\\Whisper\\models\\ggml-small.bin",
+                         "LanguageCode":  "en"
+                     },
+    "MMC-EDP-V2.5":  {
+                         "OllamaModel":  "llama3.2:3b"
                      }
 }
