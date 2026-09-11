@@ -9,13 +9,11 @@ using AIF.Store;
 
 namespace Mpai.Hci.Api;
 
-// NorthApi - the MPAI-AIF North API (the interface the User Agent calls to drive a
-// Module through the Controller), implemented to the type-addressed contract:
-//   * data identified by DATA TYPE (+ Port Number only where a type repeats);
-//   * (DataType,PortNumber) <-> boundary port name resolved from the Module's L3;
-//   * outcomes are the standard AifError, surfaced faithfully;
-//   * no application semantics, no content, no state (memory lives in the Module).
-// The caller supplies the IAimProvider. Device I/O remains the UA's, outside this API.
+// NorthApi - the MPAI-AIF North API. The UA identifies data by DATA TYPE (+ Port
+// Number where a type repeats); (DataType,PortNumber) <-> boundary port name is
+// resolved from the Module's L3; outcomes are the standard AifError, surfaced
+// faithfully; no application semantics, no content, no state (memory lives in the
+// Module). The caller supplies the IAimProvider (or a factory over the AmdStore).
 public sealed class NorthApi : IDisposable
 {
     private readonly UserAgent    _ua;
@@ -29,10 +27,22 @@ public sealed class NorthApi : IDisposable
 
     public NorthApi(string amdDir, string settingsPath, IAimProvider provider)
     {
-        _amdDir   = amdDir;
+        _amdDir = amdDir;
         _settings = AimSettings.Load(settingsPath);
         _provider = provider;
         var store = new AmdStore(amdDir); store.Scan();
+        _ua = new UserAgent(store);
+        _ua.MPAI_AIFU_Controller_Initialize();
+    }
+
+    // Overload: caller supplies a provider FACTORY, so NorthApi builds ONE AmdStore
+    // and hands it to the factory (e.g. store => new MacProvider(store, galleryJson)).
+    public NorthApi(string amdDir, string settingsPath, Func<AmdStore, IAimProvider> providerFactory)
+    {
+        _amdDir = amdDir;
+        _settings = AimSettings.Load(settingsPath);
+        var store = new AmdStore(amdDir); store.Scan();
+        _provider = providerFactory(store);
         _ua = new UserAgent(store);
         _ua.MPAI_AIFU_Controller_Initialize();
     }
@@ -101,10 +111,8 @@ public sealed class NorthApi : IDisposable
         var outs = new List<Datum>();
         if (outcome?.Completed is { IsError: false } msg)
             foreach (var kv in msg.Ports)
-            {
-                var (dt, pn) = map.OutputType(kv.Key);
-                if (dt is not null) outs.Add(new Datum(dt, pn, kv.Value));
-            }
+                foreach (var (dt, pn) in map.OutputTypes(kv.Key))
+                    outs.Add(new Datum(dt, pn, kv.Value));
 
         if (ephemeral) StopFlow(moduleName);
         return new Result(AifError.OK, outs, false);
@@ -127,11 +135,12 @@ public sealed class NorthApi : IDisposable
 
     private sealed class PortMap
     {
-        private readonly Dictionary<string, string> _in = new();
-        private readonly Dictionary<string, (string dt, int pn)> _outByName = new();
+        private readonly Dictionary<string, string> _in = new();                       // dt|pn -> name
+        private readonly Dictionary<string, List<(string dt, int pn)>> _outByName = new(); // name -> [(dt,pn)]
 
         public string? InputName(string dt, int pn) => _in.TryGetValue(dt + "|" + pn, out var n) ? n : null;
-        public (string? dt, int pn) OutputType(string name) => _outByName.TryGetValue(name, out var v) ? (v.dt, v.pn) : (null, 1);
+        public IEnumerable<(string dt, int pn)> OutputTypes(string name) =>
+            _outByName.TryGetValue(name, out var v) ? v : Enumerable.Empty<(string, int)>();
 
         public static PortMap FromAmd(string amdDir, string moduleName)
         {
@@ -149,8 +158,12 @@ public sealed class NorthApi : IDisposable
                 int pn   = p.TryGetProperty("PortNumber", out var pne) ? pne.GetInt32() : 1;
                 foreach (var dt in DataTypes(p))
                 {
-                    if (dir == "Input") pm._in[dt + "|" + pn] = name;
-                    else                pm._outByName[name] = (dt, pn);
+                    if (dir == "Input") { _ = pm._in.TryAdd(dt + "|" + pn, name); }
+                    else
+                    {
+                        if (!pm._outByName.TryGetValue(name, out var list)) { list = new(); pm._outByName[name] = list; }
+                        list.Add((dt, pn));
+                    }
                 }
             }
             return pm;
