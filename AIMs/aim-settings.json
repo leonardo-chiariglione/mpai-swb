@@ -72,5 +72,13 @@
                      },
     "MMC-EFI-V2.5":  {
                          "HseModel":  "D:\\BI\\Models\\hsemotion_enet_b0_8_va_mtl.onnx"
+                     },
+    "CAE-ASI-V2.5":  {
+                         "YamnetModel":  "D:\\BI\\Models\\yamnet.onnx",
+                         "YamnetClassMap":  "D:\\BI\\Models\\yamnet_class_map.csv"
+                     },
+    "CAE-AII-V2.5":  {
+                         "YamnetModel":  "D:\\BI\\Models\\yamnet.onnx",
+                         "YamnetClassMap":  "D:\\BI\\Models\\yamnet_class_map.csv"
                      }
 }

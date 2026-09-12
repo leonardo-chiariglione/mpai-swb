@@ -103,6 +103,7 @@ public sealed class MachineExecutor
 
         Message last = message;
 
+
         for (int position = startPosition; position < plan.Count; position++)
         {
             var aimName = plan[position];
@@ -169,12 +170,27 @@ public sealed class MachineExecutor
             }
             catch (Exception failure)
             {
-                return ExecutionResult.Complete(
-                    Message.Error(message.MessageId, aimName, failure.Message));
+                // A leaf that THROWS is isolated just like one that returns an
+                // error: log it, treat it as having produced nothing, and let the
+                // Module continue (graceful degradation, e.g. a recogniser that
+                // threw on empty/garbled input must not blank the whole graph).
+                Console.WriteLine($"[AIF] {aimName}: threw, skipped (produced no output): {failure.Message}");
+                continue;
             }
 
-            if (result.IsError || result.IsCancelled)
+            // A user CANCEL aborts the whole run. But a single leaf ERROR is
+            // isolated: it means that AIM produced nothing (e.g. a recogniser
+            // that saw no face or heard no speaker). The Module continues so the
+            // rest of the graph - notably ID Reconciliation - can proceed with
+            // whichever modalities DID succeed. Graceful degradation, not abort.
+            if (result.IsCancelled)
                 return ExecutionResult.Complete(result);
+            if (result.IsError)
+            {
+                Console.WriteLine($"[AIF] {aimName}: error, skipped (produced no output): {result.Payload}");
+                last = result;
+                continue;
+            }
 
             // Store each output port tagged with the DataType it carries. For a
             // leaf, result.Ports is keyed by the leaf's own output port names, so
