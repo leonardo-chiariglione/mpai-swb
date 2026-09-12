@@ -5,26 +5,32 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-using AIF.Controller;
-using AIF.Store;
+using AIF.Controller;   // AifError
+using AIF.Store;        // AmdStore (provider factory)
 
 using Mpai.Core;
 using Mpai.Core.OSD;
 using Mpai.UaKit;         // AvatarUaHost
-using Mpai.Hci.Api;       // SpeakingAvatar
+using Mpai.Hci.Api;       // NorthApi, SpeakingAvatar
 
 namespace HciMat;
 
-// HCI-MAT User Agent (BI-standard: UA -> Controller -> MMC-MAT-V2.5).
-// Flow: Start -> lady speaks instructions -> Select (From/To pickers + type box appear)
-//   * type text + Enter  -> Module translates (TextObject path) -> display translation
-//   * press Speak, speak -> Module translates (InputSpeech path) -> lady speaks it
-//     then the user presses Stop -> ready for the next turn.
-// The Module lives for the app's lifetime (started once, off the UI thread). No auto-loop.
+// HCI-MAT User Agent - drives MMC-MAT through the type-addressed North API.
+// The UA identifies data ONLY by data type. It provides an input language, an
+// output language (a Language Selector, OSD-SEL) and either a Text Object
+// (OSD-BTO) or a Speech Object (OSD-BSO), and reads back TranslatedText (OSD-BTO),
+// MachineSpeech (OSD-BSO) and MachineFaceDescriptors (PAF-FDO). No port names.
+// Two-press Start -> Select -> (type+Enter => see text | Speak => hear it) -> Stop.
 public partial class MainWindow : Window
 {
     private const string MatModule = "MMC-MAT-V2.5";
     private const string RsrModule = "PAF-RSR-V1.6";
+
+    private const string BSO = "OSD-BSO-V1.5";   // speech object
+    private const string STM = "OSD-STM-V1.5";   // acquisition time
+    private const string SEL = "OSD-SEL-V1.5";   // language selector (from/to)
+    private const string BTO = "OSD-BTO-V1.5";   // text object (input) / TranslatedText (output)
+    private const string FDO = "PAF-FDO-V1.6";   // face descriptors
 
     private static readonly string AmdDir       = Mpai.Core.MpaiPaths.Amds;
     private static readonly string SettingsPath = Mpai.Core.MpaiPaths.Settings;
@@ -36,13 +42,11 @@ public partial class MainWindow : Window
         ("fr","Francais"), ("de","Deutsch"), ("ja","Nihongo"), ("zh","Zhongwen")
     };
 
-    private UserAgent?    _ua;
-    private MatProvider?  _provider;
-    private AimSettings?  _settings;
+    private NorthApi?     _north;
     private AvatarUaHost? _avatar;
-    private int _matId = -1;
-    private volatile bool _busy = false;   // a turn is in progress
-    private string _from = "en", _to = "it";   // committed by Select
+    private volatile bool _busy = false;
+    private int _phase = 0;   // 0=before first Start, 1=models loaded, 2=Select active
+    private bool _matStarted = false;
 
     private const string WelcomeLoading =
         "Welcome to the Multimodal Translation Service. Please wait a few seconds while the models load.";
@@ -81,18 +85,11 @@ public partial class MainWindow : Window
             await _avatar.InitAsync();
             await Task.Delay(TimeSpan.FromSeconds(2.0));
 
-            // Build the Controller/UA first (light), so RSR can speak the loading welcome.
             await Task.Run(() =>
-            {
-                var store = new AmdStore(AmdDir); store.Scan();
-                _settings = AimSettings.Load(SettingsPath);
-                _provider = new MatProvider(store);
-                _ua       = new UserAgent(store);
-                _ua.MPAI_AIFU_Controller_Initialize();
-            });
+                _north = new NorthApi(AmdDir, SettingsPath, store => new MatProvider(store)));
 
             SetStatus("Press Start.");
-            PrimaryButton.IsEnabled = true;                    // step 1-2: Start shown, un-grayed
+            PrimaryButton.IsEnabled = true;
         }
         catch (Exception fatal) { App.Log("startup", fatal); SetStatus("startup failed: " + fatal.Message); }
     }
@@ -100,28 +97,21 @@ public partial class MainWindow : Window
     private string FromCode() => Dispatcher.Invoke(() => (FromLang.SelectedItem as ComboBoxItem)?.Tag as string ?? "en");
     private string ToCode()   => Dispatcher.Invoke(() => (ToLang.SelectedItem   as ComboBoxItem)?.Tag as string ?? "it");
 
-    // Start -> speak the instructions, then reveal Select (pickers + type box) + Speak/Stop.
-    private int _phase = 0;   // 0=before first Start, 1=models loaded (awaiting second Start), 2=Select active
-
-    // Two-press Start:
-    //  press #1  -> lady speaks the welcome (audio unlocked by this click), then models load (Start grays);
-    //               when loaded, Start un-grays for press #2.
-    //  press #2  -> lady speaks the instructions; the button then BECOMES "Select".
     private async void PrimaryButton_Click(object sender, RoutedEventArgs e)
     {
-        if (_ua is null || _avatar is null || _busy) return;
+        if (_north is null || _avatar is null || _busy) return;
 
         if (_phase == 0)   // ---- FIRST Start press ----
         {
-            PrimaryButton.IsEnabled = false;                     // step 5: Start grays while loading
+            PrimaryButton.IsEnabled = false;
             SetStatus("welcome...");
-            await RenderPromptAsync(WelcomeLoading);             // step 4: lady welcome + please wait (audio unlocked)
+            await RenderPromptAsync(WelcomeLoading);
             SetStatus("loading models...");
-            var started = await Task.Run(() =>
-                _ua!.MPAI_AIFU_MODULE_Start(MatModule, _provider!, _settings!, out _matId));
+            var started = await Task.Run(() => _north!.StartFlow(MatModule));
             if (started != AifError.OK) { SetStatus("could not start " + MatModule); return; }
+            _matStarted = true;
             _phase = 1;
-            PrimaryButton.IsEnabled = true;                      // step 6: models loaded -> Start un-grays
+            PrimaryButton.IsEnabled = true;
             SetStatus("Models ready. Press Start again.");
             return;
         }
@@ -130,8 +120,8 @@ public partial class MainWindow : Window
         {
             PrimaryButton.IsEnabled = false;
             SetStatus("instructions...");
-            await RenderPromptAsync(Instructions);               // step 7: lady speaks the instructions
-            PrimaryButton.Content = "Select";                    // step 8: Start BECOMES Select
+            await RenderPromptAsync(Instructions);
+            PrimaryButton.Content = "Select";
             PrimaryButton.IsEnabled = true;
             SpeakButton.Visibility = Visibility.Visible; SpeakButton.IsEnabled = false;
             StopButton.Visibility  = Visibility.Visible;
@@ -141,33 +131,32 @@ public partial class MainWindow : Window
         }
 
         // ---- phase 2: this press is SELECT ----
-        SelectPanel.Visibility = Visibility.Visible;             // pickers + type box appear
-        _from = FromCode(); _to = ToCode();                      // MAT is informed of the i/o languages
+        SelectPanel.Visibility = Visibility.Visible;
         SpeakButton.IsEnabled = true;
-        SetStatus("Languages set: " + _from + " -> " + _to + ". Type + Enter, or press Speak.");
+        SetStatus("Languages set: " + FromCode() + " -> " + ToCode() + ". Type + Enter, or press Speak.");
     }
 
-    // Typed path: text + Enter -> Module translates (TextObject) -> display translation.
+    // Typed path: text + Enter -> Module translates -> display TranslatedText.
     private async void TypeBox_KeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter || _busy || _matId < 0) return;
+        if (e.Key != Key.Enter || _busy || !_matStarted) return;
         string typed = TypeBox.Text?.Trim() ?? "";
         if (typed.Length == 0) return;
         _busy = true; SetTurn("translating...");
         var reply = await Task.Run(() => RunTurn(speech: null, typedText: typed, from: FromCode(), to: ToCode()));
         if (reply is not null && !string.IsNullOrWhiteSpace(reply.Value.text))
-            TranslationText.Text = reply.Value.text;          // typed -> SEE the translation
+            TranslationText.Text = reply.Value.text;
         SetTurn("");
         _busy = false;
     }
 
-    // Speak path: press Speak, speak -> Module translates (InputSpeech) -> lady SPEAKS it.
+    // Speak path: Speak -> speak -> Module translates -> lady speaks it.
     private async void SpeakButton_Click(object sender, RoutedEventArgs e)
     {
-        if (_ua is null || _avatar is null || _busy || _matId < 0) return;
-        _busy = true; SpeakButton.IsEnabled = false; PrimaryButton.IsEnabled = false;   // gray Select during the turn
+        if (_north is null || _avatar is null || _busy || !_matStarted) return;
+        _busy = true; SpeakButton.IsEnabled = false; PrimaryButton.IsEnabled = false;
         SetTurn("listening... speak, then pause.");
-        var speech = await CaptureSpeechAsync();
+        var speech = await CaptureSpeechAsync(FromCode());
         if (speech is null || speech.Data is null || speech.Data.Length == 0)
         { SetTurn("(nothing captured) - press Stop"); _busy = false; return; }
 
@@ -176,60 +165,76 @@ public partial class MainWindow : Window
         if (reply is not null)
         {
             if (!string.IsNullOrWhiteSpace(reply.Value.text)) TranslationText.Text = reply.Value.text;
-            await _avatar!.PresentAsync(new SpeakingAvatar(reply.Value.wav, reply.Value.fdo));   // lady speaks it
+            await _avatar!.PresentAsync(new SpeakingAvatar(reply.Value.wav, reply.Value.fdo));
             await Task.Delay(TimeSpan.FromSeconds(AvatarUaHost.WavDurationSeconds(reply.Value.wav) + 0.3));
         }
         SetTurn("press Stop to continue.");
-        _busy = false;   // Speak/Select stay grayed until Stop
+        _busy = false;
     }
 
-    // Stop: end the current turn; stay ready for the next (type or Speak).
     private void StopButton_Click(object sender, RoutedEventArgs e)
     {
         SetTurn("");
-        PrimaryButton.IsEnabled = true;   // Select stops being grayed out
+        PrimaryButton.IsEnabled = true;
         SpeakButton.IsEnabled = true;
         SetStatus("Ready. Type + Enter, or press Speak. (Select to change languages.)");
     }
 
-    // One Module run. Typed -> TextObject (#1); spoken -> InputSpeech (ASR). LanguageSelector carries From/To.
-    private (byte[] wav, FaceDescriptorsObject? fdo, string text)? RunTurn(BasicSpeechObject? speech, string? typedText, string from, string to)
+    // One Module run, addressed by data type: LanguageSelector (OSD-SEL) always;
+    // typed => TextObject (OSD-BTO); spoken => InputSpeech (OSD-BSO) + time (OSD-STM).
+    // Read TranslatedText (OSD-BTO), MachineSpeech (OSD-BSO), FaceDescriptors (PAF-FDO).
+    private (byte[] wav, FaceDescriptorsObject? fdo, string text)? RunTurn(
+        BasicSpeechObject? speech, string? typedText, string from, string to)
     {
-        if (_ua is null || _matId < 0) return null;
+        if (_north is null || !_matStarted) return null;
+
         var selector = BasicSelectorObject.Languages(from, to);
-        var boundary = new Dictionary<string, string> { ["LanguageSelector"] = MpaiJson.ToJson(selector) };
+        var inputs = new List<NorthApi.Datum> { new NorthApi.Datum(SEL, MpaiJson.ToJson(selector)) };
         if (typedText is not null)
-            boundary["TextObject"] = MpaiJson.ToJson(BasicTextObject.FromText(typedText));
+            inputs.Add(new NorthApi.Datum(BTO, MpaiJson.ToJson(BasicTextObject.FromText(typedText))));
         else if (speech is not null)
         {
-            boundary["InputSpeech"]     = MpaiJson.ToJson(speech);
-            boundary["InputSpeechTime"] = MpaiJson.ToJson(NowSimpleTime());
+            inputs.Add(new NorthApi.Datum(BSO, MpaiJson.ToJson(speech)));
+            inputs.Add(new NorthApi.Datum(STM, MpaiJson.ToJson(NowSimpleTime())));
         }
 
-        var (err, outcome) = _ua.RunAsync(_matId, boundary).GetAwaiter().GetResult();
-        if (err != AifError.OK || outcome?.Completed is null || outcome.Completed.IsError)
-        { Diag("MAT run err=" + err); return null; }
+        var r = _north.Advance(MatModule, inputs);
+        if (!r.Ok) { Diag("MAT run err=" + r.Error); return null; }
 
-        var c = outcome.Completed;
         byte[] wav = Array.Empty<byte>();
+        var sj = r.ByType(BSO);
+        if (!string.IsNullOrWhiteSpace(sj)) wav = MpaiJson.FromJson<BasicSpeechObject>(sj)?.Data ?? Array.Empty<byte>();
         FaceDescriptorsObject? fdo = null;
+        var fj = r.ByType(FDO);
+        if (!string.IsNullOrWhiteSpace(fj)) fdo = MpaiJson.FromJson<FaceDescriptorsObject>(fj);
         string text = "";
-        if (c.Ports.TryGetValue("MachineSpeech", out var sj) && !string.IsNullOrWhiteSpace(sj))
-            wav = MpaiJson.FromJson<BasicSpeechObject>(sj)?.Data ?? Array.Empty<byte>();
-        if (c.Ports.TryGetValue("MachineFaceDescriptors", out var fj) && !string.IsNullOrWhiteSpace(fj))
-            fdo = MpaiJson.FromJson<FaceDescriptorsObject>(fj);
-        if (c.Ports.TryGetValue("TranslatedText", out var tj) && !string.IsNullOrWhiteSpace(tj))
-            text = MpaiJson.FromJson<BasicTextObject>(tj)?.GetText() ?? "";
+        var tj = r.ByType(BTO);
+        if (!string.IsNullOrWhiteSpace(tj)) text = MpaiJson.FromJson<BasicTextObject>(tj)?.GetText() ?? "";
+
         Diag("turn: " + (typedText is null ? "speak" : "typed") + " " + from + "->" + to + " wavBytes=" + wav.Length + " text=" + text);
         return (wav, fdo, text);
     }
 
-    private async Task<BasicSpeechObject?> CaptureSpeechAsync()
+    private async Task<BasicSpeechObject?> CaptureSpeechAsync(string sourceLanguage)
     {
         try
         {
             var wav = await Task.Run(() => _avatar!.CaptureSpeech()?.Data);
-            return (wav is { Length: > 0 }) ? BasicSpeechObject.FromData(wav, null) : null;
+            if (wav is not { Length: > 0 }) return null;
+            // Stamp the captured speech with its SOURCE language so ASR (Whisper)
+            // decodes it as that language, not auto-detect / the static default.
+            var qualifier = new SpeechQualifier
+            {
+                SpeechQualifierID = Guid.NewGuid().ToString(),
+                Attributes = new SpeechAttributes
+                {
+                    Metadata = new SpeechMetadata
+                    {
+                        Language = new Language { LanguageCode = sourceLanguage, LanguageFormat = LanguageFormat.Iso639_1 }
+                    }
+                }
+            };
+            return BasicSpeechObject.FromData(wav, qualifier);
         }
         catch { return null; }
     }
@@ -245,37 +250,26 @@ public partial class MainWindow : Window
         };
     }
 
+    // One-shot spoken prompt via PAF-RSR (welcome / instructions).
     private async Task RenderPromptAsync(string words)
     {
-        var done = await Task.Run(() => RunRsr(words));
-        if (done is null) return;
+        if (_north is null) return;
+        var inputs = new List<NorthApi.Datum> { new NorthApi.Datum(BTO, MpaiJson.ToJson(BasicTextObject.FromText(words))) };
+        var r = await Task.Run(() => _north!.Advance(RsrModule, inputs));
+        if (!r.Ok) return;
         byte[] wav = Array.Empty<byte>();
+        var sj = r.ByType(BSO);
+        if (!string.IsNullOrWhiteSpace(sj)) wav = MpaiJson.FromJson<BasicSpeechObject>(sj)?.Data ?? Array.Empty<byte>();
         FaceDescriptorsObject? fdo = null;
-        if (done.Ports.TryGetValue("MachineSpeech", out var sj) && !string.IsNullOrWhiteSpace(sj))
-            wav = MpaiJson.FromJson<BasicSpeechObject>(sj)?.Data ?? Array.Empty<byte>();
-        if (done.Ports.TryGetValue("MachineFaceDescriptors", out var fj) && !string.IsNullOrWhiteSpace(fj))
-            fdo = MpaiJson.FromJson<FaceDescriptorsObject>(fj);
+        var fj = r.ByType(FDO);
+        if (!string.IsNullOrWhiteSpace(fj)) fdo = MpaiJson.FromJson<FaceDescriptorsObject>(fj);
         await _avatar!.PresentAsync(new SpeakingAvatar(wav, fdo));
         await Task.Delay(TimeSpan.FromSeconds(AvatarUaHost.WavDurationSeconds(wav) + 0.3));
     }
 
-    private AIF.Controller.Message? RunRsr(string words)
-    {
-        if (_ua is null) return null;
-        if (_ua.MPAI_AIFU_MODULE_Start(RsrModule, _provider!, _settings!, out var rid) != AifError.OK) return null;
-        try
-        {
-            var boundary = new Dictionary<string, string> { ["TextObject"] = MpaiJson.ToJson(BasicTextObject.FromText(words)) };
-            var (error, outcome) = _ua.RunAsync(rid, boundary).GetAwaiter().GetResult();
-            if (error != AifError.OK || outcome?.Completed is null || outcome.Completed.IsError) return null;
-            return outcome.Completed;
-        }
-        finally { _ua.MPAI_AIFU_MODULE_Stop(rid); }
-    }
-
     protected override void OnClosed(EventArgs e)
     {
-        try { var mid = _matId; _matId = -1; if (mid >= 0) _ua?.MPAI_AIFU_MODULE_Stop(mid); } catch { }
+        try { if (_matStarted) { _north?.StopFlow(MatModule); _matStarted = false; } } catch { }
         base.OnClosed(e);
     }
 
